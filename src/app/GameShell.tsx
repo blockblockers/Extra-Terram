@@ -1,4 +1,4 @@
-// Extra Terram — src/app/GameShell.tsx v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/app/GameShell.tsx v0.2.0 — feeds sim events to the renderer
 // Owns one run: sim state (in a ref, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -80,7 +80,10 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
     const state = createSim(ctx, seed);
     const renderer = new PixiRenderer();
     const loop = new GameLoop({
-      step: () => stepSim(state, ctx),
+      step: () => {
+        stepSim(state, ctx);
+        if (state.events.length) renderer.pushEvents(state.events, ctx, state);
+      },
       render: (alpha) => renderer.draw({ state, ctx, alpha, overlay: overlay.current }),
       isAnimating: () => isAnimating(state),
       onAutoPause: () => setPaused(true),
@@ -95,6 +98,7 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
           return;
         }
         game.current = { state, ctx, renderer, loop };
+        renderer.setEffectsScale(settings.batterySaver ? 0.5 : 1);
         loop.start();
         setView(simView(state, ctx));
       })
@@ -256,19 +260,22 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
         {result && view && <ResultOverlay view={view} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
       </div>
 
-      {selected ? (
-        <TowerPanel
-          tower={selected}
-          resources={view?.resources ?? 0}
-          onUpgrade={(branch) => send({ type: 'upgrade', towerId: selected.id, branch })}
-          onSell={() => {
-            if (send({ type: 'sell', towerId: selected.id })) select(null);
-          }}
-          onClose={() => select(null)}
-        />
-      ) : (
-        <BuildBar towers={content.towers} resources={view?.resources ?? 0} placing={placing} onPick={startPlacing} />
-      )}
+      {/* Fixed-height footer slot: the build bar and the tower panel swap inside it without resizing the board. */}
+      <div className="shrink-0 overflow-y-auto bg-grove-900" style={{ height: 'calc(9rem + var(--safe-bottom))' }}>
+        {selected ? (
+          <TowerPanel
+            tower={selected}
+            resources={view?.resources ?? 0}
+            onUpgrade={(branch) => send({ type: 'upgrade', towerId: selected.id, branch })}
+            onSell={() => {
+              if (send({ type: 'sell', towerId: selected.id })) select(null);
+            }}
+            onClose={() => select(null)}
+          />
+        ) : (
+          <BuildBar towers={content.towers} resources={view?.resources ?? 0} placing={placing} onPick={startPlacing} />
+        )}
+      </div>
     </div>
   );
 }

@@ -1,8 +1,8 @@
-// Extra Terram — src/render/renderer.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/render/renderer.ts v0.2.0 — events and effects scale
 // The thin interface the app drives. PixiRenderer is the one implementation today; keeping the
 // surface small means a Canvas 2D fallback or a different engine could slot in without touching
 // the sim or the UI.
-import type { SimContext, SimState } from '../engine';
+import type { SimContext, SimEvent, SimState } from '../engine';
 
 export interface Cell {
   col: number;
@@ -32,6 +32,10 @@ export interface Renderer {
   mount(canvas: HTMLCanvasElement, width: number, height: number, ctx: SimContext): Promise<void>;
   resize(width: number, height: number): void;
   draw(frame: RenderFrame): void;
+  /** Hand over one tick's sim events (fire, hit, kill, ...) for effects. */
+  pushEvents(events: SimEvent[], ctx: SimContext, state: SimState): void;
+  /** 1 = full particle budget, 0.5 = battery saver. */
+  setEffectsScale(scale: number): void;
   /** Map a pointer position (CSS pixels relative to the viewport) to a board cell, or null when outside the board. */
   screenToCell(clientX: number, clientY: number): Cell | null;
   destroy(): void;

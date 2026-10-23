@@ -1,4 +1,17 @@
-# Handoff — Phase 1 scaffold (2026-10-22)
+# Handoff — Phase 1 scaffold (2026-10-22, updated with v0.2.0 art pass)
+
+## v0.2.0 — unit art, weapon effects, sprite pipeline (same day, later)
+
+- `src/engine`: the sim now emits per-tick render events (`fire`, `hit`, `kill`, `leak`, `place`, `upgrade`, `sell`, `wave`) in `state.events`; cleared each step, excluded from the state hash. Determinism unchanged (smoke test hash identical before and after).
+- `src/render/sprites.ts`: sprite library. Reads `public/sprites/manifest.json`, preloads listed images, falls back to vector art per sprite. Keys and file layout match the art handoff doc.
+- `src/render/vectorArt.ts`: distinct vector units: Needlespire (spire with needle rings; t3a rust-tipped and weeping, t3b twin spires), Ironbark (armoured trunk + rotating seed-pod cannon turret; t3a steel barrel, t3b double pod), Weepvine (hooded bell with trailing vines; t3a surfacing roots, t3b snare loops); Compactor, Dump hauler, Dozer as top-down vehicles; needle and acorn projectiles.
+- `src/render/effects.ts`: pooled particles (400, one draw batch): muzzle flashes, projectile trails, impact bursts by damage type, bio drips, death bursts by armour (sparks + tumbling scrap for plated, sap + leaves for organic, shards for shielded), leak pulse, place/upgrade/sell rings. Battery saver halves counts.
+- `PixiRenderer.ts`: turret aiming with easing and recoil, aura root-rings with rotating tendrils and motes, slow ring, stun motes, bleed tint, soft shadows under creeps, ellipse selection marker.
+- HUD is a fixed two-row layout and the footer slot has a fixed height, so the board never shifts when a wave starts or a tower is selected (it did before; a tap could land on the wrong cell).
+- `scripts/sprites.py` (`npm run sprites`, `-- --fit`): fits raw crops from `public/sprites/_inbox/` to the canvas spec and writes the manifest.
+
+Verified: build, lint, typecheck, sim smoke test (hash unchanged), headless phone-size run with placement, waves at 1–3×, selection, tier-2 upgrade; no console errors.
+
 
 ## What was built
 
@@ -43,6 +56,6 @@ Verified in this session:
 1. **Install the dependencies on Windows** (`npm install`) — `node_modules` is not in the zip. Node 22 is pinned in `netlify.toml`.
 2. **Push to the repo and connect Netlify** (build `npm run build`, publish `dist`). Deep links work through the SPA redirect in `netlify.toml`.
 3. **Profile on the S24** through `chrome://inspect` with the 3× button held through waves 9–10, and watch for thermal throttling over ten minutes. If frames drop, the first knobs are `MAX_RESOLUTION` in `PixiRenderer.ts` (2 → 1.5) and the battery-saver setting (30 fps).
-4. **Four small open questions** under Decisions in the design doc (lives in 2v2 Lanes, send targeting, empty seats, King of the Maze base rule).
+4. ~~Four small open questions~~ Settled Oct 22: 2v2 Lanes share a team life pool; free-for-all sends hit one random rival (seeded, carried in the send event); bots fill empty seats and move into Phase 4; a fallen King of the Maze base ends the match, ranked by score at that moment.
 5. **Project instructions** are still empty: paste the brief's §8 ways of working.
 6. Phase 2 starts with content: the other three tower rosters and creep rosters, upgrade branches for all, more mazes per world, painted backgrounds per world, sound. The schemas already accept all eight role slots and creep archetypes; the engine does not yet implement flyers, path-skippers, tower-attackers, buffers, splash or economy towers.

@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/types.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/engine/types.ts v0.2.0 — sim events for the renderer
 // Content types (mirroring src/content/schemas) and simulation state.
 // Everything in SimState is plain JSON so a snapshot is just JSON.stringify(state).
 import type { RngState } from './rng';
@@ -227,6 +227,20 @@ export type SimInput =
 /** An input as recorded in the log: who sent it and the tick it applied on. */
 export type LoggedInput = SimInput & { tick: number; seat: number; seq: number };
 
+/**
+ * Transient events raised during one tick, for the renderer only. Cleared at the start of every
+ * step, excluded from the state hash, never read by the sim itself.
+ */
+export type SimEvent =
+  | { kind: 'fire'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType }
+  | { kind: 'hit'; x: number; y: number; damageType: DamageType; amount: number; kill: boolean }
+  | { kind: 'kill'; creep: string; x: number; y: number; armor: ArmorType }
+  | { kind: 'leak'; creep: string; x: number; y: number }
+  | { kind: 'place'; tower: number; x: number; y: number }
+  | { kind: 'upgrade'; tower: number; x: number; y: number; tier: number }
+  | { kind: 'sell'; x: number; y: number }
+  | { kind: 'wave'; index: number };
+
 export interface SimStats {
   kills: number;
   leaks: number;
@@ -268,6 +282,7 @@ export interface SimState {
   projectiles: Projectile[];
   spawnQueue: SpawnEntry[];
   inputLog: LoggedInput[];
+  events: SimEvent[];
   stats: SimStats;
   result: SimResult | null;
 }

@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/inputs.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/engine/inputs.ts v0.2.0 — emits place/upgrade/sell events
 // Player inputs: validate, apply, and log with the tick they applied on.
 // The log is the replay, the lockstep payload (Phase 4) and the verification record in one.
 import { cellIndex } from './map';
@@ -77,6 +77,7 @@ export function applyInput(state: SimState, ctx: SimContext, input: SimInput, se
       state.occupied[cellIndex(state.cols, input.col, input.row)] = tower.id;
       state.resources -= def.cost;
       state.stats.spent += def.cost;
+      state.events.push({ kind: 'place', tower: tower.id, x: input.col + 0.5, y: input.row + 0.5 });
       break;
     }
     case 'upgrade': {
@@ -87,6 +88,7 @@ export function applyInput(state: SimState, ctx: SimContext, input: SimInput, se
       tower.invested += cost;
       tower.tier = (tower.tier + 1) as 2 | 3;
       if (tower.tier === 3) tower.branch = input.branch!;
+      state.events.push({ kind: 'upgrade', tower: tower.id, x: tower.col + 0.5, y: tower.row + 0.5, tier: tower.tier });
       break;
     }
     case 'sell': {
@@ -94,6 +96,7 @@ export function applyInput(state: SimState, ctx: SimContext, input: SimInput, se
       state.resources += sellValue(tower);
       state.occupied[cellIndex(state.cols, tower.col, tower.row)] = -1;
       state.towers = state.towers.filter((t) => t.id !== tower.id);
+      state.events.push({ kind: 'sell', x: tower.col + 0.5, y: tower.row + 0.5 });
       break;
     }
     case 'start-wave': {

@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/snapshot.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/engine/snapshot.ts v0.2.0 — events excluded from the hash
 // Snapshot = the whole sim as JSON (rejoin, resync, suspended-run saves).
 // Hash = a cheap fingerprint of that JSON (desync detection in shared-board modes).
 import { fnv1a32 } from './rng';
@@ -20,12 +20,13 @@ export function cloneState(state: SimState): SimState {
 }
 
 /**
- * 32-bit fingerprint of the state. The input log is excluded so two clients that received the
+ * 32-bit fingerprint of the state. The input log and the per-tick render events are excluded so two clients that received the
  * same inputs in a different order (impossible under lockstep, but cheap to guard) still compare
  * the board itself. Hex-formatted for logs and comparisons.
  */
 export function hashState(state: SimState): string {
-  const { inputLog, ...board } = state;
+  const { inputLog, events, ...board } = state;
   void inputLog;
+  void events;
   return fnv1a32(JSON.stringify(board)).toString(16).padStart(8, '0');
 }

@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/sim.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/engine/sim.ts v0.2.0 — emits render events per tick
 // The deterministic simulation: 20 Hz fixed tick, plain-JSON state, no wall clock, no Math.random.
 // Everything here runs identically in the browser, in Node (scripts/sim-smoke.ts) and, later,
 // on the server for replay verification. Keep it that way.
@@ -59,6 +59,7 @@ export function createSim(ctx: SimContext, seed: string): SimState {
     projectiles: [],
     spawnQueue: [],
     inputLog: [],
+    events: [],
     stats: { kills: 0, leaks: 0, spent: 0, earned: 0, damageDealt: 0 },
     result: null,
   };
@@ -111,6 +112,7 @@ export function damageMultiplier(ctx: SimContext, type: DamageType, armor: Creep
 export function stepSim(state: SimState, ctx: SimContext): void {
   if (state.phase === 'won' || state.phase === 'lost') return;
   state.tick++;
+  state.events.length = 0;
 
   if (state.phase === 'build') {
     state.buildTimer--;
@@ -148,6 +150,7 @@ export function beginWave(state: SimState, ctx: SimContext): void {
   state.phase = 'wave';
   state.waveStartTick = state.tick;
   state.buildTimer = 0;
+  state.events.push({ kind: 'wave', index: state.waveIndex });
   const wave = ctx.waves.waves[state.waveIndex];
   const queue = state.spawnQueue;
   for (const g of wave.groups) {
@@ -290,6 +293,7 @@ function updateTowers(state: SimState, ctx: SimContext, buckets: Buckets): void 
     // "First" targeting: the creep furthest along the path. Ties break by id for determinism.
     targets.sort((a, b) => b.dist - a.dist || a.id - b.id);
     const shots = Math.min(stats.multishot, targets.length);
+    state.events.push({ kind: 'fire', tower: tower.id, x: cx, y: cy, tx: targets[0].x, ty: targets[0].y, damageType: def.damageType });
     for (let i = 0; i < shots; i++) {
       const target = targets[i];
       state.projectiles.push({
@@ -332,7 +336,9 @@ function updateProjectiles(state: SimState, ctx: SimContext, byId: Map<number, C
       p.y = target.y;
       p.alive = false;
       const owner = state.towers.find((t) => t.id === p.owner);
+      const hpBefore = target.hp;
       applyDamage(state, ctx, target, p.damage, p.damageType, p.armorPierce, owner);
+      state.events.push({ kind: 'hit', x: p.x, y: p.y, damageType: p.damageType, amount: hpBefore - target.hp, kill: !target.alive });
       if (p.bleedTicks > 0 && target.alive) {
         target.bleedPerSecond = Math.max(target.bleedPerSecond, p.bleedPerSecond);
         target.bleedTicks = Math.max(target.bleedTicks, p.bleedTicks);
@@ -393,6 +399,7 @@ function updateCreeps(state: SimState, ctx: SimContext): void {
 function leak(state: SimState, ctx: SimContext, c: Creep): void {
   const def = ctx.creepIndex[c.def];
   c.alive = false;
+  state.events.push({ kind: 'leak', creep: c.def, x: c.x, y: c.y });
   state.lives = Math.max(0, state.lives - def.leakCost);
   state.stats.leaks++;
   if (state.lives <= 0 && state.phase === 'wave') finish(state, ctx, 'lost');
@@ -407,6 +414,7 @@ function applyDamage(state: SimState, ctx: SimContext, creep: Creep, amount: num
   if (owner) owner.damageDealt += dealt;
   if (creep.hp <= 0) {
     creep.alive = false;
+    state.events.push({ kind: 'kill', creep: creep.def, x: creep.x, y: creep.y, armor: def.armor });
     state.resources += def.bounty;
     state.score += def.bounty;
     state.stats.kills++;

@@ -1,8 +1,8 @@
 {
   "name": "extra-terram",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Extra Terram: The Alien Race Tower Defense — Phase 1 vertical slice",
+  "description": "Extra Terram: The Alien Race Tower Defense \u2014 Phase 1 vertical slice",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-content.mjs",
     "sim": "tsx scripts/sim-smoke.ts",
-    "art": "python scripts/gen-background.py && python scripts/gen-icons.py"
+    "art": "python scripts/gen-background.py && python scripts/gen-icons.py && python scripts/sprites.py",
+    "sprites": "python scripts/sprites.py"
   },
   "dependencies": {
     "pixi.js": "^8.22.0",

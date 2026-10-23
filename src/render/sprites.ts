@@ -81,7 +81,7 @@ export class SpriteLibrary {
     const file = `${def.race}/${def.id}/${tierFile(tier, branch)}`;
     const image = this.imageTexture(file);
     const entry: SpriteEntry = image
-      ? { texture: image, width: TILE * 1.6, height: TILE * 1.6, ax: 0.5, ay: TOWER_ANCHOR_Y, image: true }
+      ? { texture: image, width: TILE * 1.85, height: TILE * 1.85, ax: 0.5, ay: TOWER_ANCHOR_Y, image: true }
       : this.generate((g) => drawTower(g, def, tier, branch, TILE));
     this.cache.set(key, entry);
     return entry;
@@ -96,7 +96,7 @@ export class SpriteLibrary {
     const file = `${def.race}/${def.id}/turret-${tierFile(tier, branch)}`;
     const image = this.imageTexture(file);
     const entry: SpriteEntry = image
-      ? { texture: image, width: TILE * 0.9, height: TILE * 0.9, ax: 0.5, ay: 0.5, image: true }
+      ? { texture: image, width: TILE * 1.0, height: TILE * 1.0, ax: 0.5, ay: 0.5, image: true }
       : this.generate((g) => drawTurret(g, def, tier, branch, TILE));
     this.cache.set(key, entry);
     return entry;
@@ -108,7 +108,8 @@ export class SpriteLibrary {
     if (cached) return cached;
     const file = `${def.race}/creeps/${def.id}.png`;
     const image = this.imageTexture(file);
-    const size = TILE * def.radius * 2 * 1.5;
+    // Painted creeps fill ~72% of their canvas, so the canvas is drawn larger than the hit radius.
+    const size = TILE * Math.min(1.5, Math.max(0.95, def.radius * 2 * 2.7));
     const entry: SpriteEntry = image
       ? { texture: image, width: size, height: size, ax: 0.5, ay: 0.5, image: true }
       : this.generate((g) => drawCreep(g, def, TILE));
@@ -133,6 +134,11 @@ export class SpriteLibrary {
     for (const e of this.cache.values()) if (!e.image) e.texture.destroy(true);
     this.cache.clear();
   }
+}
+
+/** Public path of a sprite image, for the UI (build bar, menu). The UI hides the img if it 404s. */
+export function spriteUrl(race: string, towerId: string, state: 't1' | 't2' | 't3a' | 't3b' = 't1'): string {
+  return `/sprites/${race}/${towerId}/${state}.png`;
 }
 
 export function hasTurret(def: TowerDef): boolean {

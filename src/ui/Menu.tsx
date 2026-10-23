@@ -1,7 +1,8 @@
-// Extra Terram — src/ui/Menu.tsx v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/ui/Menu.tsx v0.3.0 — faction preview with the tower sprites
 // Title screen: one level for now, a seed you can share, and the two device settings.
 import { useState } from 'react';
-import { CONTENT_VERSION, type LevelEntry } from '../content';
+import { CONTENT_VERSION, content, type LevelEntry } from '../content';
+import { TowerIcon } from './TowerIcon';
 import { ENGINE_VERSION } from '../engine';
 import { randomSeed, type Settings } from '../app/settings';
 
@@ -23,7 +24,20 @@ export function Menu({ levels, settings, onSettings, onPlay }: Props) {
         <h1 className="mt-1 text-3xl font-bold leading-tight">The Alien Race Tower Defense</h1>
         <p className="mt-2 text-sm text-grove-300/80">Pick a race, defend your maze. Phase 1 slice: the Rootkin hold a forest moon against the Assembly's construction crew.</p>
 
-        <section className="mt-6 rounded-xl border border-grove-700 bg-grove-900 p-4">
+        <section className="mt-6 flex items-center gap-3 rounded-xl border border-grove-700 bg-grove-900 px-4 py-3">
+          <div className="flex -space-x-2">
+            {content.towers.map((t) => (
+              <TowerIcon key={t.id} tower={t} size={56} state="t2" />
+            ))}
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs uppercase tracking-wide text-grove-300/60">Your race</p>
+            <p className="font-semibold">Rootkin</p>
+            <p className="truncate text-xs text-grove-300/70">{content.towers.map((t) => t.name).join(' · ')}</p>
+          </div>
+        </section>
+
+        <section className="mt-3 rounded-xl border border-grove-700 bg-grove-900 p-4">
           <h2 className="text-xs uppercase tracking-wide text-grove-300/60">Level</h2>
           <p className="mt-1 font-semibold">{level.map.name}</p>
           <p className="text-sm text-grove-300/80">

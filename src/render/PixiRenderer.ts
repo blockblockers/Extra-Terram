@@ -1,4 +1,4 @@
-// Extra Terram — src/render/PixiRenderer.ts v0.2.0 — sprite library, turrets, status marks, effects layer
+// Extra Terram — src/render/PixiRenderer.ts v0.3.0 — painted sprites from the art pack
 // PixiJS v8 renderer. It is driven by the app's loop (no Pixi ticker): the loop decides when a
 // frame is worth drawing, this class only draws. Heat controls live in the loop (fps cap, idle
 // between waves) and here (resolution cap, generated textures cached once, no per-frame filters,
@@ -20,6 +20,7 @@ interface TowerView {
   aim: number; // current turret angle
   targetAim: number;
   recoil: number;
+  mount: number; // turret height above the cell centre, board px
 }
 
 interface CreepView {
@@ -86,7 +87,7 @@ export class PixiRenderer implements Renderer {
       autoDensity: true,
       antialias: true,
       autoStart: false, // the app loop calls render(); Pixi's ticker never runs
-      background: 0x06100b,
+      background: 0x07131a,
     });
     this.mounted = true;
     this.sprites = new SpriteLibrary(this.app.renderer);
@@ -300,6 +301,7 @@ export class PixiRenderer implements Renderer {
           view.turret?.destroy();
         }
         const entry = this.sprites!.tower(def, t.tier, t.branch);
+        const mount = entry.image ? TILE * 0.5 : turretMount(def, t.tier, TILE);
         const body = new Sprite(entry.texture);
         body.anchor.set(entry.ax, entry.ay);
         body.width = entry.width;
@@ -314,11 +316,11 @@ export class PixiRenderer implements Renderer {
             turret.anchor.set(te.ax, te.ay);
             turret.width = te.width;
             turret.height = te.height;
-            turret.position.set(t.col * TILE + TILE / 2, t.row * TILE + TILE / 2 - turretMount(def, t.tier, TILE));
+            turret.position.set(t.col * TILE + TILE / 2, t.row * TILE + TILE / 2 - mount);
             this.towerLayer.addChild(turret);
           }
         }
-        view = { body, turret, key, aim: view?.aim ?? -Math.PI / 2, targetAim: view?.targetAim ?? -Math.PI / 2, recoil: 0 };
+        view = { body, turret, key, aim: view?.aim ?? -Math.PI / 2, targetAim: view?.targetAim ?? -Math.PI / 2, recoil: 0, mount };
         this.towers.set(t.id, view);
         this.towerDefOf.set(t.id, t.def);
       }
@@ -331,7 +333,7 @@ export class PixiRenderer implements Renderer {
         view.turret.rotation = view.aim;
         view.recoil = Math.max(0, view.recoil - 0.25 * dt);
         const back = view.recoil * 3;
-        view.turret.position.set(t.col * TILE + TILE / 2 - Math.cos(view.aim) * back, t.row * TILE + TILE / 2 - turretMount(def, t.tier, TILE) - Math.sin(view.aim) * back);
+        view.turret.position.set(t.col * TILE + TILE / 2 - Math.cos(view.aim) * back, t.row * TILE + TILE / 2 - view.mount - Math.sin(view.aim) * back);
       }
     }
     for (const [id, view] of this.towers) {

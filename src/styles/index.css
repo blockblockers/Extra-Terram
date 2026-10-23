@@ -1,4 +1,4 @@
-/* Extra Terram — src/styles/index.css v0.1.0 — Phase 1 scaffold */
+/* Extra Terram — src/styles/index.css v0.3.0 — teal-navy chrome */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,7 +17,7 @@ body,
 #root {
   height: 100%;
   margin: 0;
-  background: #06100b;
+  background: #07131a;
   color: #e6f0e8;
   overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;

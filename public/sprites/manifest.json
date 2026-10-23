@@ -1,4 +1,26 @@
 {
   "version": 1,
-  "sprites": []
+  "sprites": [
+    "assembly/creeps/compactor.png",
+    "assembly/creeps/dozer.png",
+    "assembly/creeps/dump-hauler.png",
+    "rootkin/ironbark/projectile.png",
+    "rootkin/ironbark/t1.png",
+    "rootkin/ironbark/t2.png",
+    "rootkin/ironbark/t3a.png",
+    "rootkin/ironbark/t3b.png",
+    "rootkin/ironbark/turret-t1.png",
+    "rootkin/ironbark/turret-t2.png",
+    "rootkin/ironbark/turret-t3a.png",
+    "rootkin/ironbark/turret-t3b.png",
+    "rootkin/needlespire/projectile.png",
+    "rootkin/needlespire/t1.png",
+    "rootkin/needlespire/t2.png",
+    "rootkin/needlespire/t3a.png",
+    "rootkin/needlespire/t3b.png",
+    "rootkin/weepvine/t1.png",
+    "rootkin/weepvine/t2.png",
+    "rootkin/weepvine/t3a.png",
+    "rootkin/weepvine/t3b.png"
+  ]
 }

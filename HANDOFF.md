@@ -59,3 +59,15 @@ Verified in this session:
 4. ~~Four small open questions~~ Settled Oct 22: 2v2 Lanes share a team life pool; free-for-all sends hit one random rival (seeded, carried in the send event); bots fill empty seats and move into Phase 4; a fallen King of the Maze base ends the match, ranked by score at that moment.
 5. **Project instructions** are still empty: paste the brief's §8 ways of working.
 6. Phase 2 starts with content: the other three tower rosters and creep rosters, upgrade branches for all, more mazes per world, painted backgrounds per world, sound. The schemas already accept all eight role slots and creep archetypes; the engine does not yet implement flyers, path-skippers, tower-attackers, buffers, splash or economy towers.
+
+## v0.3.0 — concept-art integration (2026-10-23)
+
+- The art pack's four concept sheets live in `art/concept-sheets/`. They are labelled sheets on fake-transparency checkerboards, so `scripts/cut-sheets.py` cuts the usable units out: flood-fills the checker to true alpha, drops baked ground shadows and label fragments, rotates projectiles to face right, then `scripts/sprites.py --fit` places them on the spec canvases and writes the manifest. `npm run cut-sheets` does both; `npm run art` regenerates everything.
+- Mapping (sheet 01, Rootkin columns): column 1 broad/stout → Ironbark; column 2 drooping vines → Weepvine; column 3 narrow/pointed → Needlespire; the labelled IRONBARK pod on sheet 02 is the rotating turret (rotated 135° to point right, one image for every tier). Assembly creeps are sheet 02's three right-facing walkers: small → Compactor, mid → Dump hauler, wide crab → Dozer. Projectiles: sheet 02's green leaf-needle (Needlespire) and gold seed (Ironbark). Swap a folder's files to change any of this; no code change needed.
+- 21 sprites in `public/sprites/` and listed in the manifest; every other sprite still falls back to vector art.
+- Background repainted to the pack's palette (saturated moss with teal shadow, bark trail with root edges and stepping stones, sap-gold rimmed stumps, gold spawn gate, cyan-green grove heart). Chrome retinted to the sheets' deep teal-navy; `theme_color` and the Pixi clear colour match.
+- PWA icons cut from sheet 03's Rootkin tier-2 tree on a teal-navy tile with a sap-gold glow: `icon-512`, `icon-192`, `apple-touch-icon` (180), `favicon-32`, and a safe-zone `icon-maskable-512` for the manifest's maskable entry. `index.html` links all of them.
+- UI: build bar and tower panel show the tower sprite (t1 / current tier); the menu shows the three towers as a race preview. `TowerIcon` falls back to a colour dot when an image is missing.
+- Renderer: image towers draw at 1.85 tiles with the footprint anchor from the spec; turrets mount at half a tile above the centre on image bodies; creep canvases scale with hit radius (0.95 to 1.5 tiles).
+
+Verified: build, lint, typecheck, sim smoke test (hash unchanged), headless phone-size run with placement, waves, selection and a tier-2 upgrade; no console errors.

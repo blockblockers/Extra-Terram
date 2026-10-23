@@ -8,20 +8,20 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png', 'maps/*.png'],
+      includeAssets: ['icons/*.png', 'maps/*.png', 'sprites/**/*.png', 'sprites/manifest.json'],
       manifest: {
         name: 'Extra Terram: The Alien Race Tower Defense',
         short_name: 'Extra Terram',
         description: 'Pick a race, defend your maze.',
-        theme_color: '#06100b',
-        background_color: '#06100b',
+        theme_color: '#07131a',
+        background_color: '#07131a',
         display: 'standalone',
         orientation: 'any',
         start_url: '/',
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

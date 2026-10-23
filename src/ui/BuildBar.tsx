@@ -1,6 +1,7 @@
-// Extra Terram — src/ui/BuildBar.tsx v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/ui/BuildBar.tsx v0.3.0 — tower sprite icons
 // Bottom shop bar. Inset by the bottom safe area. Tap a tower, then tap a build pad on the board.
 import type { TowerDef } from '../engine';
+import { TowerIcon } from './TowerIcon';
 
 interface Props {
   towers: TowerDef[];
@@ -21,17 +22,15 @@ export function BuildBar({ towers, resources, placing, onPick }: Props) {
               key={t.id}
               onClick={() => onPick(t.id)}
               disabled={!affordable && !active}
-              className={`flex min-w-0 flex-1 flex-col items-start rounded-lg border px-3 py-2 text-left ${
+              className={`flex min-w-0 flex-1 flex-col items-center rounded-lg border px-2 py-2 text-center ${
                 active ? 'border-grove-300 bg-grove-700' : affordable ? 'border-grove-700 bg-grove-800 hover:bg-grove-700' : 'border-grove-800 bg-grove-900 opacity-50'
               }`}
               title={`${t.description} (key ${i + 1})`}
             >
-              <span className="flex w-full items-center gap-2">
-                <span className="inline-block h-3.5 w-3.5 shrink-0 rounded-full" style={{ backgroundColor: t.color }} />
-                <span className="truncate font-semibold">{t.name}</span>
-              </span>
-              <span className="text-xs text-grove-300/80">
-                {t.role} · <span className="text-sap">{t.cost} sap</span>
+              <TowerIcon tower={t} size={46} />
+              <span className="mt-1 w-full truncate text-xs font-semibold">{t.name}</span>
+              <span className="text-[11px] text-grove-300/80">
+                {t.role} · <span className="text-sap">{t.cost}</span>
               </span>
             </button>
           );

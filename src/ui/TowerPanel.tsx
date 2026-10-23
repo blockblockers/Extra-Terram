@@ -1,6 +1,7 @@
-// Extra Terram — src/ui/TowerPanel.tsx v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/ui/TowerPanel.tsx v0.3.0 — tower sprite icon
 // Replaces the build bar while a tower is selected: stats, the next upgrade (a branch choice at tier 2), sell.
 import { TICK_RATE, type TowerDef, type TowerStats } from '../engine';
+import { TowerIcon } from './TowerIcon';
 
 export interface SelectedTower {
   id: number;
@@ -33,7 +34,7 @@ export function TowerPanel({ tower, resources, onUpgrade, onSell, onClose }: Pro
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="inline-block h-3.5 w-3.5 rounded-full" style={{ backgroundColor: def.color }} />
+            <TowerIcon tower={def} size={30} state={tower.tier === 3 ? (tower.branch === 'b' ? 't3b' : 't3a') : tower.tier === 2 ? 't2' : 't1'} />
             <span className="font-semibold">{tower.name}</span>
             <span className="text-grove-300/70">
               tier {tower.tier}

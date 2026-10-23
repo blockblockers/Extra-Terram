@@ -1,0 +1,35 @@
+{
+  "id": "rootkin-forest-01",
+  "name": "Mossbank Hollow",
+  "world": "rootkin",
+  "difficulty": "easy",
+  "cols": 12,
+  "rows": 16,
+  "legend": {
+    ".": "scenery",
+    "#": "path",
+    "o": "pad",
+    "S": "spawn",
+    "E": "exit"
+  },
+  "grid": [
+    ".S..........",
+    ".#oo.....o..",
+    "o#.o......o.",
+    ".#o..oo..o..",
+    ".#########..",
+    "o.o.oo.o.#o.",
+    "..o..o.o.#.o",
+    ".o.o..o..#o.",
+    "..########..",
+    ".o#o.o..o.o.",
+    "..#.o.oo..o.",
+    ".o#o....o...",
+    "..#########.",
+    ".o.oo.o.o.#o",
+    "....o..o..#.",
+    "..........E."
+  ],
+  "background": "/maps/rootkin-forest-01.png",
+  "content_version": "0.1.0"
+}

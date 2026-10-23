@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://extraterram.app/schemas/damage-matrix.schema.json",
+  "title": "Damage-type vs armor-type multipliers",
+  "type": "object",
+  "required": ["content_version", "multipliers"],
+  "additionalProperties": false,
+  "properties": {
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "multipliers": {
+      "type": "object",
+      "required": ["kinetic", "energy", "bio"],
+      "additionalProperties": false,
+      "properties": {
+        "kinetic": { "$ref": "#/$defs/row" },
+        "energy": { "$ref": "#/$defs/row" },
+        "bio": { "$ref": "#/$defs/row" }
+      }
+    }
+  },
+  "$defs": {
+    "row": {
+      "type": "object",
+      "required": ["organic", "plated", "shielded"],
+      "additionalProperties": false,
+      "properties": {
+        "organic": { "type": "number", "minimum": 0 },
+        "plated": { "type": "number", "minimum": 0 },
+        "shielded": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}

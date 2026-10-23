@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://extraterram.app/schemas/creep.schema.json",
+  "title": "Creeps content file",
+  "type": "object",
+  "required": ["content_version", "creeps"],
+  "additionalProperties": false,
+  "properties": {
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "creeps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "race", "name", "archetype", "hp", "speed", "armor", "bounty", "leakCost", "radius", "color"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "race": { "type": "string" },
+          "name": { "type": "string", "minLength": 1 },
+          "archetype": { "enum": ["rusher", "workhorse", "tank", "tower-attacker", "flyer", "path-skipper", "buffer", "boss"] },
+          "hp": { "type": "number", "exclusiveMinimum": 0 },
+          "speed": { "type": "number", "exclusiveMinimum": 0, "description": "tiles per second" },
+          "armor": { "enum": ["organic", "plated", "shielded"] },
+          "bounty": { "type": "integer", "minimum": 0 },
+          "leakCost": { "type": "integer", "minimum": 1 },
+          "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5, "description": "tiles, for rendering and hit tests" },
+          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+        }
+      }
+    }
+  }
+}

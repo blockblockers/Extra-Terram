@@ -1,0 +1,170 @@
+{
+  "id": "rootkin-forest-01",
+  "map": "rootkin-forest-01",
+  "startingResources": 180,
+  "lives": 20,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "waves": [
+    {
+      "name": "Survey crew",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 8,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Second shift",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 12,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Haulers arrive",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 8,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Convoy",
+      "groups": [
+        {
+          "creep": "dump-hauler",
+          "count": 6,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Mixed crew",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "First dozer",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "compactor",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Overtime",
+      "groups": [
+        {
+          "creep": "dump-hauler",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "compactor",
+          "count": 14,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Heavy plant",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Rush hour",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 28,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 12,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Clearance order",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 9,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 14,
+          "intervalTicks": 18,
+          "delayTicks": 80
+        },
+        {
+          "creep": "compactor",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    }
+  ],
+  "content_version": "0.1.0"
+}

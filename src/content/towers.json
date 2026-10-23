@@ -1,0 +1,170 @@
+{
+  "content_version": "0.1.0",
+  "towers": [
+    {
+      "id": "needlespire",
+      "race": "rootkin",
+      "name": "Needlespire",
+      "role": "starter",
+      "description": "Rapid needle volleys. Cheap and fast; kinetic damage.",
+      "cost": 60,
+      "range": 2.2,
+      "damage": 7,
+      "damageType": "kinetic",
+      "cooldownTicks": 5,
+      "attack": "projectile",
+      "projectileSpeed": 10,
+      "tiers": [
+        {
+          "upgradeCost": 45,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 70,
+          "damageMult": 1.4,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1.9,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.8
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "barbed",
+          "name": "Barbed needles",
+          "description": "Hits leave a bleeding wound: 4 bio damage per second for 2 s.",
+          "effects": {
+            "bleedPerSecond": 4,
+            "bleedTicks": 40
+          }
+        },
+        "b": {
+          "id": "twin-volley",
+          "name": "Twin volley",
+          "description": "Fires at two targets at once.",
+          "effects": {
+            "multishot": 2
+          }
+        }
+      },
+      "color": "#7fd36b"
+    },
+    {
+      "id": "ironbark",
+      "race": "rootkin",
+      "name": "Ironbark",
+      "role": "heavy",
+      "description": "Slow, heavy acorn cannon. Big single hits; weak against plating until pierced.",
+      "cost": 110,
+      "range": 2.8,
+      "damage": 52,
+      "damageType": "kinetic",
+      "cooldownTicks": 30,
+      "attack": "projectile",
+      "projectileSpeed": 7,
+      "tiers": [
+        {
+          "upgradeCost": 90,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 140,
+          "damageMult": 1.5,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.1,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "ironpiercer",
+          "name": "Ironpiercer",
+          "description": "Acorns punch through plating: full damage against Plated armor.",
+          "effects": {
+            "armorPierce": true
+          }
+        },
+        "b": {
+          "id": "double-acorn",
+          "name": "Double acorn",
+          "description": "Fires two acorns per shot at two targets.",
+          "effects": {
+            "multishot": 2
+          }
+        }
+      },
+      "color": "#8b5a2b"
+    },
+    {
+      "id": "weepvine",
+      "race": "rootkin",
+      "name": "Weepvine",
+      "role": "control",
+      "description": "A root field that slows every creep in range and seeps sap into them (bio damage over time).",
+      "cost": 90,
+      "range": 1.8,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "aura",
+      "aura": {
+        "slow": 0.4,
+        "dotPerSecond": 3,
+        "dotType": "bio"
+      },
+      "tiers": [
+        {
+          "upgradeCost": 70,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.5,
+          "rangeMult": 1.15,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.3,
+          "cooldownMult": 1.0
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "deep-roots",
+          "name": "Deep roots",
+          "description": "Wider field and a stronger slow.",
+          "effects": {
+            "rangeMult": 1.3,
+            "slowBonus": 0.1
+          }
+        },
+        "b": {
+          "id": "entangle",
+          "name": "Entangle",
+          "description": "Each creep entering the field is held still for half a second.",
+          "effects": {
+            "stunTicksOnEntry": 10
+          }
+        }
+      },
+      "color": "#4fa58a"
+    }
+  ]
+}

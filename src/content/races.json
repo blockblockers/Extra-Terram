@@ -1,0 +1,37 @@
+{
+  "content_version": "0.1.0",
+  "races": [
+    {
+      "id": "rootkin",
+      "name": "Rootkin",
+      "description": "Tree-aliens. Control and economy; a slow start that snowballs. Towers grow stronger the longer they stand.",
+      "damageTypes": ["kinetic", "bio"],
+      "creepArmor": "organic",
+      "palette": { "primary": "#3f8f3a", "secondary": "#6b4a2b" }
+    },
+    {
+      "id": "assembly",
+      "name": "The Assembly",
+      "description": "A machine collective. Raw damage and armor; its construction crew is the Phase 1 enemy.",
+      "damageTypes": ["kinetic", "energy"],
+      "creepArmor": "plated",
+      "palette": { "primary": "#e8c33a", "secondary": "#1a1a1a" }
+    },
+    {
+      "id": "chitin",
+      "name": "Chitin Swarm",
+      "description": "Insectoid hive. Numbers, cheap towers, acid damage over time.",
+      "damageTypes": ["bio"],
+      "creepArmor": "organic",
+      "palette": { "primary": "#8a4fc9", "secondary": "#9fe84a" }
+    },
+    {
+      "id": "lumenari",
+      "name": "Lumenari",
+      "description": "Energy beings. Few expensive towers; range, piercing beams, time tricks.",
+      "damageTypes": ["energy"],
+      "creepArmor": "shielded",
+      "palette": { "primary": "#4fd8e8", "secondary": "#f4fbff" }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://extraterram.app/schemas/map.schema.json",
+  "title": "Map (fixed maze) content file",
+  "description": "A painted tile grid. The engine derives the waypoint path from the path tiles at load; the author never types coordinates.",
+  "type": "object",
+  "required": ["id", "name", "world", "difficulty", "cols", "rows", "legend", "grid", "background", "content_version"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "name": { "type": "string", "minLength": 1 },
+    "world": { "type": "string", "description": "race id whose home world this map is set on" },
+    "difficulty": { "enum": ["easy", "normal", "hard"] },
+    "cols": { "type": "integer", "minimum": 4, "maximum": 64 },
+    "rows": { "type": "integer", "minimum": 4, "maximum": 64 },
+    "legend": {
+      "type": "object",
+      "description": "single character -> tile kind",
+      "additionalProperties": { "enum": ["scenery", "path", "pad", "spawn", "exit", "water"] },
+      "propertyNames": { "type": "string", "minLength": 1, "maxLength": 1 }
+    },
+    "grid": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "type": "string", "minLength": 4 }
+    },
+    "background": { "type": "string", "pattern": "^/maps/[a-z0-9-]+\\.png$" },
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+  }
+}

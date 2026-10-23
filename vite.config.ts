@@ -1,0 +1,36 @@
+// Extra Terram — vite.config.ts v0.1.0 — Phase 1 scaffold
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      includeAssets: ['icons/*.png', 'maps/*.png'],
+      manifest: {
+        name: 'Extra Terram: The Alien Race Tower Defense',
+        short_name: 'Extra Terram',
+        description: 'Pick a race, defend your maze.',
+        theme_color: '#06100b',
+        background_color: '#06100b',
+        display: 'standalone',
+        orientation: 'any',
+        start_url: '/',
+        icons: [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        // Single-player must work offline: precache the app shell, content JSON and map art.
+        globPatterns: ['**/*.{js,css,html,png,svg,json,woff2}'],
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+      },
+    }),
+  ],
+  server: { host: true, port: 5173 },
+  build: { target: 'es2022', sourcemap: false },
+});

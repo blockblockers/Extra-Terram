@@ -1,0 +1,44 @@
+{
+  "content_version": "0.1.0",
+  "creeps": [
+    {
+      "id": "compactor",
+      "race": "assembly",
+      "name": "Compactor",
+      "archetype": "rusher",
+      "hp": 36,
+      "speed": 2.4,
+      "armor": "plated",
+      "bounty": 5,
+      "leakCost": 1,
+      "radius": 0.22,
+      "color": "#e8c33a"
+    },
+    {
+      "id": "dump-hauler",
+      "race": "assembly",
+      "name": "Dump hauler",
+      "archetype": "workhorse",
+      "hp": 150,
+      "speed": 1.4,
+      "armor": "plated",
+      "bounty": 11,
+      "leakCost": 1,
+      "radius": 0.3,
+      "color": "#d89a2b"
+    },
+    {
+      "id": "dozer",
+      "race": "assembly",
+      "name": "Dozer",
+      "archetype": "tank",
+      "hp": 460,
+      "speed": 0.9,
+      "armor": "plated",
+      "bounty": 30,
+      "leakCost": 3,
+      "radius": 0.36,
+      "color": "#c47a1e"
+    }
+  ]
+}

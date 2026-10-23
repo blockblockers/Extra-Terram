@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://extraterram.app/schemas/wave.schema.json",
+  "title": "Wave script content file",
+  "type": "object",
+  "required": ["id", "map", "startingResources", "lives", "firstBuildTicks", "buildTicks", "waveBonus", "waves", "content_version"],
+  "additionalProperties": false,
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "map": { "type": "string", "description": "map id this script runs on" },
+    "startingResources": { "type": "integer", "minimum": 0 },
+    "lives": { "type": "integer", "minimum": 1 },
+    "firstBuildTicks": { "type": "integer", "minimum": 0 },
+    "buildTicks": { "type": "integer", "minimum": 0 },
+    "waveBonus": { "type": "integer", "minimum": 0 },
+    "waves": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["groups"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "groups": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["creep", "count", "intervalTicks", "delayTicks"],
+              "additionalProperties": false,
+              "properties": {
+                "creep": { "type": "string" },
+                "count": { "type": "integer", "minimum": 1 },
+                "intervalTicks": { "type": "integer", "minimum": 1 },
+                "delayTicks": { "type": "integer", "minimum": 0 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+  }
+}

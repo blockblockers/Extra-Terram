@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://extraterram.app/schemas/tower.schema.json",
+  "title": "Towers content file",
+  "type": "object",
+  "required": ["content_version", "towers"],
+  "additionalProperties": false,
+  "properties": {
+    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "towers": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/tower" }
+    }
+  },
+  "$defs": {
+    "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+    "damageType": { "enum": ["kinetic", "energy", "bio"] },
+    "tier": {
+      "type": "object",
+      "required": ["upgradeCost", "damageMult", "rangeMult", "cooldownMult"],
+      "additionalProperties": false,
+      "properties": {
+        "upgradeCost": { "type": "integer", "minimum": 0 },
+        "damageMult": { "type": "number", "exclusiveMinimum": 0 },
+        "rangeMult": { "type": "number", "exclusiveMinimum": 0 },
+        "cooldownMult": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "branchEffects": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "armorPierce": { "type": "boolean" },
+        "multishot": { "type": "integer", "minimum": 2, "maximum": 4 },
+        "rangeMult": { "type": "number", "exclusiveMinimum": 0 },
+        "damageMult": { "type": "number", "exclusiveMinimum": 0 },
+        "slowBonus": { "type": "number", "minimum": 0, "maximum": 0.5 },
+        "stunTicksOnEntry": { "type": "integer", "minimum": 1 },
+        "bleedPerSecond": { "type": "number", "exclusiveMinimum": 0 },
+        "bleedTicks": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "branch": {
+      "type": "object",
+      "required": ["id", "name", "description", "effects"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "effects": { "$ref": "#/$defs/branchEffects" }
+      }
+    },
+    "tower": {
+      "type": "object",
+      "required": ["id", "race", "name", "role", "description", "cost", "range", "damage", "damageType", "cooldownTicks", "attack", "tiers", "branches", "color"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "race": { "type": "string" },
+        "name": { "type": "string", "minLength": 1 },
+        "role": { "enum": ["starter", "heavy", "control", "splash", "range", "economy", "trap", "support"] },
+        "description": { "type": "string" },
+        "cost": { "type": "integer", "minimum": 1 },
+        "range": { "type": "number", "exclusiveMinimum": 0 },
+        "damage": { "type": "number", "minimum": 0 },
+        "damageType": { "$ref": "#/$defs/damageType" },
+        "cooldownTicks": { "type": "integer", "minimum": 0 },
+        "attack": { "enum": ["projectile", "aura"] },
+        "projectileSpeed": { "type": "number", "exclusiveMinimum": 0 },
+        "aura": {
+          "type": "object",
+          "required": ["slow", "dotPerSecond", "dotType"],
+          "additionalProperties": false,
+          "properties": {
+            "slow": { "type": "number", "minimum": 0, "maximum": 0.9 },
+            "dotPerSecond": { "type": "number", "minimum": 0 },
+            "dotType": { "$ref": "#/$defs/damageType" }
+          }
+        },
+        "tiers": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/tier" }
+        },
+        "branches": {
+          "type": "object",
+          "required": ["a", "b"],
+          "additionalProperties": false,
+          "properties": {
+            "a": { "$ref": "#/$defs/branch" },
+            "b": { "$ref": "#/$defs/branch" }
+          }
+        },
+        "color": { "$ref": "#/$defs/color" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "attack": { "const": "projectile" } } },
+          "then": { "required": ["projectileSpeed"] }
+        },
+        {
+          "if": { "properties": { "attack": { "const": "aura" } } },
+          "then": { "required": ["aura"] }
+        }
+      ]
+    }
+  }
+}

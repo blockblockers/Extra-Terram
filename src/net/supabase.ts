@@ -1,4 +1,4 @@
-// Extra Terram — src/net/supabase.ts v0.1.0 — the one Supabase client, or null when not configured
+// Extra Terram — src/net/supabase.ts v0.2.0 — tolerates a project URL pasted with a path (the "Invalid path" sign-up error)
 // The game must run with no backend at all (offline builds, a fresh clone, a blocked network), so
 // every caller checks `supabase` for null and falls back to local storage. Only the publishable
 // (anon) key ever ships in the client; the service-role key is never used here or on Netlify.
@@ -6,7 +6,28 @@ import { createClient, type Provider, type SupabaseClient } from '@supabase/supa
 
 const env = import.meta.env as Record<string, string | undefined>;
 
-const url = env.VITE_SUPABASE_URL?.trim();
+/**
+ * The project URL must be the bare origin (https://<ref>.supabase.co). The dashboard also shows the
+ * REST and Auth endpoints (…/rest/v1, …/auth/v1); pasting one of those makes every request hit
+ * "<origin>/rest/v1/auth/v1/signup", which the gateway answers with
+ * "Invalid path specified in request URL". Keep only the origin and say so once in the console.
+ */
+function projectOrigin(raw: string | undefined): string | undefined {
+  const value = raw?.trim();
+  if (!value) return undefined;
+  try {
+    const u = new URL(value.includes('://') ? value : `https://${value}`);
+    if (u.pathname !== '/' || u.search || u.hash) {
+      console.warn(`[extra-terram] VITE_SUPABASE_URL has a path (${u.pathname}); using ${u.origin}. Set it to the bare project URL.`);
+    }
+    return u.origin;
+  } catch {
+    console.warn('[extra-terram] VITE_SUPABASE_URL is not a valid URL; running offline.');
+    return undefined;
+  }
+}
+
+const url = projectOrigin(env.VITE_SUPABASE_URL);
 const key = (env.VITE_SUPABASE_ANON_KEY ?? env.VITE_SUPABASE_PUBLISHABLE_KEY)?.trim();
 
 export const supabase: SupabaseClient | null =
@@ -58,6 +79,8 @@ export function errorMessage(err: unknown): string {
   if (typeof err === 'object' && 'message' in err && typeof (err as { message: unknown }).message === 'string') {
     const m = (err as { message: string }).message;
     if (/fetch|network|failed to/i.test(m)) return 'No connection to the server. Check your network and try again.';
+    if (/invalid path specified/i.test(m)) return 'The server URL in this build is wrong: VITE_SUPABASE_URL must be the bare project URL (https://<ref>.supabase.co), not the REST or Auth endpoint.';
+    if (/no route matched/i.test(m)) return 'The server URL in this build points at the wrong host. Check VITE_SUPABASE_URL.';
     return m;
   }
   return 'Something went wrong.';

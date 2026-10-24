@@ -1,4 +1,4 @@
-// Extra Terram — scripts/validate-content.mjs v0.1.0 — Phase 1 scaffold
+// Extra Terram — scripts/validate-content.mjs v0.3.0 — Phase 1 scaffold
 // Validates every file under src/content against its JSON Schema, then cross-checks references.
 // Runs as part of `npm run build` so a bad balance edit fails the deploy, not the player.
 import { readFileSync, readdirSync } from 'node:fs';
@@ -74,6 +74,7 @@ function connected(m) {
   return false;
 }
 
+const PAD_REACH = 1.5;
 const maps = new Map();
 for (const f of readdirSync(join(root, 'maps')).filter((f) => f.endsWith('.json'))) {
   const m = read(join(root, 'maps', f));
@@ -93,6 +94,15 @@ for (const f of readdirSync(join(root, 'maps')).filter((f) => f.endsWith('.json'
     }
   });
   if (spawns === 1 && exits === 1 && !connected(m)) fail(file, 'no walkable path from spawn to exit (path tiles must touch edge to edge)');
+  // Every pad must be useful: the shortest attack range in the game is 1.8 tiles, so a pad more than
+  // 1.5 tiles (centre to centre) from the nearest path cell can hold nothing that reaches the creeps.
+  const pathCells = [];
+  m.grid.forEach((row, r) => [...row].forEach((ch, c) => { if (['path', 'spawn', 'exit'].includes(m.legend[ch])) pathCells.push([c, r]); }));
+  m.grid.forEach((row, r) => [...row].forEach((ch, c) => {
+    if (m.legend[ch] !== 'pad') return;
+    const d = Math.min(...pathCells.map(([pc, pr]) => Math.hypot(pc - c, pr - r)));
+    if (d > PAD_REACH) fail(file, `pad at col ${c}, row ${r} is ${d.toFixed(2)} tiles from the path (max ${PAD_REACH}); no tower can reach the creeps from there`);
+  }));
   if (spawns !== 1) fail(file, `expected exactly 1 spawn, found ${spawns}`);
   if (exits !== 1) fail(file, `expected exactly 1 exit, found ${exits}`);
   if (pads < 4) fail(file, `only ${pads} build pads`);

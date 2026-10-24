@@ -40,7 +40,7 @@ Dashboard → **Project Settings → API Keys** → "Publishable and secret API 
 
 | Variable | Value |
 | --- | --- |
-| `VITE_SUPABASE_URL` | Project URL, e.g. `https://abcdefghijklmnop.supabase.co` (Project Settings → Data API) |
+| `VITE_SUPABASE_URL` | The bare project URL only: `https://<ref>.supabase.co` — nothing after `.co`. The Data API page also lists the REST endpoint (`…/rest/v1`) and the Auth endpoint (`…/auth/v1`); pasting either one breaks every call with "Invalid path specified in request URL". The client now strips a path and warns in the console, but set it right. |
 | `VITE_SUPABASE_ANON_KEY` | The **publishable** key (`sb_publishable_…`). The legacy `anon` JWT also works; Supabase is retiring it by the end of 2026, so start with the publishable one. |
 | `VITE_AUTH_PROVIDERS` | **Leave unset for now.** OAuth is parked; sign-in is email + password. Setting it (e.g. `google`) brings the provider buttons back once section 5 is done. |
 

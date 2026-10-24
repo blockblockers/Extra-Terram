@@ -1,5 +1,5 @@
 {
-  "content_version": "0.1.0",
+  "content_version": "0.2.0",
   "towers": [
     {
       "id": "needlespire",
@@ -165,6 +165,1371 @@
         }
       },
       "color": "#4fa58a"
+    },
+    {
+      "id": "whirlseed",
+      "race": "rootkin",
+      "name": "Whirlseed",
+      "role": "splash",
+      "description": "A spinning disc of samara seeds. Each seed bursts on impact and scatters damage around the target.",
+      "cost": 120,
+      "range": 2.4,
+      "damage": 22,
+      "damageType": "kinetic",
+      "cooldownTicks": 22,
+      "attack": "projectile",
+      "projectileSpeed": 7,
+      "splash": 0.9,
+      "tiers": [
+        {
+          "upgradeCost": 95,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 150,
+          "damageMult": 1.45,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.0,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "seed-storm",
+          "name": "Seed storm",
+          "description": "Wider burst: splash radius +40%.",
+          "effects": {
+            "splashMult": 1.4
+          }
+        },
+        "b": {
+          "id": "burning-husk",
+          "name": "Burning husk",
+          "description": "Seeds smoulder: hits leave 3 bio damage per second for 2 s.",
+          "effects": {
+            "bleedPerSecond": 3,
+            "bleedTicks": 40
+          }
+        }
+      },
+      "color": "#c9a63a"
+    },
+    {
+      "id": "spirebirch",
+      "race": "rootkin",
+      "name": "Spirebirch",
+      "role": "range",
+      "description": "The tallest tree. Sees far, fires rarely, hits hard.",
+      "cost": 140,
+      "range": 4.2,
+      "damage": 70,
+      "damageType": "kinetic",
+      "cooldownTicks": 45,
+      "attack": "projectile",
+      "projectileSpeed": 16,
+      "tiers": [
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 170,
+          "damageMult": 1.5,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "longsight",
+          "name": "Longsight",
+          "description": "Range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "thornshot",
+          "name": "Thornshot",
+          "description": "One shot in four strikes a weak point for double damage.",
+          "effects": {
+            "critChance": 0.25
+          }
+        }
+      },
+      "color": "#e8e2d2"
+    },
+    {
+      "id": "sapwell",
+      "race": "rootkin",
+      "name": "Sapwell",
+      "role": "economy",
+      "description": "A fungal cluster around a sap pool. Pays out at the end of every wave; never attacks.",
+      "cost": 100,
+      "range": 1.0,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "economy",
+      "income": 14,
+      "tiers": [
+        {
+          "upgradeCost": 80,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 120,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "deep-well",
+          "name": "Deep well",
+          "description": "Income +50%.",
+          "effects": {
+            "incomeMult": 1.5
+          }
+        },
+        "b": {
+          "id": "spore-trade",
+          "name": "Spore trade",
+          "description": "Income +25% and the well is cheaper to sell (refund rule unchanged).",
+          "effects": {
+            "incomeMult": 1.25
+          }
+        }
+      },
+      "color": "#e8c33a"
+    },
+    {
+      "id": "elderwood",
+      "race": "rootkin",
+      "name": "Elderwood",
+      "role": "support",
+      "description": "The oldest tree. Its sap pods strengthen every tower in range: +15% damage, +10% range, 10% faster.",
+      "cost": 130,
+      "range": 2.0,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "support",
+      "buff": {
+        "damageMult": 1.15,
+        "rangeMult": 1.1,
+        "cooldownMult": 0.9
+      },
+      "tiers": [
+        {
+          "upgradeCost": 100,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 160,
+          "damageMult": 1,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "far-reach",
+          "name": "Far reach",
+          "description": "Buff range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "quickening",
+          "name": "Quickening",
+          "description": "Every buff is 10 points stronger.",
+          "effects": {
+            "buffBonus": 0.1
+          }
+        }
+      },
+      "color": "#9fd36b"
+    },
+    {
+      "id": "nailgun",
+      "race": "assembly",
+      "name": "Nailgun turret",
+      "role": "starter",
+      "description": "A box on a tripod with a magazine drum. Cheap, fast nails.",
+      "cost": 60,
+      "range": 2.2,
+      "damage": 7,
+      "damageType": "kinetic",
+      "cooldownTicks": 5,
+      "attack": "projectile",
+      "projectileSpeed": 12,
+      "tiers": [
+        {
+          "upgradeCost": 45,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 70,
+          "damageMult": 1.4,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1.9,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.8
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "hollow-point",
+          "name": "Hollow point",
+          "description": "Nails tear: hits leave 3 damage per second for 2 s.",
+          "effects": {
+            "bleedPerSecond": 3,
+            "bleedTicks": 40
+          }
+        },
+        "b": {
+          "id": "twin-drum",
+          "name": "Twin drum",
+          "description": "Fires at two targets at once.",
+          "effects": {
+            "multishot": 2
+          }
+        }
+      },
+      "color": "#e8c33a"
+    },
+    {
+      "id": "pile-driver",
+      "race": "assembly",
+      "name": "Pile driver",
+      "role": "heavy",
+      "description": "A hydraulic ram on a wide base. Slow, crushing blows.",
+      "cost": 110,
+      "range": 2.6,
+      "damage": 54,
+      "damageType": "kinetic",
+      "cooldownTicks": 30,
+      "attack": "projectile",
+      "projectileSpeed": 7,
+      "tiers": [
+        {
+          "upgradeCost": 90,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 140,
+          "damageMult": 1.5,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.1,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "breaker",
+          "name": "Breaker",
+          "description": "Punches through plating: full damage against Plated armour.",
+          "effects": {
+            "armorPierce": true
+          }
+        },
+        "b": {
+          "id": "double-ram",
+          "name": "Double ram",
+          "description": "Two rams, two targets.",
+          "effects": {
+            "multishot": 2
+          }
+        }
+      },
+      "color": "#c47a1e"
+    },
+    {
+      "id": "tar-sprayer",
+      "race": "assembly",
+      "name": "Tar sprayer",
+      "role": "control",
+      "description": "A tank with a nozzle. Everything in range wades through tar.",
+      "cost": 90,
+      "range": 1.8,
+      "damage": 0,
+      "damageType": "energy",
+      "cooldownTicks": 0,
+      "attack": "aura",
+      "aura": {
+        "slow": 0.4,
+        "dotPerSecond": 1.5,
+        "dotType": "energy"
+      },
+      "tiers": [
+        {
+          "upgradeCost": 70,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.5,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-spray",
+          "name": "Wide spray",
+          "description": "Wider pool and a stronger slow.",
+          "effects": {
+            "rangeMult": 1.3,
+            "slowBonus": 0.1
+          }
+        },
+        "b": {
+          "id": "hot-tar",
+          "name": "Hot tar",
+          "description": "The tar burns: twice the energy damage per second to everything in it.",
+          "effects": {
+            "damageMult": 2.0
+          }
+        }
+      },
+      "color": "#8c8c8c"
+    },
+    {
+      "id": "mortar",
+      "race": "assembly",
+      "name": "Mortar",
+      "role": "splash",
+      "description": "A short fat tube on a plate. Lobs shells that burst on impact.",
+      "cost": 120,
+      "range": 2.8,
+      "damage": 24,
+      "damageType": "kinetic",
+      "cooldownTicks": 26,
+      "attack": "projectile",
+      "projectileSpeed": 6,
+      "splash": 1.0,
+      "tiers": [
+        {
+          "upgradeCost": 95,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 150,
+          "damageMult": 1.45,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.0,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "cluster-shell",
+          "name": "Cluster shell",
+          "description": "Wider burst: splash radius +40%.",
+          "effects": {
+            "splashMult": 1.4
+          }
+        },
+        "b": {
+          "id": "incendiary",
+          "name": "Incendiary",
+          "description": "Shells burn: 3 damage per second for 2 s on everything hit.",
+          "effects": {
+            "bleedPerSecond": 3,
+            "bleedTicks": 40
+          }
+        }
+      },
+      "color": "#6a7076"
+    },
+    {
+      "id": "railgun",
+      "race": "assembly",
+      "name": "Railgun",
+      "role": "range",
+      "description": "A long rail on a swivel base. One slug, a long way, right now.",
+      "cost": 140,
+      "range": 4.4,
+      "damage": 64,
+      "damageType": "energy",
+      "cooldownTicks": 44,
+      "attack": "beam",
+      "tiers": [
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 170,
+          "damageMult": 1.5,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "capacitor",
+          "name": "Capacitor bank",
+          "description": "Fires 30% faster.",
+          "effects": {
+            "cooldownMult": 0.7
+          }
+        },
+        "b": {
+          "id": "sabot",
+          "name": "Sabot round",
+          "description": "Punches through plating; one shot in four crits.",
+          "effects": {
+            "armorPierce": true,
+            "critChance": 0.25
+          }
+        }
+      },
+      "color": "#4fd8e8"
+    },
+    {
+      "id": "salvage-rig",
+      "race": "assembly",
+      "name": "Salvage rig",
+      "role": "economy",
+      "description": "A crane arm over a scrap bin. Pays out scrap at the end of every wave; never attacks.",
+      "cost": 100,
+      "range": 1.0,
+      "damage": 0,
+      "damageType": "kinetic",
+      "cooldownTicks": 0,
+      "attack": "economy",
+      "income": 14,
+      "tiers": [
+        {
+          "upgradeCost": 80,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 120,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "smelter",
+          "name": "Smelter",
+          "description": "Income +50%.",
+          "effects": {
+            "incomeMult": 1.5
+          }
+        },
+        "b": {
+          "id": "scrap-market",
+          "name": "Scrap market",
+          "description": "Income +25%.",
+          "effects": {
+            "incomeMult": 1.25
+          }
+        }
+      },
+      "color": "#e8c33a"
+    },
+    {
+      "id": "relay-mast",
+      "race": "assembly",
+      "name": "Relay mast",
+      "role": "support",
+      "description": "A lattice tower with a dish. Targeting data for every tower in range: +15% damage, +10% range, 10% faster.",
+      "cost": 130,
+      "range": 2.0,
+      "damage": 0,
+      "damageType": "energy",
+      "cooldownTicks": 0,
+      "attack": "support",
+      "buff": {
+        "damageMult": 1.15,
+        "rangeMult": 1.1,
+        "cooldownMult": 0.9
+      },
+      "tiers": [
+        {
+          "upgradeCost": 100,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 160,
+          "damageMult": 1,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "long-wave",
+          "name": "Long wave",
+          "description": "Buff range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "overclock",
+          "name": "Overclock",
+          "description": "Every buff is 10 points stronger.",
+          "effects": {
+            "buffBonus": 0.1
+          }
+        }
+      },
+      "color": "#9fb4c4"
+    },
+    {
+      "id": "spitter",
+      "race": "chitin",
+      "name": "Spitter",
+      "role": "starter",
+      "description": "A mound with a single puckered spout. Fast acid gobs.",
+      "cost": 50,
+      "range": 2.2,
+      "damage": 7,
+      "damageType": "bio",
+      "cooldownTicks": 5,
+      "attack": "projectile",
+      "projectileSpeed": 10,
+      "tiers": [
+        {
+          "upgradeCost": 40,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 60,
+          "damageMult": 1.4,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1.9,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.8
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "caustic",
+          "name": "Caustic spit",
+          "description": "Acid clings: 4 bio damage per second for 2 s.",
+          "effects": {
+            "bleedPerSecond": 4,
+            "bleedTicks": 40
+          }
+        },
+        "b": {
+          "id": "twin-spout",
+          "name": "Twin spout",
+          "description": "Spits at two targets at once.",
+          "effects": {
+            "multishot": 2
+          }
+        }
+      },
+      "color": "#9fe84a"
+    },
+    {
+      "id": "mandible",
+      "race": "chitin",
+      "name": "Mandible",
+      "role": "heavy",
+      "description": "Two great jaws rising from the ground. Short reach, savage bite.",
+      "cost": 95,
+      "range": 2.0,
+      "damage": 66,
+      "damageType": "bio",
+      "cooldownTicks": 26,
+      "attack": "beam",
+      "tiers": [
+        {
+          "upgradeCost": 80,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 125,
+          "damageMult": 1.5,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.1,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "crushing-jaws",
+          "name": "Crushing jaws",
+          "description": "One bite in three crits.",
+          "effects": {
+            "critChance": 0.33
+          }
+        },
+        "b": {
+          "id": "venom-bite",
+          "name": "Venom bite",
+          "description": "Bitten creeps crawl: slowed 40% for 1.5 s.",
+          "effects": {
+            "slowOnHit": 0.4,
+            "slowTicks": 30
+          }
+        }
+      },
+      "color": "#c77dff"
+    },
+    {
+      "id": "web-spinner",
+      "race": "chitin",
+      "name": "Web spinner",
+      "role": "control",
+      "description": "A spinneret dome with silk guy-lines. Everything in range is webbed.",
+      "cost": 80,
+      "range": 1.8,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "aura",
+      "aura": {
+        "slow": 0.4,
+        "dotPerSecond": 2,
+        "dotType": "bio"
+      },
+      "tiers": [
+        {
+          "upgradeCost": 70,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.5,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-web",
+          "name": "Wide web",
+          "description": "Wider web and a stronger slow.",
+          "effects": {
+            "rangeMult": 1.3,
+            "slowBonus": 0.1
+          }
+        },
+        "b": {
+          "id": "sticky-silk",
+          "name": "Sticky silk",
+          "description": "Each creep entering the web is held for half a second.",
+          "effects": {
+            "stunTicksOnEntry": 10
+          }
+        }
+      },
+      "color": "#f0d060"
+    },
+    {
+      "id": "acid-bloat",
+      "race": "chitin",
+      "name": "Acid bloat",
+      "role": "splash",
+      "description": "A swollen sac that lobs acid. The splash eats plating.",
+      "cost": 105,
+      "range": 2.4,
+      "damage": 22,
+      "damageType": "bio",
+      "cooldownTicks": 24,
+      "attack": "projectile",
+      "projectileSpeed": 6,
+      "splash": 1.0,
+      "tiers": [
+        {
+          "upgradeCost": 95,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 150,
+          "damageMult": 1.45,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.0,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-burst",
+          "name": "Wide burst",
+          "description": "Splash radius +40%.",
+          "effects": {
+            "splashMult": 1.4
+          }
+        },
+        "b": {
+          "id": "lingering-acid",
+          "name": "Lingering acid",
+          "description": "Everything splashed keeps burning: 3 bio per second for 2 s.",
+          "effects": {
+            "bleedPerSecond": 3,
+            "bleedTicks": 40
+          }
+        }
+      },
+      "color": "#9fe84a"
+    },
+    {
+      "id": "stalker-eye",
+      "race": "chitin",
+      "name": "Stalker eye",
+      "role": "range",
+      "description": "A stalk with one large eye. Long sight, but the swarm was never built for sniping.",
+      "cost": 120,
+      "range": 3.8,
+      "damage": 58,
+      "damageType": "bio",
+      "cooldownTicks": 46,
+      "attack": "projectile",
+      "projectileSpeed": 14,
+      "tiers": [
+        {
+          "upgradeCost": 100,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 160,
+          "damageMult": 1.5,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "far-stalk",
+          "name": "Far stalk",
+          "description": "Range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "paralytic",
+          "name": "Paralytic dart",
+          "description": "Darts slow their target 50% for 2 s.",
+          "effects": {
+            "slowOnHit": 0.5,
+            "slowTicks": 40
+          }
+        }
+      },
+      "color": "#c99cff"
+    },
+    {
+      "id": "resin-nest",
+      "race": "chitin",
+      "name": "Resin nest",
+      "role": "economy",
+      "description": "A honeycomb cluster of amber cells. Pays out resin at the end of every wave; never attacks.",
+      "cost": 90,
+      "range": 1.0,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "economy",
+      "income": 14,
+      "tiers": [
+        {
+          "upgradeCost": 80,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 120,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "royal-cells",
+          "name": "Royal cells",
+          "description": "Income +50%.",
+          "effects": {
+            "incomeMult": 1.5
+          }
+        },
+        "b": {
+          "id": "brood-trade",
+          "name": "Brood trade",
+          "description": "Income +25%.",
+          "effects": {
+            "incomeMult": 1.25
+          }
+        }
+      },
+      "color": "#e6b422"
+    },
+    {
+      "id": "pheromone-node",
+      "race": "chitin",
+      "name": "Pheromone node",
+      "role": "support",
+      "description": "A bulb that drives the swarm: every tower in range +15% damage, +10% range, 10% faster.",
+      "cost": 115,
+      "range": 2.0,
+      "damage": 0,
+      "damageType": "bio",
+      "cooldownTicks": 0,
+      "attack": "support",
+      "buff": {
+        "damageMult": 1.15,
+        "rangeMult": 1.1,
+        "cooldownMult": 0.9
+      },
+      "tiers": [
+        {
+          "upgradeCost": 100,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 160,
+          "damageMult": 1,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-scent",
+          "name": "Wide scent",
+          "description": "Buff range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "frenzy",
+          "name": "Frenzy",
+          "description": "Every buff is 10 points stronger.",
+          "effects": {
+            "buffBonus": 0.1
+          }
+        }
+      },
+      "color": "#b26ee8"
+    },
+    {
+      "id": "prism",
+      "race": "lumenari",
+      "name": "Prism",
+      "role": "starter",
+      "description": "A floating triangular crystal. A steady beam, no projectile to dodge.",
+      "cost": 65,
+      "range": 2.3,
+      "damage": 9,
+      "damageType": "energy",
+      "cooldownTicks": 7,
+      "attack": "beam",
+      "tiers": [
+        {
+          "upgradeCost": 50,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 75,
+          "damageMult": 1.4,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1.9,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.8
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "refraction",
+          "name": "Refraction",
+          "description": "The beam splits to one extra target.",
+          "effects": {
+            "chain": 1
+          }
+        },
+        "b": {
+          "id": "focused",
+          "name": "Focused lens",
+          "description": "Damage +35%.",
+          "effects": {
+            "damageMult": 1.35
+          }
+        }
+      },
+      "color": "#4fd8e8"
+    },
+    {
+      "id": "lance",
+      "race": "lumenari",
+      "name": "Lance",
+      "role": "heavy",
+      "description": "A long floating spear of light. Slow, piercing strikes.",
+      "cost": 120,
+      "range": 2.8,
+      "damage": 58,
+      "damageType": "energy",
+      "cooldownTicks": 30,
+      "attack": "beam",
+      "tiers": [
+        {
+          "upgradeCost": 95,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 150,
+          "damageMult": 1.5,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.1,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "piercing-light",
+          "name": "Piercing light",
+          "description": "Punches through plating; one strike in four crits.",
+          "effects": {
+            "armorPierce": true,
+            "critChance": 0.25
+          }
+        },
+        "b": {
+          "id": "twin-lance",
+          "name": "Twin lance",
+          "description": "The strike forks to a second target.",
+          "effects": {
+            "chain": 1
+          }
+        }
+      },
+      "color": "#f4fbff"
+    },
+    {
+      "id": "chrono-field",
+      "race": "lumenari",
+      "name": "Chrono field",
+      "role": "control",
+      "description": "A ring of slowly turning rune shards. Time drags for everything inside.",
+      "cost": 95,
+      "range": 1.9,
+      "damage": 0,
+      "damageType": "energy",
+      "cooldownTicks": 0,
+      "attack": "aura",
+      "aura": {
+        "slow": 0.45,
+        "dotPerSecond": 0,
+        "dotType": "energy"
+      },
+      "tiers": [
+        {
+          "upgradeCost": 70,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.5,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-field",
+          "name": "Wide field",
+          "description": "Wider field and a stronger slow.",
+          "effects": {
+            "rangeMult": 1.3,
+            "slowBonus": 0.1
+          }
+        },
+        "b": {
+          "id": "stasis-edge",
+          "name": "Stasis edge",
+          "description": "Each creep entering the field is frozen for half a second.",
+          "effects": {
+            "stunTicksOnEntry": 10
+          }
+        }
+      },
+      "color": "#6fb8ff"
+    },
+    {
+      "id": "nova",
+      "race": "lumenari",
+      "name": "Nova",
+      "role": "splash",
+      "description": "A sphere with orbiting fragments. Hurls orbs that detonate on impact.",
+      "cost": 125,
+      "range": 2.5,
+      "damage": 22,
+      "damageType": "energy",
+      "cooldownTicks": 24,
+      "attack": "projectile",
+      "projectileSpeed": 8,
+      "splash": 0.9,
+      "tiers": [
+        {
+          "upgradeCost": 95,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 150,
+          "damageMult": 1.45,
+          "rangeMult": 1.05,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.0,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "supernova",
+          "name": "Supernova",
+          "description": "Splash radius +40%.",
+          "effects": {
+            "splashMult": 1.4
+          }
+        },
+        "b": {
+          "id": "cold-light",
+          "name": "Cold light",
+          "description": "Everything in the blast is slowed 35% for 1.5 s.",
+          "effects": {
+            "slowOnHit": 0.35,
+            "slowTicks": 30
+          }
+        }
+      },
+      "color": "#a8f1ff"
+    },
+    {
+      "id": "pulsar",
+      "race": "lumenari",
+      "name": "Pulsar",
+      "role": "range",
+      "description": "A tall thin obelisk with a star at the tip. Sees the whole lane.",
+      "cost": 145,
+      "range": 4.6,
+      "damage": 62,
+      "damageType": "energy",
+      "cooldownTicks": 46,
+      "attack": "beam",
+      "tiers": [
+        {
+          "upgradeCost": 110,
+          "damageMult": 1.0,
+          "rangeMult": 1.0,
+          "cooldownMult": 1.0
+        },
+        {
+          "upgradeCost": 175,
+          "damageMult": 1.5,
+          "rangeMult": 1.1,
+          "cooldownMult": 0.95
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 2.2,
+          "rangeMult": 1.2,
+          "cooldownMult": 0.9
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "far-star",
+          "name": "Far star",
+          "description": "Range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "cascade",
+          "name": "Cascade",
+          "description": "The pulse chains to two more targets.",
+          "effects": {
+            "chain": 2
+          }
+        }
+      },
+      "color": "#f4fbff"
+    },
+    {
+      "id": "solar-collector",
+      "race": "lumenari",
+      "name": "Solar collector",
+      "role": "economy",
+      "description": "A dish of petals. Pays out light at the end of every wave; the Lumenari were never gatherers.",
+      "cost": 110,
+      "range": 1.0,
+      "damage": 0,
+      "damageType": "energy",
+      "cooldownTicks": 0,
+      "attack": "economy",
+      "income": 12,
+      "tiers": [
+        {
+          "upgradeCost": 85,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 125,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "wide-dish",
+          "name": "Wide dish",
+          "description": "Income +50%.",
+          "effects": {
+            "incomeMult": 1.5
+          }
+        },
+        "b": {
+          "id": "night-store",
+          "name": "Night store",
+          "description": "Income +25%.",
+          "effects": {
+            "incomeMult": 1.25
+          }
+        }
+      },
+      "color": "#f4fbff"
+    },
+    {
+      "id": "resonator",
+      "race": "lumenari",
+      "name": "Resonator",
+      "role": "support",
+      "description": "A tuning-fork crystal. Every tower in range rings with it: +15% damage, +10% range, 10% faster.",
+      "cost": 130,
+      "range": 2.0,
+      "damage": 0,
+      "damageType": "energy",
+      "cooldownTicks": 0,
+      "attack": "support",
+      "buff": {
+        "damageMult": 1.15,
+        "rangeMult": 1.1,
+        "cooldownMult": 0.9
+      },
+      "tiers": [
+        {
+          "upgradeCost": 100,
+          "damageMult": 1,
+          "rangeMult": 1.0,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 160,
+          "damageMult": 1,
+          "rangeMult": 1.15,
+          "cooldownMult": 1
+        },
+        {
+          "upgradeCost": 0,
+          "damageMult": 1,
+          "rangeMult": 1.3,
+          "cooldownMult": 1
+        }
+      ],
+      "branches": {
+        "a": {
+          "id": "harmonic",
+          "name": "Harmonic",
+          "description": "Buff range +30%.",
+          "effects": {
+            "rangeMult": 1.3
+          }
+        },
+        "b": {
+          "id": "overtone",
+          "name": "Overtone",
+          "description": "Every buff is 10 points stronger.",
+          "effects": {
+            "buffBonus": 0.1
+          }
+        }
+      },
+      "color": "#4fd8e8"
     }
   ]
 }

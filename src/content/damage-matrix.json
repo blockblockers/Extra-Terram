@@ -1,8 +1,20 @@
 {
-  "content_version": "0.1.0",
+  "content_version": "0.2.0",
   "multipliers": {
-    "kinetic": { "organic": 1.0, "plated": 0.75, "shielded": 1.25 },
-    "energy": { "organic": 1.25, "plated": 1.0, "shielded": 0.5 },
-    "bio": { "organic": 0.75, "plated": 1.5, "shielded": 1.0 }
+    "kinetic": {
+      "organic": 1.0,
+      "plated": 0.85,
+      "shielded": 1.25
+    },
+    "energy": {
+      "organic": 1.25,
+      "plated": 1.0,
+      "shielded": 0.7
+    },
+    "bio": {
+      "organic": 0.9,
+      "plated": 1.5,
+      "shielded": 1.0
+    }
   }
 }

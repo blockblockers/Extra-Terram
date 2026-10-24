@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/types.ts v0.2.0 — sim events for the renderer
+// Extra Terram — src/engine/types.ts v0.4.0 — splash, beam, economy, support towers; more branch effects
 // Content types (mirroring src/content/schemas) and simulation state.
 // Everything in SimState is plain JSON so a snapshot is just JSON.stringify(state).
 import type { RngState } from './rng';
@@ -41,10 +41,24 @@ export interface BranchEffects {
   multishot?: number;
   rangeMult?: number;
   damageMult?: number;
+  cooldownMult?: number;
   slowBonus?: number;
   stunTicksOnEntry?: number;
   bleedPerSecond?: number;
   bleedTicks?: number;
+  /** Splash radius multiplier (splash towers). */
+  splashMult?: number;
+  /** Extra targets a beam jumps to (beam towers). */
+  chain?: number;
+  /** Chance per hit of double damage, 0..1, rolled on the sim RNG. */
+  critChance?: number;
+  /** Slow applied on hit (fraction) for slowTicks. */
+  slowOnHit?: number;
+  slowTicks?: number;
+  /** Income multiplier (economy towers). */
+  incomeMult?: number;
+  /** Added to every buff multiplier (support towers), e.g. 0.1 = +10% more. */
+  buffBonus?: number;
 }
 
 export interface BranchDef {
@@ -60,6 +74,15 @@ export interface AuraDef {
   dotType: DamageType;
 }
 
+/** Support towers buff every tower in range: multipliers on damage, range and fire rate. */
+export interface BuffDef {
+  damageMult: number;
+  rangeMult: number;
+  cooldownMult: number;
+}
+
+export type AttackKind = 'projectile' | 'aura' | 'beam' | 'economy' | 'support';
+
 export interface TowerDef {
   id: string;
   race: string;
@@ -71,9 +94,17 @@ export interface TowerDef {
   damage: number; // per hit; 0 for aura towers
   damageType: DamageType;
   cooldownTicks: number;
-  attack: 'projectile' | 'aura';
+  attack: AttackKind;
   projectileSpeed?: number; // tiles per second
   aura?: AuraDef;
+  /** Splash radius in tiles around a projectile's impact (projectile towers). */
+  splash?: number;
+  /** Extra targets a beam chains to after the first (beam towers). */
+  chain?: number;
+  /** Sap paid at the end of every wave (economy towers). */
+  income?: number;
+  /** Buff for towers in range (support towers). */
+  buff?: BuffDef;
   tiers: TierDef[]; // index 0 = tier 1
   branches: { a: BranchDef; b: BranchDef };
   color: string;
@@ -207,6 +238,10 @@ export interface Projectile {
   armorPierce: boolean;
   bleedPerSecond: number;
   bleedTicks: number;
+  splash: number; // tiles; 0 = single target
+  slowOnHit: number;
+  slowTicks: number;
+  critChance: number;
   owner: number; // tower id
   alive: boolean;
 }
@@ -233,7 +268,9 @@ export type LoggedInput = SimInput & { tick: number; seat: number; seq: number }
  */
 export type SimEvent =
   | { kind: 'fire'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType }
-  | { kind: 'hit'; x: number; y: number; damageType: DamageType; amount: number; kill: boolean }
+  | { kind: 'hit'; x: number; y: number; damageType: DamageType; amount: number; kill: boolean; splash?: number }
+  | { kind: 'beam'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType }
+  | { kind: 'income'; tower: number; x: number; y: number; amount: number }
   | { kind: 'kill'; creep: string; x: number; y: number; armor: ArmorType }
   | { kind: 'leak'; creep: string; x: number; y: number }
   | { kind: 'place'; tower: number; x: number; y: number }

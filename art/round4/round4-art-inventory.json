@@ -1,0 +1,525 @@
+{
+  "pass": "Round 4 material shading and clean title art",
+  "tower_states": [
+    {
+      "path": "public/sprites/rootkin/whirlseed/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/whirlseed/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/whirlseed/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/whirlseed/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/spirebirch/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/spirebirch/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/spirebirch/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/spirebirch/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/sapwell/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/sapwell/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/sapwell/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/sapwell/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/elderwood/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/elderwood/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/elderwood/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/rootkin/elderwood/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/tar-sprayer/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/tar-sprayer/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/tar-sprayer/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/tar-sprayer/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/railgun/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/railgun/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/railgun/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/railgun/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/salvage-rig/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/salvage-rig/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/salvage-rig/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/salvage-rig/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/relay-mast/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/relay-mast/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/relay-mast/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/assembly/relay-mast/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/web-spinner/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/web-spinner/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/web-spinner/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/web-spinner/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/stalker-eye/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/stalker-eye/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/stalker-eye/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/stalker-eye/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/resin-nest/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/resin-nest/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/resin-nest/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/resin-nest/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/pheromone-node/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/pheromone-node/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/pheromone-node/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/chitin/pheromone-node/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/chrono-field/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/chrono-field/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/chrono-field/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/chrono-field/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/pulsar/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/pulsar/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/pulsar/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/pulsar/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/solar-collector/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/solar-collector/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/solar-collector/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/solar-collector/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/resonator/t1.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/resonator/t2.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/resonator/t3a.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "path": "public/sprites/lumenari/resonator/t3b.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  ],
+  "title_size": [
+    1536,
+    2048
+  ],
+  "title_2x_size": [
+    3072,
+    4096
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "id": "lumenari-crystal-01",
+  "map": "lumenari-crystal-01",
+  "startingResources": 220,
+  "lives": 12,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "waves": [
+    {
+      "name": "Seedlings",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 10,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Sprouting",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 15,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Thornbeasts",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 10,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Thicket",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 8,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Overgrowth",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 18,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 5,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "Rootwalker",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 4,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "seedling",
+          "count": 18,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Canopy",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 12,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "seedling",
+          "count": 18,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Deep roots",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 8,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 10,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Seed storm",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 35,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 15,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Worldroot stirs",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 11,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 18,
+          "intervalTicks": 18,
+          "delayTicks": 80
+        },
+        {
+          "creep": "seedling",
+          "count": 30,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    }
+  ],
+  "content_version": "0.2.0"
+}

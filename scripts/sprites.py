@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/sprites.py v0.2.0 — sprite inbox fitter + manifest writer
+"""Extra Terram — scripts/sprites.py v0.3.0 — sprite inbox fitter, in-place refit, manifest writer
 
-Two jobs, matching the art handoff doc:
+Three jobs, matching the art handoff doc:
 
   python scripts/sprites.py           write public/sprites/manifest.json from the PNGs that exist
   python scripts/sprites.py --fit     first process public/sprites/_inbox/**: trim transparent margins,
                                       scale to the canvas rule, place at the anchor, save to the real
                                       path, then write the manifest
+  python scripts/sprites.py --refit   normalise tower stills already in place: any t1/t2/t3a/t3b whose
+                                      artwork fills the canvas more than 8% off the rule is trimmed and
+                                      refitted (art packs that deliver undersized icons land at the same
+                                      size as the painted towers). Strips are never touched.
 
 Canvas rules (from the handoff):
   towers   256x256, footprint centre at (128, 168); t1/t2 fill 70% of the box, t3a/t3b fill 85%
@@ -85,6 +89,30 @@ def process_inbox() -> int:
     return n
 
 
+def refit_in_place(tolerance: float = 0.08) -> int:
+    """Refit tower stills whose content height is off the fill rule. Returns how many were changed."""
+    n = 0
+    for png in sorted(SPRITES.rglob("*.png")):
+        rel = png.relative_to(SPRITES)
+        if rel.parts[0].startswith("_") or rel.stem not in TOWER_STATES:
+            continue
+        img = Image.open(png).convert("RGBA")
+        w, h = img.size
+        if w != h:
+            continue  # a strip
+        bbox = img.getbbox()
+        if bbox is None:
+            continue
+        canvas, ratio, ax, ay = spec_for(rel)
+        content = max(bbox[2] - bbox[0], bbox[3] - bbox[1]) / canvas
+        if abs(content - ratio) <= tolerance:
+            continue
+        fit(png, png, canvas, ratio, ax, ay)
+        print(f"refitted {rel.as_posix()}: filled {content:.0%}, rule {ratio:.0%}")
+        n += 1
+    return n
+
+
 def write_manifest() -> int:
     paths = []
     for png in sorted(SPRITES.rglob("*.png")):
@@ -103,5 +131,7 @@ if __name__ == "__main__":
         if fitted and "--keep-inbox" not in sys.argv:
             shutil.rmtree(INBOX)
         print(f"{fitted} sprite(s) fitted")
+    if "--refit" in sys.argv:
+        print(f"{refit_in_place()} tower still(s) refitted in place")
     count = write_manifest()
     print(f"manifest: {count} sprite(s) listed in public/sprites/manifest.json")

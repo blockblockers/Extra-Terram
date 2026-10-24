@@ -1,4 +1,4 @@
-// Extra Terram — src/render/effects.ts v0.2.0 — pooled particle effects driven by sim events
+// Extra Terram — src/render/effects.ts v0.4.0 — beams, splash rings, income motes
 // One pool, one shared texture, one container: the whole layer is a single draw batch. Nothing here
 // touches the simulation, and when the pool is full new bursts are dropped rather than allocated.
 import { Container, Graphics, Sprite, Texture, type Renderer as PixiRendererType } from 'pixi.js';
@@ -21,7 +21,8 @@ interface Particle {
   alpha: number;
   spin: number;
   gravity: number;
-  kind: 'dot' | 'spark' | 'shard' | 'leaf' | 'scrap' | 'ring';
+  kind: 'dot' | 'spark' | 'shard' | 'leaf' | 'scrap' | 'ring' | 'beam';
+  length: number; // beams only
 }
 
 const DAMAGE_COLOR: Record<DamageType, number> = { kinetic: 0xf6f0c8, bio: 0x9fe84a, energy: 0x4fd8e8 };
@@ -44,13 +45,14 @@ export class Effects {
       leaf: this.make(renderer, (g) => g.ellipse(8, 8, 8, 4).fill(0xffffff)),
       scrap: this.make(renderer, (g) => g.rect(2, 4, 12, 8).fill(0xffffff).rect(5, 2, 6, 12).fill(0xffffff)),
       ring: this.make(renderer, (g) => g.circle(16, 16, 14).stroke({ width: 3, color: 0xffffff })),
+      beam: this.make(renderer, (g) => g.rect(0, 0, 32, 4).fill(0xffffff)),
     };
     for (let i = 0; i < capacity; i++) {
       const sprite = new Sprite(this.textures.dot);
       sprite.anchor.set(0.5);
       sprite.visible = false;
       this.container.addChild(sprite);
-      const p: Particle = { sprite, x: 0, y: 0, vx: 0, vy: 0, drag: 1, life: 0, maxLife: 1, size: 4, endSize: 0, color: 0xffffff, alpha: 1, spin: 0, gravity: 0, kind: 'dot' };
+      const p: Particle = { sprite, x: 0, y: 0, vx: 0, vy: 0, drag: 1, life: 0, maxLife: 1, size: 4, endSize: 0, color: 0xffffff, alpha: 1, spin: 0, gravity: 0, kind: 'dot', length: 0 };
       this.pool.push(p);
       this.free.push(p);
     }
@@ -88,9 +90,11 @@ export class Effects {
     p.alpha = opts.alpha ?? 1;
     p.spin = opts.spin ?? 0;
     p.gravity = opts.gravity ?? 0;
+    p.length = opts.length ?? 0;
     p.sprite.tint = p.color;
     p.sprite.visible = true;
     p.sprite.rotation = this.rand() * Math.PI * 2;
+    p.sprite.anchor.set(0.5);
     this.live.push(p);
     return p;
   }
@@ -108,6 +112,13 @@ export class Effects {
         break;
       case 'hit':
         this.impact(ev.x * TILE, ev.y * TILE, ev.damageType, ev.amount);
+        if (ev.splash) this.spawn('ring', ev.x * TILE, ev.y * TILE, { size: 8, endSize: ev.splash * TILE, maxLife: 7, color: DAMAGE_COLOR[ev.damageType], alpha: 0.7 });
+        break;
+      case 'beam':
+        this.beam(ev.x * TILE, ev.y * TILE, ev.tx * TILE, ev.ty * TILE, DAMAGE_COLOR[ev.damageType]);
+        break;
+      case 'income':
+        this.income(ev.x * TILE, ev.y * TILE);
         break;
       case 'kill':
         this.death(ev.x * TILE, ev.y * TILE, ev.armor);
@@ -195,6 +206,27 @@ export class Effects {
     }
   }
 
+  /** A hitscan beam from a tower (or the previous chain target) to a creep. */
+  beam(x0: number, y0: number, x1: number, y1: number, color: number): void {
+    const dx = x1 - x0;
+    const dy = y1 - y0;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    if (len < 1) return;
+    const p = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 5, endSize: 1, maxLife: 5, color, alpha: 0.95, drag: 1, length: len });
+    if (p) p.sprite.rotation = Math.atan2(dy, dx);
+    const core = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 2, endSize: 0.5, maxLife: 5, color: 0xffffff, alpha: 0.9, drag: 1, length: len });
+    if (core) core.sprite.rotation = Math.atan2(dy, dx);
+    this.spawn('dot', x1, y1, { size: 7, endSize: 2, maxLife: 5, color, alpha: 0.9 });
+  }
+
+  /** Sap paid out by an economy tower: gold motes rising. */
+  income(x: number, y: number): void {
+    this.spawn('ring', x, y, { size: 8, endSize: 34, maxLife: 12, color: 0xe8c33a, alpha: 0.8 });
+    for (let i = 0; i < this.count(6); i++) {
+      this.spawn('dot', x + (this.rand() - 0.5) * 20, y + (this.rand() - 0.5) * 10, { vy: -1.4 - this.rand(), vx: (this.rand() - 0.5) * 0.6, size: 3, endSize: 1, maxLife: 18, color: 0xffe08a, alpha: 1, drag: 0.98 });
+    }
+  }
+
   /** Short-lived trail dot behind a projectile; called by the renderer each frame a projectile moves. */
   trail(x: number, y: number, color: number): void {
     this.spawn('dot', x, y, { size: 3, endSize: 0.5, maxLife: 4, color, alpha: 0.55, drag: 1 });
@@ -221,11 +253,16 @@ export class Effects {
       const t = 1 - p.life / p.maxLife;
       const size = p.size + (p.endSize - p.size) * t;
       p.sprite.position.set(p.x, p.y);
-      p.sprite.width = size * 2;
-      p.sprite.height = p.kind === 'spark' || p.kind === 'leaf' ? size : size * 2;
+      if (p.kind === 'beam') {
+        p.sprite.width = p.length;
+        p.sprite.height = size;
+      } else {
+        p.sprite.width = size * 2;
+        p.sprite.height = p.kind === 'spark' || p.kind === 'leaf' ? size : size * 2;
+        p.sprite.rotation += p.spin * dtTicks;
+        if (p.kind === 'spark' && (p.vx !== 0 || p.vy !== 0)) p.sprite.rotation = Math.atan2(p.vy, p.vx);
+      }
       p.sprite.alpha = p.alpha * (1 - t * t);
-      p.sprite.rotation += p.spin * dtTicks;
-      if (p.kind === 'spark' && (p.vx !== 0 || p.vy !== 0)) p.sprite.rotation = Math.atan2(p.vy, p.vx);
       this.live[w++] = p;
     }
     this.live.length = w;

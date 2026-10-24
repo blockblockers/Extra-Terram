@@ -49,6 +49,31 @@ for (const t of towers.towers) {
 }
 for (const c of creeps.creeps) if (!raceIds.has(c.race)) fail('creeps.json', `creep ${c.id} references unknown race ${c.race}`);
 
+/** Same walk the engine does at load: 4-neighbour BFS over path/spawn/exit tiles. */
+function connected(m) {
+  const kind = (c, r) => m.legend[m.grid[r][c]];
+  let start = null;
+  let goal = null;
+  for (let r = 0; r < m.rows; r++) for (let c = 0; c < m.cols; c++) {
+    if (kind(c, r) === 'spawn') start = [c, r];
+    if (kind(c, r) === 'exit') goal = [c, r];
+  }
+  const seen = new Set([start.join(',')]);
+  const queue = [start];
+  while (queue.length) {
+    const [c, r] = queue.shift();
+    if (c === goal[0] && r === goal[1]) return true;
+    for (const [nc, nr] of [[c, r - 1], [c + 1, r], [c, r + 1], [c - 1, r]]) {
+      if (nc < 0 || nr < 0 || nc >= m.cols || nr >= m.rows) continue;
+      const k = kind(nc, nr);
+      if (!['path', 'spawn', 'exit'].includes(k) || seen.has(`${nc},${nr}`)) continue;
+      seen.add(`${nc},${nr}`);
+      queue.push([nc, nr]);
+    }
+  }
+  return false;
+}
+
 const maps = new Map();
 for (const f of readdirSync(join(root, 'maps')).filter((f) => f.endsWith('.json'))) {
   const m = read(join(root, 'maps', f));
@@ -67,6 +92,7 @@ for (const f of readdirSync(join(root, 'maps')).filter((f) => f.endsWith('.json'
       if (kind === 'pad') pads++;
     }
   });
+  if (spawns === 1 && exits === 1 && !connected(m)) fail(file, 'no walkable path from spawn to exit (path tiles must touch edge to edge)');
   if (spawns !== 1) fail(file, `expected exactly 1 spawn, found ${spawns}`);
   if (exits !== 1) fail(file, `expected exactly 1 exit, found ${exits}`);
   if (pads < 4) fail(file, `only ${pads} build pads`);

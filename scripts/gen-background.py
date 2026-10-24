@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/gen-background.py v0.2.0 — forest-moon background matched to the concept art
+"""Extra Terram — scripts/gen-background.py v0.3.0 — one painter, four home worlds
 
 Paints the home-world background for a map from its JSON tile grid. Tuned to the art pack's
 Rootkin look: saturated moss and leaf greens with teal shadow, a warm bark-brown trail with root
@@ -9,8 +9,9 @@ the spawn and a cyan-green grove heart at the exit, bioluminescent motes and can
 The grid is a data structure, not a look: nothing here draws tile squares. The engine positions
 everything on cells; the renderer only lays sprites over this image.
 
-Usage:  python scripts/gen-background.py [map-id]      (default: rootkin-forest-01)
-Output: public/maps/<map-id>.png at 64 px per tile.
+Usage:  python scripts/gen-background.py [map-id ...]   (default: every map in src/content/maps)
+Output: public/maps/<map-id>.png at 64 px per tile. The map's `world` picks the palette:
+        rootkin forest moon, assembly scrap plains, chitin hive tunnels, lumenari crystal fields.
 Needs:  numpy, pillow
 """
 import json
@@ -22,20 +23,39 @@ from PIL import Image, ImageDraw, ImageFilter
 
 TILE = 64
 ROOT = Path(__file__).resolve().parent.parent
-MAP_ID = sys.argv[1] if len(sys.argv) > 1 else "rootkin-forest-01"
 SEED = 11  # deterministic art: re-running produces the same file
 
 rng = np.random.default_rng(SEED)
 
-# Palette from the art pack (sheet 04): moss #3f8f3a, bark #6b4a2b, sap gold #e8c33a, pale leaf #7fd36b
-MOSS = np.array([63, 143, 58], dtype=np.float32)
-LEAF = np.array([127, 211, 107], dtype=np.float32)
-DEEP = np.array([8, 34, 30], dtype=np.float32)  # teal-black shadow, the art's dark ground
-TEAL = np.array([14, 70, 62], dtype=np.float32)
-BARK = np.array([107, 74, 43], dtype=np.float32)
-BARK_DARK = np.array([58, 38, 22], dtype=np.float32)
-STONE = np.array([150, 128, 96], dtype=np.float32)
-SAP = (232, 195, 58)
+
+def C(r, g, b):
+    return np.array([r, g, b], dtype=np.float32)
+
+
+# One palette per home world, from the art pack's faction sheets.
+WORLDS = {
+    "rootkin": dict(deep=C(8, 34, 30), moss=C(63, 143, 58), leaf=C(127, 211, 107), teal=C(14, 70, 62),
+                    bark=C(107, 74, 43), bark_dark=C(58, 38, 22), stone=C(150, 128, 96),
+                    pad=((78, 54, 30), (118, 84, 48), (232, 195, 58)), pad_core=(240, 210, 90), tuft=(96, 170, 80),
+                    spawn=((70, 34, 18), (232, 195, 58), (255, 240, 170)), exit=((40, 150, 110), (140, 240, 190), (240, 255, 240)),
+                    mote=((150, 245, 215), (232, 215, 110)), leaves=(80, 130, 170, 215, 70, 110), glow=(232, 195, 58, 60), vig=0.4),
+    "assembly": dict(deep=C(14, 15, 17), moss=C(58, 60, 64), leaf=C(110, 106, 96), teal=C(70, 48, 30),
+                     bark=C(40, 42, 46), bark_dark=C(18, 19, 22), stone=C(120, 122, 126),
+                     pad=((40, 42, 46), (96, 100, 106), (232, 195, 58)), pad_core=(255, 200, 70), tuft=(196, 122, 30),
+                     spawn=((60, 24, 10), (255, 120, 30), (255, 220, 160)), exit=((20, 60, 90), (90, 190, 240), (230, 250, 255)),
+                     mote=((255, 190, 80), (120, 125, 130)), leaves=(150, 190, 100, 130, 30, 60), glow=(232, 195, 58, 45), vig=0.45),
+    "chitin": dict(deep=C(26, 10, 40), moss=C(80, 40, 120), leaf=C(138, 79, 201), teal=C(50, 20, 70),
+                   bark=C(120, 86, 40), bark_dark=C(60, 38, 18), stone=C(190, 140, 50),
+                   pad=((60, 30, 90), (110, 60, 160), (159, 232, 74)), pad_core=(180, 250, 100), tuft=(159, 232, 74),
+                   spawn=((40, 10, 60), (159, 232, 74), (230, 255, 190)), exit=((90, 40, 140), (200, 140, 255), (250, 230, 255)),
+                   mote=((180, 250, 120), (230, 180, 60)), leaves=(120, 170, 60, 110, 160, 220), glow=(159, 232, 74, 50), vig=0.5),
+    "lumenari": dict(deep=C(10, 14, 40), moss=C(27, 42, 107), leaf=C(79, 216, 232), teal=C(18, 24, 70),
+                     bark=C(120, 200, 230), bark_dark=C(60, 120, 170), stone=C(230, 250, 255),
+                     pad=((40, 60, 120), (200, 230, 245), (79, 216, 232)), pad_core=(255, 255, 255), tuft=(168, 241, 255),
+                     spawn=((230, 245, 255), (79, 216, 232), (255, 255, 255)), exit=((20, 40, 110), (120, 230, 255), (255, 255, 255)),
+                     mote=((168, 241, 255), (255, 255, 255)), leaves=(120, 200, 200, 240, 220, 255), glow=(79, 216, 232, 55), vig=0.35),
+}
+
 
 
 def value_noise(w: int, h: int, octaves=((8, 1.0), (16, 0.5), (32, 0.25), (64, 0.125))):
@@ -78,9 +98,13 @@ def waypoints_from_grid(grid, legend, cols, rows):
     return [(c * TILE + TILE / 2, r * TILE + TILE / 2) for c, r in path], kinds
 
 
-def main():
-    map_path = ROOT / "src" / "content" / "maps" / f"{MAP_ID}.json"
+def paint(map_id: str):
+    global rng
+    rng = np.random.default_rng(SEED)
+    map_path = ROOT / "src" / "content" / "maps" / f"{map_id}.json"
     m = json.loads(map_path.read_text())
+    W = WORLDS[m["world"]]
+    DEEP, MOSS, LEAF, TEAL, BARK, BARK_DARK, STONE = W["deep"], W["moss"], W["leaf"], W["teal"], W["bark"], W["bark_dark"], W["stone"]
     cols, rows = m["cols"], m["rows"]
     w, h = cols * TILE, rows * TILE
     points, kinds = waypoints_from_grid(m["grid"], m["legend"], cols, rows)
@@ -142,19 +166,20 @@ def main():
         cx = c * TILE + TILE / 2 + rng.uniform(-2, 2)
         cy = r * TILE + TILE / 2 + rng.uniform(-2, 2)
         rr = TILE * 0.36
-        gd.ellipse([cx - rr * 1.5, cy - rr * 1.3, cx + rr * 1.5, cy + rr * 1.5], fill=(232, 195, 58, 60))
-        pd.ellipse([cx - rr - 2, cy - rr + 5, cx + rr + 2, cy + rr + 8], fill=(4, 18, 14, 150))  # shadow
-        pd.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=(78, 54, 30, 255))  # stump
-        pd.ellipse([cx - rr * 0.86, cy - rr * 0.86, cx + rr * 0.86, cy + rr * 0.86], fill=(118, 84, 48, 255))
-        pd.ellipse([cx - rr * 0.86, cy - rr * 0.86, cx + rr * 0.86, cy + rr * 0.86], outline=(232, 195, 58, 210), width=2)
+        p_outer, p_inner, p_rim = W["pad"]
+        gd.ellipse([cx - rr * 1.5, cy - rr * 1.3, cx + rr * 1.5, cy + rr * 1.5], fill=W["glow"])
+        pd.ellipse([cx - rr - 2, cy - rr + 5, cx + rr + 2, cy + rr + 8], fill=(4, 8, 14, 150))  # shadow
+        pd.ellipse([cx - rr, cy - rr, cx + rr, cy + rr], fill=(*p_outer, 255))
+        pd.ellipse([cx - rr * 0.86, cy - rr * 0.86, cx + rr * 0.86, cy + rr * 0.86], fill=(*p_inner, 255))
+        pd.ellipse([cx - rr * 0.86, cy - rr * 0.86, cx + rr * 0.86, cy + rr * 0.86], outline=(*p_rim, 210), width=2)
         for ring in (0.62, 0.4, 0.2):
-            pd.ellipse([cx - rr * ring, cy - rr * ring, cx + rr * ring, cy + rr * ring], outline=(70, 46, 24, 170), width=1)
-        pd.ellipse([cx - rr * 0.16, cy - rr * 0.16, cx + rr * 0.16, cy + rr * 0.16], fill=(240, 210, 90, 230))
-        # moss tufts on the rim
+            pd.ellipse([cx - rr * ring, cy - rr * ring, cx + rr * ring, cy + rr * ring], outline=(*p_outer, 170), width=1)
+        pd.ellipse([cx - rr * 0.16, cy - rr * 0.16, cx + rr * 0.16, cy + rr * 0.16], fill=(*W["pad_core"], 230))
+        # tufts (moss, rust, resin, frost) on the rim
         for k in range(5):
             a = rng.uniform(0, 6.283)
             tx, ty = cx + np.cos(a) * rr * 0.95, cy + np.sin(a) * rr * 0.75
-            pd.ellipse([tx - 4, ty - 3, tx + 4, ty + 3], fill=(96, 170, 80, 220))
+            pd.ellipse([tx - 4, ty - 3, tx + 4, ty + 3], fill=(*W["tuft"], 220))
     glow = glow.filter(ImageFilter.GaussianBlur(TILE * 0.22))
     img = Image.alpha_composite(img, glow)
     img = Image.alpha_composite(img, pads.filter(ImageFilter.GaussianBlur(0.6)))
@@ -165,13 +190,15 @@ def main():
     for (c, r), kind in kinds.items():
         cx, cy = c * TILE + TILE / 2, r * TILE + TILE / 2
         if kind == "spawn":
-            md.ellipse([cx - TILE * 0.55, cy - TILE * 0.55, cx + TILE * 0.55, cy + TILE * 0.55], fill=(70, 34, 18, 220))
-            md.ellipse([cx - TILE * 0.34, cy - TILE * 0.34, cx + TILE * 0.34, cy + TILE * 0.34], fill=(232, 195, 58, 170))
-            md.ellipse([cx - TILE * 0.16, cy - TILE * 0.16, cx + TILE * 0.16, cy + TILE * 0.16], fill=(255, 240, 170, 230))
+            s0, s1, s2 = W["spawn"]
+            md.ellipse([cx - TILE * 0.55, cy - TILE * 0.55, cx + TILE * 0.55, cy + TILE * 0.55], fill=(*s0, 220))
+            md.ellipse([cx - TILE * 0.34, cy - TILE * 0.34, cx + TILE * 0.34, cy + TILE * 0.34], fill=(*s1, 170))
+            md.ellipse([cx - TILE * 0.16, cy - TILE * 0.16, cx + TILE * 0.16, cy + TILE * 0.16], fill=(*s2, 230))
         if kind == "exit":
-            md.ellipse([cx - TILE * 0.6, cy - TILE * 0.6, cx + TILE * 0.6, cy + TILE * 0.6], fill=(40, 150, 110, 150))
-            md.ellipse([cx - TILE * 0.36, cy - TILE * 0.36, cx + TILE * 0.36, cy + TILE * 0.36], fill=(140, 240, 190, 210))
-            md.ellipse([cx - TILE * 0.14, cy - TILE * 0.14, cx + TILE * 0.14, cy + TILE * 0.14], fill=(240, 255, 240, 240))
+            e0, e1, e2 = W["exit"]
+            md.ellipse([cx - TILE * 0.6, cy - TILE * 0.6, cx + TILE * 0.6, cy + TILE * 0.6], fill=(*e0, 150))
+            md.ellipse([cx - TILE * 0.36, cy - TILE * 0.36, cx + TILE * 0.36, cy + TILE * 0.36], fill=(*e1, 210))
+            md.ellipse([cx - TILE * 0.14, cy - TILE * 0.14, cx + TILE * 0.14, cy + TILE * 0.14], fill=(*e2, 240))
     marks = marks.filter(ImageFilter.GaussianBlur(TILE * 0.1))
     img = Image.alpha_composite(img, marks)
 
@@ -190,7 +217,8 @@ def main():
         for k in range(n):
             a = base_a + k * (6.283 / n)
             lx, ly = x + np.cos(a) * 7, y + np.sin(a) * 5
-            col = (int(rng.uniform(80, 130)), int(rng.uniform(170, 215)), int(rng.uniform(70, 110)), 200)
+            lr0, lr1, lg0, lg1, lb0, lb1 = W["leaves"]
+            col = (int(rng.uniform(lr0, lr1)), int(rng.uniform(lg0, lg1)), int(rng.uniform(lb0, lb1)), 200)
             ld.ellipse([lx - 6, ly - 3, lx + 6, ly + 3], fill=col)
         placed += 1
     leaves = leaves.rotate(0)
@@ -205,7 +233,8 @@ def main():
         if trail_mask[int(y) % h, int(x) % w]:
             continue
         rad = rng.uniform(1.2, 3.0)
-        col = (150, 245, 215, int(rng.uniform(110, 220))) if rng.random() < 0.65 else (232, 215, 110, 170)
+        m0, m1 = W["mote"]
+        col = (*m0, int(rng.uniform(110, 220))) if rng.random() < 0.65 else (*m1, 170)
         md.ellipse([x - rad, y - rad, x + rad, y + rad], fill=col)
         placed += 1
     img = Image.alpha_composite(img, motes.filter(ImageFilter.GaussianBlur(5)))
@@ -218,14 +247,20 @@ def main():
     yy, xx = np.mgrid[0:h, 0:w]
     vx = np.minimum(xx, w - 1 - xx) / (w * 0.5)
     vy = np.minimum(yy, h - 1 - yy) / (h * 0.5)
-    vig = np.clip(np.minimum(vx, vy) * 3.5, 0, 1) * 0.4 + 0.6
+    vig = np.clip(np.minimum(vx, vy) * 3.5, 0, 1) * W["vig"] + (1 - W["vig"])
     arr = arr * vig[..., None]
     out = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGB")
 
-    out_path = ROOT / "public" / "maps" / f"{MAP_ID}.png"
+    out_path = ROOT / "public" / "maps" / f"{map_id}.png"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out.save(out_path, optimize=True)
-    print(f"wrote {out_path.relative_to(ROOT)} ({w}x{h})")
+    print(f"wrote {out_path.relative_to(ROOT)} ({w}x{h}, {m['world']})")
+
+
+def main():
+    ids = sys.argv[1:] or sorted(p.stem for p in (ROOT / "src" / "content" / "maps").glob("*.json"))
+    for map_id in ids:
+        paint(map_id)
 
 
 if __name__ == "__main__":

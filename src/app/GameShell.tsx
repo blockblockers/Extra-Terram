@@ -1,8 +1,8 @@
-// Extra Terram — src/app/GameShell.tsx v0.2.0 — feeds sim events to the renderer
+// Extra Terram — src/app/GameShell.tsx v0.7.0 — idle strips keep playing between waves (unless battery saver)
 // Owns one run: sim state (in a ref, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { content, type LevelEntry } from '../content';
+import { content, towersForRace, type LevelEntry } from '../content';
 import {
   applyInput,
   createContext,
@@ -14,8 +14,10 @@ import {
   towerAt,
   towerStats,
   upgradeCost,
+  type LoggedInput,
   type SimContext,
   type SimInput,
+  type SimResult,
   type SimState,
   type SimView,
   type Tower,
@@ -27,13 +29,19 @@ import { BuildBar } from '../ui/BuildBar';
 import { Hud } from '../ui/Hud';
 import { PauseOverlay, ResultOverlay } from '../ui/Overlays';
 import { TowerPanel, type SelectedTower } from '../ui/TowerPanel';
+import type { SaveStatus } from './App';
 import { GameLoop } from './loop';
 import type { Settings } from './settings';
 
 interface Props {
   level: LevelEntry;
+  raceId: string;
   seed: string;
   settings: Settings;
+  saveStatus: SaveStatus;
+  signedIn: boolean;
+  /** Called exactly once, when the run ends, with the result and the input log for replay/verification. */
+  onResult(result: SimResult, view: SimView, inputLog: LoggedInput[]): void;
   onExit(): void;
   onReplay(): void;
   onNewSeed(): void;
@@ -48,7 +56,9 @@ interface Game {
 
 const SNAPSHOT_MS = 100; // 10 Hz: the HUD updates at human speed
 
-export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }: Props) {
+export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn, onResult, onExit, onReplay, onNewSeed }: Props) {
+  const roster = useRef(towersForRace(raceId)).current;
+  const reported = useRef(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const game = useRef<Game | null>(null);
@@ -86,9 +96,11 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
       },
       render: (alpha) => renderer.draw({ state, ctx, alpha, overlay: overlay.current }),
       isAnimating: () => isAnimating(state),
+      hasIdleAnimation: () => renderer.hasIdleAnimation(),
       onAutoPause: () => setPaused(true),
     });
     loop.maxFps = settings.batterySaver ? 30 : 60;
+    loop.idleFps = settings.batterySaver ? 0 : 10; // saver: towers hold still between waves
 
     renderer
       .mount(canvas, host.clientWidth, host.clientHeight, ctx)
@@ -236,17 +248,25 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
       } else if (e.key === ' ') {
         e.preventDefault();
         togglePause();
-      } else if (e.key === '1' || e.key === '2' || e.key === '3') {
-        const def = content.towers[Number(e.key) - 1];
+      } else if (e.key >= '1' && e.key <= '9') {
+        const def = roster[Number(e.key) - 1];
         if (def) startPlacing(def.id);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [startPlacing, select, togglePause]);
+  }, [startPlacing, select, togglePause, roster]);
+
+  // ---------------------------------------------------------------- result
+  const result = view?.result ?? null;
+  useEffect(() => {
+    const g = game.current;
+    if (!result || !view || !g || reported.current) return;
+    reported.current = true;
+    onResult(result, view, g.state.inputLog);
+  }, [result, view, onResult]);
 
   // ---------------------------------------------------------------- render
-  const result = view?.result ?? null;
 
   return (
     <div className="flex h-dvh w-full flex-col bg-grove-950 font-ui">
@@ -257,7 +277,7 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
         <canvas ref={canvasRef} className="h-full w-full" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave} onPointerDown={onPointerDown} />
         {toast && <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1.5 text-sm text-amber-200">{toast}</div>}
         {paused && !result && <PauseOverlay onResume={togglePause} onExit={onExit} />}
-        {result && view && <ResultOverlay view={view} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
+        {result && view && <ResultOverlay view={view} seed={seed} saveStatus={saveStatus} signedIn={signedIn} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
       </div>
 
       {/* Fixed-height footer slot: the build bar and the tower panel swap inside it without resizing the board. */}
@@ -273,7 +293,7 @@ export function GameShell({ level, seed, settings, onExit, onReplay, onNewSeed }
             onClose={() => select(null)}
           />
         ) : (
-          <BuildBar towers={content.towers} resources={view?.resources ?? 0} placing={placing} onPick={startPlacing} />
+          <BuildBar towers={roster} resources={view?.resources ?? 0} placing={placing} onPick={startPlacing} />
         )}
       </div>
     </div>

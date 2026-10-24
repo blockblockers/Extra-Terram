@@ -30,9 +30,11 @@ src/content/   JSON content + schemas; every file carries content_version
 src/render/    PixiJS v8 renderer behind a small Renderer interface
 src/app/       the loop (fixed 20 Hz timestep, interpolated render, fps cap, idle between waves) and the game shell
 src/ui/        React HUD, build bar, tower panel, overlays, menu (static styling, safe-area insets)
-src/net/       empty until Phase 3/4 (Supabase)
+src/net/       Supabase: client, auth (OAuth / email link + code / guest), run results + offline queue, leaderboards, match plumbing
+supabase/      the SQL migration (tables, RLS, RPCs) and the dashboard setup guide
 scripts/       validate-content, sim-smoke, art generators
-public/maps/   painted backgrounds, one per map; public/icons/ PWA icons
+public/maps/   painted backgrounds, one per map; public/icons/ PWA icons; public/art/ key art
+art/           concept sheets, key-art originals, round notes and layout guides (not shipped)
 ```
 
 ## Rules that the structure enforces
@@ -46,6 +48,8 @@ public/maps/   painted backgrounds, one per map; public/icons/ PWA icons
 ## Deploy
 
 Netlify: build command `npm run build`, publish directory `dist` (both in `netlify.toml`). Node 22. The service worker is served with `Cache-Control: no-cache` so updates roll out.
+
+Accounts and leaderboards need three environment variables (`.env.example`; on Netlify under Site configuration → Environment variables) and the migration in `supabase/`. Without them the game runs fully offline — no login screen, scores stay on the device. The setup walkthrough is `supabase/README.md`.
 
 Identifiers still to register when the time comes: domain (deferred), Android package id (suggested `com.deadblock.extraterram`).
 

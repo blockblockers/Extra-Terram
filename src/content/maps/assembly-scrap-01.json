@@ -1,0 +1,35 @@
+{
+  "id": "assembly-scrap-01",
+  "name": "Slag Trench",
+  "world": "assembly",
+  "difficulty": "normal",
+  "cols": 12,
+  "rows": 16,
+  "legend": {
+    ".": "scenery",
+    "#": "path",
+    "o": "pad",
+    "S": "spawn",
+    "E": "exit"
+  },
+  "grid": [
+    "............",
+    "S#######....",
+    ".o.o.o.#.o..",
+    ".......#..o.",
+    ".o.o...#.o..",
+    "....####....",
+    ".o..#.o.o.o.",
+    "....#.......",
+    "..o.######..",
+    ".......o.#o.",
+    ".o.o.o...#..",
+    ".........#..",
+    "..o.######o.",
+    "....#..o....",
+    "....#.o..o..",
+    "....E......."
+  ],
+  "background": "/maps/assembly-scrap-01.png",
+  "content_version": "0.2.0"
+}

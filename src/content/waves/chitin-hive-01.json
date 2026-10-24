@@ -1,0 +1,170 @@
+{
+  "id": "chitin-hive-01",
+  "map": "chitin-hive-01",
+  "startingResources": 200,
+  "lives": 16,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "waves": [
+    {
+      "name": "Wisps",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 9,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Second light",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Sentinels",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 9,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Phalanx",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 7,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Mixed light",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 16,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 5,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "Bastion",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "wisp",
+          "count": 16,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Long dusk",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 12,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 16,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Bastion wall",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 7,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 9,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Wisp storm",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 32,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 14,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Eclipse",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 10,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 16,
+          "intervalTicks": 18,
+          "delayTicks": 80
+        },
+        {
+          "creep": "wisp",
+          "count": 28,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    }
+  ],
+  "content_version": "0.2.0"
+}

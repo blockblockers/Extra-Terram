@@ -1,4 +1,4 @@
-// Extra Terram — vite.config.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — vite.config.ts v0.7.0 — key art (jpg) joins the precache
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png', 'maps/*.png', 'sprites/**/*.png', 'sprites/manifest.json'],
+      includeAssets: ['icons/*.png', 'maps/*.png', 'art/*.jpg', 'sprites/**/*.png', 'sprites/manifest.json'],
       manifest: {
         name: 'Extra Terram: The Alien Race Tower Defense',
         short_name: 'Extra Terram',
@@ -26,7 +26,7 @@ export default defineConfig({
       },
       workbox: {
         // Single-player must work offline: precache the app shell, content JSON and map art.
-        globPatterns: ['**/*.{js,css,html,png,svg,json,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,jpg,svg,json,woff2}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
       },
     }),

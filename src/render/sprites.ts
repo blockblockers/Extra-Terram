@@ -1,8 +1,8 @@
-// Extra Terram — src/render/sprites.ts v0.2.0 — sprite library: images when present, vector art when not
+// Extra Terram — src/render/sprites.ts v0.5.0 — stills, animation strips, vector fallbacks
 // The art handoff doc (Project) describes the image spec. Any sprite listed in public/sprites/manifest.json
 // is loaded and used; anything else is drawn here with Pixi Graphics and cached as a texture.
 // Keys: tower:<id>:<tier>:<branch|->   turret:<id>:<tier>:<branch|->   creep:<id>   projectile:<towerId>
-import { Assets, Graphics, Texture, type Renderer as PixiRendererType } from 'pixi.js';
+import { Assets, Graphics, Rectangle, Texture, type Renderer as PixiRendererType } from 'pixi.js';
 import type { CreepDef, TowerDef } from '../engine';
 import { drawCreep, drawProjectile, drawTower, drawTurret } from './vectorArt';
 
@@ -29,8 +29,18 @@ export interface SpriteEntry {
   image: boolean;
 }
 
+/** An animation strip sliced into frames. fps is the authored playback rate. */
+export interface Strip {
+  frames: Texture[];
+  fps: number;
+}
+
+export type TowerAnim = 'idle' | 'fire';
+export type CreepAnim = 'walk' | 'die';
+
 export class SpriteLibrary {
   private cache = new Map<string, SpriteEntry>();
+  private strips = new Map<string, Strip | null>();
   private images = new Set<string>();
   private renderer: PixiRendererType;
 
@@ -56,6 +66,45 @@ export class SpriteLibrary {
   private imageTexture(path: string): Texture | null {
     if (!this.images.has(path)) return null;
     return Assets.get<Texture>(`/sprites/${path}`) ?? null;
+  }
+
+  /**
+   * An animation strip: a PNG whose width is a whole multiple of its height, sliced into square
+   * frames left to right. Detected purely by shape, so a strip is just a file dropped next to its still.
+   */
+  private strip(path: string, fps: number): Strip | null {
+    const cached = this.strips.get(path);
+    if (cached !== undefined) return cached;
+    const base = this.imageTexture(path);
+    let out: Strip | null = null;
+    if (base) {
+      const size = base.height;
+      const n = Math.round(base.width / size);
+      if (n >= 2 && Math.abs(base.width - n * size) < 2) {
+        const frames: Texture[] = [];
+        for (let i = 0; i < n; i++) frames.push(new Texture({ source: base.source, frame: new Rectangle(i * size, 0, size, size) }));
+        out = { frames, fps };
+      }
+    }
+    this.strips.set(path, out);
+    return out;
+  }
+
+  /** Idle (loop) or fire (once) strip for a tower body, or null. */
+  towerStrip(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null, anim: TowerAnim): Strip | null {
+    const state = tierFile(tier, branch).replace('.png', '');
+    return this.strip(`${def.race}/${def.id}/${state}-${anim}.png`, anim === 'idle' ? 6 : 12);
+  }
+
+  /** Fire strip for a turret, or null. */
+  turretStrip(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null): Strip | null {
+    const state = tierFile(tier, branch).replace('.png', '');
+    return this.strip(`${def.race}/${def.id}/turret-${state}-fire.png`, 12);
+  }
+
+  /** Walk (loop) or die (once) strip for a creep, or null. */
+  creepStrip(def: CreepDef, anim: CreepAnim): Strip | null {
+    return this.strip(`${def.race}/creeps/${def.id}-${anim}.png`, anim === 'walk' ? 8 : 12);
   }
 
   /**
@@ -87,14 +136,15 @@ export class SpriteLibrary {
     return entry;
   }
 
-  /** Rotating part, or null when the tower has none. */
-  turret(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null): SpriteEntry | null {
+  /** Rotating part, or null when the tower has none. A painted body only gets a painted turret. */
+  turret(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null, bodyIsImage: boolean): SpriteEntry | null {
     if (!hasTurret(def)) return null;
     const key = `turret:${def.id}:${tier}:${branch ?? '-'}`;
     const cached = this.cache.get(key);
     if (cached) return cached;
     const file = `${def.race}/${def.id}/turret-${tierFile(tier, branch)}`;
     const image = this.imageTexture(file);
+    if (!image && bodyIsImage) return null;
     const entry: SpriteEntry = image
       ? { texture: image, width: TILE * 1.0, height: TILE * 1.0, ax: 0.5, ay: 0.5, image: true }
       : this.generate((g) => drawTurret(g, def, tier, branch, TILE));

@@ -1,8 +1,8 @@
 {
   "name": "extra-terram",
-  "version": "0.3.0",
+  "version": "0.7.1",
   "private": true,
-  "description": "Extra Terram: The Alien Race Tower Defense \u2014 Phase 1 vertical slice",
+  "description": "Extra Terram: The Alien Race Tower Defense — Phase 1–3: vertical slice, four races, accounts",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,11 +12,16 @@
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-content.mjs",
     "sim": "tsx scripts/sim-smoke.ts",
-    "art": "python scripts/gen-background.py && python scripts/gen-icons.py && python scripts/cut-sheets.py && python scripts/sprites.py --fit",
+    "art": "python scripts/gen-background.py && python scripts/gen-icons.py && python scripts/cut-sheets.py && python scripts/sprites.py --fit && python scripts/gen-guides.py",
     "sprites": "python scripts/sprites.py",
-    "cut-sheets": "python scripts/cut-sheets.py && python scripts/sprites.py --fit"
+    "cut-sheets": "python scripts/cut-sheets.py && python scripts/sprites.py --fit",
+    "guides": "python scripts/gen-guides.py",
+    "cut-strip": "python scripts/cut-strip.py",
+    "optimize-strips": "python scripts/optimize-strips.py",
+    "art-drop": "python scripts/sprites.py --refit && python scripts/optimize-strips.py && python scripts/sprites.py"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
     "pixi.js": "^8.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

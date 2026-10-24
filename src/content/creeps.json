@@ -1,5 +1,5 @@
 {
-  "content_version": "0.1.0",
+  "content_version": "0.2.0",
   "creeps": [
     {
       "id": "compactor",
@@ -39,6 +39,123 @@
       "leakCost": 3,
       "radius": 0.36,
       "color": "#c47a1e"
+    },
+    {
+      "id": "seedling",
+      "race": "rootkin",
+      "name": "Seedling",
+      "archetype": "rusher",
+      "hp": 34,
+      "speed": 2.5,
+      "armor": "organic",
+      "bounty": 5,
+      "leakCost": 1,
+      "radius": 0.22,
+      "color": "#7fd36b"
+    },
+    {
+      "id": "thornbeast",
+      "race": "rootkin",
+      "name": "Thornbeast",
+      "archetype": "workhorse",
+      "hp": 160,
+      "speed": 1.3,
+      "armor": "organic",
+      "bounty": 11,
+      "leakCost": 1,
+      "radius": 0.3,
+      "color": "#3f8f3a"
+    },
+    {
+      "id": "rootwalker",
+      "race": "rootkin",
+      "name": "Rootwalker",
+      "archetype": "tank",
+      "hp": 480,
+      "speed": 0.85,
+      "armor": "organic",
+      "bounty": 30,
+      "leakCost": 3,
+      "radius": 0.36,
+      "color": "#6b4a2b"
+    },
+    {
+      "id": "skitterling",
+      "race": "chitin",
+      "name": "Skitterling",
+      "archetype": "rusher",
+      "hp": 28,
+      "speed": 2.9,
+      "armor": "organic",
+      "bounty": 4,
+      "leakCost": 1,
+      "radius": 0.2,
+      "color": "#9fe84a"
+    },
+    {
+      "id": "carapace-beetle",
+      "race": "chitin",
+      "name": "Carapace beetle",
+      "archetype": "workhorse",
+      "hp": 170,
+      "speed": 1.3,
+      "armor": "organic",
+      "bounty": 12,
+      "leakCost": 1,
+      "radius": 0.3,
+      "color": "#8a4fc9"
+    },
+    {
+      "id": "siege-beetle",
+      "race": "chitin",
+      "name": "Siege beetle",
+      "archetype": "tank",
+      "hp": 520,
+      "speed": 0.8,
+      "armor": "organic",
+      "bounty": 32,
+      "leakCost": 3,
+      "radius": 0.38,
+      "color": "#2a1a4d"
+    },
+    {
+      "id": "wisp",
+      "race": "lumenari",
+      "name": "Wisp",
+      "archetype": "rusher",
+      "hp": 30,
+      "speed": 2.7,
+      "armor": "shielded",
+      "bounty": 5,
+      "leakCost": 1,
+      "radius": 0.2,
+      "color": "#a8f1ff"
+    },
+    {
+      "id": "sentinel",
+      "race": "lumenari",
+      "name": "Sentinel",
+      "archetype": "workhorse",
+      "hp": 150,
+      "speed": 1.4,
+      "armor": "shielded",
+      "bounty": 12,
+      "leakCost": 1,
+      "radius": 0.3,
+      "color": "#4fd8e8"
+    },
+    {
+      "id": "bastion",
+      "race": "lumenari",
+      "name": "Bastion",
+      "archetype": "tank",
+      "hp": 500,
+      "speed": 0.85,
+      "armor": "shielded",
+      "bounty": 32,
+      "leakCost": 3,
+      "radius": 0.38,
+      "color": "#1b2a6b"
     }
   ]
 }

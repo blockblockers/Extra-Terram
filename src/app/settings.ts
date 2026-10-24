@@ -1,4 +1,4 @@
-// Extra Terram — src/app/settings.ts v0.1.0 — Phase 1 scaffold
+// Extra Terram — src/app/settings.ts v0.4.0 — remembers the last race and level
 // Player settings, persisted per device. Every storage access is wrapped: standalone PWAs and
 // private windows can refuse localStorage, and the game must still run without it.
 
@@ -7,6 +7,8 @@ export interface Settings {
   batterySaver: boolean;
   /** Always draw the build-pad rings, not only while placing a tower. */
   showPads: boolean;
+  lastRace?: string;
+  lastLevel?: string;
 }
 
 const KEY = 'extra-terram.settings.v1';

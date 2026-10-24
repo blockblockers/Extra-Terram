@@ -1,4 +1,4 @@
-// Extra Terram — src/render/vectorArt.ts v0.2.0 — vector unit art, the fallback when no image exists
+// Extra Terram — src/render/vectorArt.ts v0.4.0 — role-based fallbacks for every race
 // Each drawing follows the art handoff's silhouette notes so the painted versions can replace them
 // one at a time without the board changing feel. All drawings are centred on (0, 0) in a box of
 // about 1.4 tiles for towers (foot at +0.12 tile), 1 tile for creeps (facing +x), 0.4 tile for projectiles.
@@ -174,10 +174,74 @@ function drawWeepvine(g: Graphics, tier: 1 | 2 | 3, branch: 'a' | 'b' | null, s:
   }
 }
 
+/**
+ * Role-based fallback art in the tower's own colour, for any tower without an image yet. Each role
+ * has one silhouette so the build bar stays readable: splash = dome and tube, range = tall spire
+ * and eye, economy = low pool, support = pylon and ring, otherwise a plinth with a core.
+ */
 function drawGenericTower(g: Graphics, def: TowerDef, tier: 1 | 2 | 3, s: number): void {
-  const r = (16 + tier * 2) * s;
-  g.circle(0, 0, r).fill(0x1c3a27).stroke({ width: 3 * s, color: INK });
-  g.circle(0, 0, r * 0.7).fill(hex(def.color));
+  const accent = hex(def.color);
+  const dark = mix(accent, 0x000000, 0.65);
+  const mid = mix(accent, 0x000000, 0.35);
+  const light = mix(accent, 0xffffff, 0.35);
+  switch (def.role) {
+    case 'splash': {
+      const r = (15 + tier * 2) * s;
+      g.ellipse(0, 6 * s, r * 1.15, r * 0.55).fill(dark);
+      g.circle(0, -2 * s, r).fill(mid).stroke({ width: 1.5 * s, color: INK, alpha: 0.6 });
+      g.ellipse(-r * 0.35, -r * 0.45, r * 0.35, r * 0.2).fill({ color: light, alpha: 0.45 });
+      // a short fat tube pointing up-right
+      g.roundRect(-4 * s, -r - 10 * s, 9 * s, 18 * s, 3 * s).fill(0x3a3f44).stroke({ width: 1 * s, color: INK });
+      g.circle(0.5 * s, -r - 10 * s, 4 * s).fill(INK);
+      for (let i = 0; i < tier; i++) g.circle(-r * 0.6 + i * 7 * s, 2 * s, 2 * s).fill(light);
+      break;
+    }
+    case 'range': {
+      const h = (36 + tier * 6) * s;
+      g.ellipse(0, 8 * s, 12 * s, 5 * s).fill(dark);
+      g.moveTo(-6 * s, 8 * s).lineTo(6 * s, 8 * s).lineTo(2 * s, -h).lineTo(-2 * s, -h).closePath().fill(mid).stroke({ width: 1 * s, color: INK, alpha: 0.6 });
+      g.moveTo(-2.5 * s, 6 * s).lineTo(0, 6 * s).lineTo(0, -h + 4 * s).lineTo(-1 * s, -h + 4 * s).closePath().fill({ color: light, alpha: 0.5 });
+      // the eye at the top
+      g.ellipse(0, -h, 7 * s, 5 * s).fill(light).stroke({ width: 1 * s, color: INK });
+      g.ellipse(0, -h, 3 * s, 4 * s).fill(INK);
+      g.circle(1 * s, -h - 1.5 * s, 1 * s).fill(0xffffff);
+      for (let i = 0; i < tier; i++) g.rect(-7 * s, -h * (0.3 + i * 0.22), 14 * s, 2 * s).fill({ color: light, alpha: 0.8 });
+      break;
+    }
+    case 'economy': {
+      const r = (16 + tier * 2) * s;
+      g.ellipse(0, 4 * s, r * 1.2, r * 0.7).fill(dark).stroke({ width: 1.5 * s, color: INK, alpha: 0.6 });
+      g.ellipse(0, 2 * s, r * 0.85, r * 0.45).fill(mid);
+      g.ellipse(0, 1 * s, r * 0.6, r * 0.3).fill(light);
+      g.ellipse(-r * 0.15, -1 * s, r * 0.2, r * 0.08).fill({ color: 0xffffff, alpha: 0.6 });
+      for (let i = 0; i < 3 + tier; i++) {
+        const a = (i / (3 + tier)) * Math.PI * 2;
+        g.circle(Math.cos(a) * r * 1.05, 3 * s + Math.sin(a) * r * 0.6, 3 * s).fill(mid).stroke({ width: 0.8 * s, color: INK, alpha: 0.5 });
+      }
+      break;
+    }
+    case 'support': {
+      const h = (28 + tier * 4) * s;
+      g.ellipse(0, 8 * s, 13 * s, 5 * s).fill(dark);
+      g.moveTo(-5 * s, 8 * s).lineTo(5 * s, 8 * s).lineTo(3 * s, -h).lineTo(-3 * s, -h).closePath().fill(mid).stroke({ width: 1 * s, color: INK, alpha: 0.6 });
+      // the ring
+      g.ellipse(0, -h + 4 * s, (14 + tier * 2) * s, 5 * s).stroke({ width: 2.5 * s, color: light, alpha: 0.9 });
+      g.circle(0, -h - 2 * s, 4 * s).fill(light).stroke({ width: 1 * s, color: INK, alpha: 0.6 });
+      for (let i = 0; i < tier; i++) g.circle(-6 * s + i * 6 * s, 2 * s, 1.8 * s).fill(light);
+      break;
+    }
+    default: {
+      const r = (16 + tier * 2) * s;
+      g.circle(0, 0, r).fill(dark).stroke({ width: 3 * s, color: INK });
+      g.circle(0, 0, r * 0.7).fill(accent);
+    }
+  }
+}
+
+function mix(a: number, b: number, t: number): number {
+  const ar = (a >> 16) & 0xff, ag = (a >> 8) & 0xff, ab = a & 0xff;
+  const br = (b >> 16) & 0xff, bg = (b >> 8) & 0xff, bb = b & 0xff;
+  return (Math.round(ar + (br - ar) * t) << 16) | (Math.round(ag + (bg - ag) * t) << 8) | Math.round(ab + (bb - ab) * t);
 }
 
 /** Rotating parts: the Ironbark seed-pod cannon (and generic barrels for turret towers without art). */

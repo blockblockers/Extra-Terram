@@ -1,0 +1,35 @@
+{
+  "id": "chitin-hive-01",
+  "name": "Brood Gallery",
+  "world": "chitin",
+  "difficulty": "normal",
+  "cols": 12,
+  "rows": 16,
+  "legend": {
+    ".": "scenery",
+    "#": "path",
+    "o": "pad",
+    "S": "spawn",
+    "E": "exit"
+  },
+  "grid": [
+    "....S.......",
+    ".o..#.o.....",
+    "....#....o..",
+    ".o..###.o...",
+    "......#.....",
+    ".o.o..####o.",
+    "......o..#..",
+    "..########..",
+    "..#.o.o.....",
+    ".o#..o..o.o.",
+    "..####.o....",
+    ".o...#..o...",
+    "..o..######.",
+    "....o.....#.",
+    ".o...o.o..#o",
+    "..........E."
+  ],
+  "background": "/maps/chitin-hive-01.png",
+  "content_version": "0.2.0"
+}

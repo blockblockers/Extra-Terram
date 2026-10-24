@@ -71,3 +71,101 @@ Verified in this session:
 - Renderer: image towers draw at 1.85 tiles with the footprint anchor from the spec; turrets mount at half a tile above the centre on image bodies; creep canvases scale with hit radius (0.95 to 1.5 tiles).
 
 Verified: build, lint, typecheck, sim smoke test (hash unchanged), headless phone-size run with placement, waves, selection and a tier-2 upgrade; no console errors.
+
+## v0.4.0 — four playable races, four maps, new weapon types (2026-10-23)
+
+**Fixes**
+- The freeze on the last kill: the loop stopped drawing the instant the board emptied, so the last creep's sprite and death burst never rendered. It now keeps drawing for a 1.5 s settle period (`SETTLE_FRAMES` in `src/app/loop.ts`).
+- Painted creeps no longer rotate with the path (which turned them upside down heading left or sideways heading down). They mirror when heading left and lean slightly into vertical travel. Vector creeps still rotate.
+
+**Engine** (`src/engine`, still deterministic: smoke hash unchanged across runs and replays)
+- New attack kinds: `beam` (hitscan, optional `chain` to extra targets at 60% damage), `economy` (`income` sap per wave end, scales with tier), `support` (`buff` multipliers on damage, range and fire rate for every tower in range; strongest buff wins, no stacking).
+- Projectile `splash` radius (damage to everything in the ring), `critChance` (2× on the sim RNG), `slowOnHit` / `slowTicks`. Branch effects added: `cooldownMult`, `splashMult`, `chain`, `critChance`, `slowOnHit`, `slowTicks`, `incomeMult`, `buffBonus`.
+- Events added: `beam`, `income`; `hit` carries `splash` for the ring effect.
+
+**Content** (`content_version` 0.2.0)
+- 28 towers: seven per race in the shared role slots (starter, heavy, control, splash, range, economy, support), each with three tiers and a tier-3 branch choice. Trap slots are not built yet.
+- 12 creeps: rusher / workhorse / tank for every race. Armour: Rootkin and Chitin organic, Assembly plated, Lumenari shielded.
+- Damage matrix softened for mirror matches (kinetic→plated 0.85, bio→organic 0.9, energy→shielded 0.7); counters unchanged.
+- Maps: Slag Trench (Assembly scrap plains, normal, vs Chitin), Brood Gallery (Chitin hive tunnels, normal, vs Lumenari), Prism Span (Lumenari crystal fields, hard, vs Rootkin), plus Mossbank Hollow. The validator now walks the path from spawn to exit (it caught two gaps in my grids).
+- `npm run sim` plays every level with every race using a role-based builder and prints a balance table; all 16 pairs are winnable by that builder after tuning (Chitin got cheaper towers).
+
+**Art**
+- `scripts/cut-sheets.py` now cuts all four races: 48 tower images (3 towers × 4 states × 4 races), the Assembly pile-driver turret, 12 creeps, projectiles. Mapping per race is in the script header. 77 sprites in the manifest.
+- Towers without sheet art (splash, range, economy, support for every race) use role-based vector art in the tower's colour; the build bar shows a drawn role glyph for them.
+- Backgrounds: one painter, four palettes (`scripts/gen-background.py` paints every map by its `world`).
+
+**UI**
+- Menu: race picker (4) and level picker (4), remembered between sessions; build bar scrolls horizontally for seven towers; tower panel describes beams, splash, chains, crits, income and buffs; aura rings use the tower's colour; support towers draw links to the towers they buff.
+
+Verified: build, lint, typecheck, sim smoke test (determinism + replay), headless phone-size runs as Lumenari on Slag Trench (beams, chains, support links) and Chitin on Prism Span; no console errors.
+
+## v0.5.0 — animation playback, title key art, simpler seed (2026-10-23)
+
+- **Animation strips.** Any PNG next to a still whose width is a whole multiple of its height is an animation strip (`t1-idle.png`, `t1-fire.png`, `turret-t1-fire.png`, `creeps/<creep>-walk.png`, `creeps/<creep>-die.png`). `src/render/sprites.ts` slices it by shape, `src/render/anim.ts` plays it (idle/walk loop, fire/die one-shot) in sim ticks, so playback follows the speed buttons and stops on pause. Death strips play as a ghost sprite where the creep fell. Verified with a synthetic 6-frame Needlespire idle strip (removed again; the pipeline is `npm run cut-strip -- <lineup> <frames> <out>`).
+- **Procedural idle** when no strip exists: painted towers breathe (1.5% scale, own phase) and flinch on fire; painted creeps bob and roll in time with their speed; turrets recoil as before.
+- **Title screen.** `public/art/title.jpg` is drawn full-bleed behind the menu (1536 × 2048 portrait, 150 KB stand-in composed from the faction style sheet). Logo lockup in live text (sap-gold EXTRA TERRAM, pale-leaf subtitle). Panels are translucent with blur. Replace the JPEG with real key art; no code change.
+- **Seed → challenge code.** The seed field is gone from the main flow. Play always uses a fresh random code; "Have a challenge code?" reveals an input for replaying a friend's waves; the result screen shows the run's code with a Copy button and offers "Same waves again" / "New waves".
+- **Tools.** `npm run guides` exports `art/guides/<map>-guide.png` (trail, pads, spawn, exit on grey) to paint map backgrounds over; `npm run cut-strip` turns a keyframe lineup into a strip and refuses frames that drift more than 6%; the cut-out helpers moved to `scripts/cut_sheets_lib.py` and are shared.
+- Art direction for all of this is in the Project doc *Art Round 2 Handoff*.
+
+## v0.6.0 — accounts, login screen, run results, leaderboards (2026-10-23)
+
+Phase 3 from the design doc, plus the Phase 4 match tables and channel so multiplayer gameplay has something to stand on. The game still runs with no backend at all.
+
+- **Login screen** (`src/ui/LoginScreen.tsx`), same door as Deadblock: OAuth buttons (Google by default, `VITE_AUTH_PROVIDERS` adds more), email link + 6-digit code in one email, **Play as guest** always available. Shown over the title key art, before the menu, unless a session or the guest flag exists. Auth redirect errors (expired link) come back as an inline notice. No provider logos are drawn; buttons use a neutral glyph.
+- **Guest mode** is deliberate, not a dead end: full single-player, runs wait on the device in a local queue (`extra-terram.run-queue.v1`, cap 50, without input logs) and upload the first time that device signs in. Account bar on the menu: "Playing as guest · Sign in" / name + Sign out / "Pick a name for the leaderboards" the first time.
+- **Run results.** `GameShell` reports a finished run once (`onResult`); `App` posts it through `recordRun()` → `submit_run` RPC with the input log (up to 2000 inputs). The result screen says where it went: posted / saved on this device, sign in to post / will post when the connection is back. Local personal bests are kept regardless.
+- **Leaderboards.** "Top scores" under the level list (only in builds with a server): one best per player, race dot, stars, score; your posted best when signed in; 30 s cache. Anonymous visitors can read it.
+- **SQL** `supabase/migrations/0001_accounts_and_matches.sql`: `profiles` (trigger on `auth.users` + `ensure_profile`), `player_progress`, `run_results`, `matches`, `match_players`, `match_logs`; RLS on all; RPCs `set_username`, `submit_run` (validates ranges, stars-on-loss, duration vs waves; raises the star record), `save_settings`, `leaderboard`, `my_best`, `create_match`, `join_match`, `start_match`, `submit_match_result`, `save_match_log`, `rating_current` (computed, never a counter). Applied twice against a local Postgres 16 with a stub `auth` schema and exercised as three users (join by code, full lobby refused, outsider sees nothing, non-host cannot start, both reports finish the match, anon reads the leaderboard but cannot submit).
+- **Client** `src/net/`: `supabase.ts` (null client without env, publishable or legacy anon key), `auth.tsx` (`AuthProvider`/`useAuth`), `progress.ts`, `leaderboard.ts`, `match.ts` (`MatchChannel`: Broadcast + Presence on `match:<id>`, typed `MatchEvent` union for frames, inputs, hashes, sends, board summaries, snapshots). The engine still cannot import any of it (lint).
+- **Setup guide** `supabase/README.md` + `.env.example`: migration, keys, Netlify env vars, redirect URLs (with the Netlify preview wildcard), magic-link template with `{{ .Token }}`, Google OAuth client, SMTP note, Realtime note, end-to-end check.
+- **Renderer fix:** towers/backgrounds managed by the Pixi Assets cache are no longer destroyed on exit, so a replay no longer re-decodes every sprite (and the "managed by Assets" warnings are gone).
+
+Verified: build (offline and with a dummy Supabase env), lint, typecheck, sim smoke test (hash unchanged); headless phone-size runs: offline build goes straight to the menu with no account bar; dummy-env build shows the login screen, validates the email field, guest → menu → lost run → "Saved on this device · sign in to post it" → account bar "Guest · 1 run waiting to post" → login screen notes the queued run; second run in the same page renders with zero console warnings.
+
+Not done yet (next): the real Google client and redirect URLs are the user's dashboard steps (see the guide); Phase 4 lobby UI and the mirrored-boards mode on top of `MatchChannel`; replay verification of uploaded input logs (an Edge Function that re-runs `replay()` and compares the score); the main bundle grew to ~720 KB with supabase-js — split it with a dynamic import if first paint on 3G matters before launch.
+
+## v0.6.1 — Google parked, email + password sign-in (2026-10-23, later)
+
+- **OAuth is dormant, not deleted.** `authProviders()` returns an empty list while `VITE_AUTH_PROVIDERS` is unset (or `none`), so no provider buttons render and no Google Cloud setup is needed. `.env.example` has the line commented out. Setting `VITE_AUTH_PROVIDERS=google` after the client exists (guide, section 5) brings the button back with no code change.
+- **Email + password** is the sign-in: *Sign in* / *Create account* (8+ characters, Show/Hide), *Forgot password?* (reset link → "Choose a new password" screen, driven by the `PASSWORD_RECOVERY` event), *Email me a sign-in link instead* (the link + code flow from v0.6.0). Create-account handles both dashboard settings: with "Confirm email" on it shows the confirm notice; with it off the player is signed in at once. Guest is unchanged.
+- Guide updated (section 4): turn **Confirm email off** for now so accounts work with the built-in mailer; password sign-in itself sends no email.
+
+Verified: lint, typecheck, build; headless phone-size run with a dummy server: no Google button, field validation (empty email, missing password, short password), Show toggle, reset and link side doors, friendly "No connection to the server" on a failed sign-in, guest path intact; zero console errors.
+
+## v0.7.0 — art round 2 integrated (2026-10-24)
+
+What the pack contained, against the *Art Round 2 Handoff*:
+
+| Asked for | Delivered | Status |
+| --- | --- | --- |
+| Animated towers and creeps (strips) | 38 strips: idle (6 f) + fire (4 f) for Needlespire, Ironbark, Weepvine in all four states; turret-fire for Ironbark and the Assembly Pile Driver; walk (6 f) + die (5 f) for Compactor, Dump Hauler, Dozer. Frame 0 is the still, later frames are generated sway/recoil/fade — a usable first pass, not hand-drawn | **In** — dropped straight into `public/sprites/` (the handoff's naming was followed exactly), so the strip player picked them up with no code change |
+| Title / loading screen in the tower-art style | 1536 × 2048 painted scene with all four races, planet and floating islands — strong, matches the towers. The title lettering is painted into the sky and reads **"XTRA TERRAM"** | **In** — `public/art/title.jpg`; the live text lockup is hidden while `TITLE_ART_HAS_LOGO` is true (`src/ui/Title.tsx`) so the title is not shown twice. Spelling: the game's name is *Extra Terram* — either regenerate the art without text (the brief asked for text-free) and flip the flag, or decide the brand is "Xtra" |
+| In-depth painted backgrounds per world | Not delivered ("deliberately not replaced"; the artist's note says new maps must be painted over `npm run guides` output) | **Open** — still the generated backgrounds |
+| — (not requested this round) | 64 stills for the 16 towers that had no sheet art (Whirlseed, Spirebirch, Sapwell, Elderwood; Tar Sprayer, Railgun, Salvage Rig, Relay Mast; Web Spinner, Stalker Eye, Resin Nest, Pheromone Node; Chrono Field, Pulsar, Solar Collector, Resonator), flat vector-icon style | **In as placeholders** — better than the procedural shapes, but visibly flatter than the painted towers next to them; refitted to the tower canvas rule so they are the same size. Round 3: repaint these in the sheet style |
+
+Engineering that came with it:
+
+- **Idle strips between waves.** The loop used to stop rendering whenever nothing moved (the heat rule), which froze idle strips in the build phase. `GameLoop.idleFps` (10 fps) now keeps frames coming while a tower with an idle strip is on the board; battery saver sets it to 0 and towers hold still between waves. Waves still render at the full cap.
+- **Strip size.** 38 RGBA strips weighed 8.4 MB, all of it in the PWA precache. `npm run optimize-strips` (`scripts/optimize-strips.py`) quantises strips to 256-colour palette PNGs with dithering: 1.9 MB, no visible change at game scale. Stills are untouched. Run it after dropping new strips in; it skips files already in palette mode. Originals stay in the art pack zip.
+- **Key art in the precache** (`jpg` added to the workbox globs and `art/*.jpg` to `includeAssets`), so the title shows offline. Precache is now ~10.2 MB (was 6.9 MB).
+- **Key art tuning.** The painted scene ends at y ≈ 1280 with a hard step into a neutral grey fill; `title.jpg` is republished with that fill blended toward the app background and the step feathered, so desktop gutters match. The backdrop is now scaled by height (`auto 100%`) instead of `cover`: identical on phones, and on wide screens the painting sits centred instead of being blown up with the lettering cropped. Untouched originals: `art/key-art/title-round2.jpg`, `title-round2@2x.jpg` (the 3072 × 4096 version is not shipped: 1.3 MB for no visible gain on phones), plus the v0.5 stand-in.
+- The artist's notes, inventory and atlas preview are in `art/round2/`.
+
+Verified: lint, typecheck, build, headless phone-size run: login and menu over the new art (phone and 1280 × 800), idle strip frames change between waves, a wave with animated Assembly creeps, flat Whirlseed next to painted Needlespire at matching size; zero console errors.
+
+Art round 3 (when you generate again): painted map backgrounds over `art/guides/<map>-guide.png`; key art without lettering (or confirm the "Xtra" spelling); the 16 flat towers repainted in the sheet style; hand-keyed strips for the remaining painted towers and creeps once the first-pass ones feel too subtle.
+
+## v0.7.1 — art round 4 (2026-10-24, later)
+
+The round-4 pack is an interim pass; the real repaint of the 16 tower families is promised for the next drop.
+
+- **Text-free key art — in.** New cinematic scene (all four races, planet, islands) with no lettering, so the live "EXTRA TERRAM" lockup is back (`TITLE_ART_HAS_LOGO = false` in `src/ui/Title.tsx`) and the spelling question is closed. The scene was upscaled ~3× from a crop of a showcase board, so it is softer than round 2 at native size; `title.jpg` is republished with a mild unsharp mask, the hard edge at y ≈ 1485 feathered, and the lower fill blended to the app background. Originals in `art/key-art/title-round4*.jpg` (the 3072 × 4096 version is again not shipped). Round 5 ask: generate the text-free scene directly at 1536 × 2048.
+- **64 tower stills — in, refitted.** Same flat designs as round 2 with a procedural shading/tint/grain pass (the pack's own README says so). They arrived at the original undersized scale again, so `scripts/sprites.py --refit` now exists: any tower still whose artwork fills the canvas more than 8% off the rule (70% for t1/t2, 85% for t3a/t3b, footprint at y = 168) is trimmed and refitted in place; painted towers and anything already right are left alone (59 of 64 changed). Strips are never touched.
+- **`npm run art-drop`** is the whole routine for any future pack: unzip it over the repo, run that (refit stills → quantise strips → rewrite the manifest), then `npm run build`. The included `round4-art-polish.py` is archived under `art/round4/`, not `scripts/`: it rewrites sprites in place and references the other tool's paths, so it is reference only.
+- Precache is 12.0 MB (title.jpg grew with the sharper, larger scene).
+
+Verified: lint, typecheck, build; headless phone-size run: login and menu with the lockup over the new art, idle strips still playing between waves, refitted Whirlseed next to Needlespire; zero console errors.
+
+Waiting on the next drop: painted repaints of the 16 families (same filenames → `npm run art-drop`), painted map backgrounds (still open since round 2), and eventually hand-keyed strips.

@@ -1,17 +1,22 @@
-// Extra Terram — src/render/PixiRenderer.ts v0.3.0 — painted sprites from the art pack
+// Extra Terram — src/render/PixiRenderer.ts v0.7.0 — reports idle strips so the loop keeps them moving between waves
 // PixiJS v8 renderer. It is driven by the app's loop (no Pixi ticker): the loop decides when a
 // frame is worth drawing, this class only draws. Heat controls live in the loop (fps cap, idle
 // between waves) and here (resolution cap, generated textures cached once, no per-frame filters,
 // one pooled effects batch).
 import { Application, Assets, Container, Graphics, Sprite, Texture } from 'pixi.js';
 import { TILE as TILE_KIND, cellIndex, towerStats, type SimContext, type SimEvent, type SimState, type Tower } from '../engine';
+import { StripPlayer } from './anim';
 import { Effects } from './effects';
 import type { Cell, RenderFrame, Renderer } from './renderer';
-import { SpriteLibrary, TILE, hasTurret } from './sprites';
+import { SpriteLibrary, TILE, hasTurret, type Strip } from './sprites';
 import { projectileColor, turretMount } from './vectorArt';
 
 export { TILE };
-const MAX_RESOLUTION = 2; // cap device pixel ratio: fill rate is the phone's main heat source
+const MAX_RESOLUTION = 2;
+
+const hexColor = (css: string): number => parseInt(css.replace('#', ''), 16);
+const darken = (c: number): number => (((c >> 16) & 0xff) * 0.7) << 16 | (((c >> 8) & 0xff) * 0.7) << 8 | ((c & 0xff) * 0.7);
+const lighten = (c: number): number => Math.min(255, ((c >> 16) & 0xff) * 0.6 + 100) << 16 | Math.min(255, ((c >> 8) & 0xff) * 0.6 + 100) << 8 | Math.min(255, (c & 0xff) * 0.6 + 100); // cap device pixel ratio: fill rate is the phone's main heat source
 
 interface TowerView {
   body: Sprite;
@@ -21,10 +26,28 @@ interface TowerView {
   targetAim: number;
   recoil: number;
   mount: number; // turret height above the cell centre, board px
+  anim: StripPlayer; // body idle/fire
+  turretAnim: StripPlayer | null;
+  fire: Strip | null; // body fire strip, played on each shot
+  turretFire: Strip | null;
+  phase: number; // procedural idle phase
+  flinch: number; // 1 right after a shot, decays
+  baseW: number;
+  baseH: number;
+  painted: boolean;
 }
 
 interface CreepView {
   body: Sprite;
+  /** Painted creeps are three-quarter views: they mirror left/right instead of rotating. */
+  painted: boolean;
+  facing: 1 | -1;
+  anim: StripPlayer;
+  die: Strip | null;
+  phase: number;
+  baseW: number;
+  baseH: number;
+  speed: number; // tiles per second, for the walk cadence
   shadow: Sprite;
   hpBack: Sprite;
   hpFront: Sprite;
@@ -65,6 +88,8 @@ export class PixiRenderer implements Renderer {
   private effects: Effects | null = null;
   private towers = new Map<number, TowerView>();
   private creeps = new Map<number, CreepView>();
+  /** One-shot death animations playing where a creep died. */
+  private ghosts: Array<{ sprite: Sprite; anim: StripPlayer }> = [];
   private projectiles = new Map<number, ProjectileView>();
   private softShadow: Texture | null = null;
   private slowRingTex: Texture | null = null;
@@ -110,6 +135,12 @@ export class PixiRenderer implements Renderer {
     this.makeSharedTextures();
     await Promise.all([this.loadBackground(ctx), this.sprites.load()]);
     this.resize(width, height);
+  }
+
+  /** True when any tower on the board plays a looping idle strip (the loop keeps a low frame rate for them). */
+  hasIdleAnimation(): boolean {
+    for (const v of this.towers.values()) if (v.anim.animated) return true;
+    return false;
   }
 
   /** Battery saver halves particle counts and is set by the shell after mount. */
@@ -201,6 +232,26 @@ export class PixiRenderer implements Renderer {
         if (view) {
           view.targetAim = Math.atan2(ev.ty - ev.y, ev.tx - ev.x);
           view.recoil = 1;
+          view.flinch = 1;
+          if (view.fire) view.anim.play(view.fire);
+          if (view.turretAnim && view.turretFire) view.turretAnim.play(view.turretFire);
+        }
+      } else if (ev.kind === 'kill') {
+        const view = [...this.creeps.values()].find((v) => v.die && Math.abs(v.body.x - ev.x * TILE) < 1 && Math.abs(v.body.y - ev.y * TILE) < 1);
+        const def = ctx.creepIndex[ev.creep];
+        const die = this.sprites?.creepStrip(def, 'die') ?? null;
+        if (die) {
+          const g = new Sprite(die.frames[0]);
+          g.anchor.set(0.5);
+          const entry = this.sprites!.creep(def);
+          g.width = entry.width;
+          g.height = entry.height;
+          g.position.set(ev.x * TILE, ev.y * TILE);
+          if (view) g.scale.x = Math.abs(g.scale.x) * view.facing;
+          this.creepLayer.addChild(g);
+          const anim = new StripPlayer(g, die.frames[0], null);
+          anim.play(die);
+          this.ghosts.push({ sprite: g, anim });
         }
       }
     }
@@ -220,21 +271,39 @@ export class PixiRenderer implements Renderer {
     this.drawTowers(state, ctx, dt);
     this.drawCreeps(state, ctx, alpha, dt);
     this.drawProjectiles(state, ctx, alpha);
+    this.drawGhosts(dt);
     this.effects.update(dt);
     this.drawOverlay(state, ctx, overlay);
     this.app.render();
   }
   private lastAlpha: number | undefined;
 
+  private drawGhosts(dt: number): void {
+    let w = 0;
+    for (const g of this.ghosts) {
+      g.anim.update(dt);
+      if (g.anim.playingOnce) this.ghosts[w++] = g;
+      else g.sprite.destroy();
+    }
+    this.ghosts.length = w;
+  }
+
   destroy(): void {
     if (!this.mounted) return;
     this.mounted = false;
+    for (const g of this.ghosts) g.sprite.destroy();
+    this.ghosts.length = 0;
     this.towers.clear();
     this.creeps.clear();
     this.projectiles.clear();
     this.sprites?.destroy();
     this.effects?.destroy();
-    this.app.destroy(false, { children: true, texture: true, textureSource: true });
+    // Generated textures are ours to free; the painted sprites and backgrounds belong to the Assets
+    // cache and stay loaded for the next run (destroying them here only forced a re-decode and a
+    // "managed by Assets" warning on every replay).
+    for (const t of [this.softShadow, this.slowRingTex, this.stunTex]) t?.destroy(true);
+    this.softShadow = this.slowRingTex = this.stunTex = null;
+    this.app.destroy(false, { children: true });
   }
 
   // ------------------------------------------------------------ layers
@@ -255,35 +324,55 @@ export class PixiRenderer implements Renderer {
     }
   }
 
-  /** Translucent rotating root-rings under aura towers. */
+  /** Ground rings under aura towers (slow fields), support towers (buff links) and economy towers (a soft gold pool). */
   private drawAuras(state: SimState, ctx: SimContext): void {
     const g = this.auraLayer;
     g.clear();
     for (const t of state.towers) {
       const def = ctx.towerIndex[t.def];
-      if (def.attack !== 'aura') continue;
-      const stats = towerStats(def, t.tier, t.branch);
       const cx = t.col * TILE + TILE / 2;
       const cy = t.row * TILE + TILE / 2;
-      const r = stats.range * TILE;
-      const color = t.tier === 3 && t.branch === 'a' ? 0x2f8a6a : 0x4fa58a;
-      g.circle(cx, cy, r).fill({ color, alpha: 0.1 });
-      g.circle(cx, cy, r).stroke({ width: 2, color, alpha: 0.35 });
-      // rotating root tendrils on the ring
-      const spokes = 8;
-      for (let i = 0; i < spokes; i++) {
-        const a = this.auraPhase + (i / spokes) * Math.PI * 2;
-        const x0 = cx + Math.cos(a) * r * 0.82;
-        const y0 = cy + Math.sin(a) * r * 0.82;
-        const x1 = cx + Math.cos(a + 0.15) * r;
-        const y1 = cy + Math.sin(a + 0.15) * r;
-        g.moveTo(x0, y0).quadraticCurveTo(cx + Math.cos(a + 0.05) * r * 0.95, cy + Math.sin(a + 0.05) * r * 0.95, x1, y1).stroke({ width: 2, color: 0x9fe8c0, alpha: 0.45 });
-      }
-      // drifting sap motes
-      for (let i = 0; i < 6; i++) {
-        const a = -this.auraPhase * 1.7 + i * 1.047;
-        const rr = r * (0.35 + 0.25 * Math.sin(this.auraPhase * 2 + i));
-        g.circle(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr, 2).fill({ color: 0xcfffe0, alpha: 0.6 });
+      if (def.attack === 'aura') {
+        const stats = towerStats(def, t.tier, t.branch);
+        const r = stats.range * TILE;
+        const accent = hexColor(def.color);
+        const color = t.tier === 3 && t.branch === 'a' ? darken(accent) : accent;
+        g.circle(cx, cy, r).fill({ color, alpha: 0.1 });
+        g.circle(cx, cy, r).stroke({ width: 2, color, alpha: 0.35 });
+        const spokes = 8;
+        for (let i = 0; i < spokes; i++) {
+          const a = this.auraPhase + (i / spokes) * Math.PI * 2;
+          const x0 = cx + Math.cos(a) * r * 0.82;
+          const y0 = cy + Math.sin(a) * r * 0.82;
+          const x1 = cx + Math.cos(a + 0.15) * r;
+          const y1 = cy + Math.sin(a + 0.15) * r;
+          g.moveTo(x0, y0).quadraticCurveTo(cx + Math.cos(a + 0.05) * r * 0.95, cy + Math.sin(a + 0.05) * r * 0.95, x1, y1).stroke({ width: 2, color: lighten(accent), alpha: 0.45 });
+        }
+        for (let i = 0; i < 6; i++) {
+          const a = -this.auraPhase * 1.7 + i * 1.047;
+          const rr = r * (0.35 + 0.25 * Math.sin(this.auraPhase * 2 + i));
+          g.circle(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr, 2).fill({ color: 0xffffff, alpha: 0.5 });
+        }
+      } else if (def.attack === 'support') {
+        const stats = towerStats(def, t.tier, t.branch);
+        const r = stats.range * TILE;
+        const accent = hexColor(def.color);
+        g.circle(cx, cy, r).stroke({ width: 1.5, color: accent, alpha: 0.25 });
+        // a pulse that travels outward, and a link to every tower it buffs
+        const pulse = (this.auraPhase * 0.8) % 1;
+        g.circle(cx, cy, r * pulse).stroke({ width: 2, color: accent, alpha: 0.35 * (1 - pulse) });
+        for (const o of state.towers) {
+          if (o.id === t.id) continue;
+          const dx = o.col - t.col;
+          const dy = o.row - t.row;
+          if (dx * dx + dy * dy > stats.range * stats.range) continue;
+          const ox = o.col * TILE + TILE / 2;
+          const oy = o.row * TILE + TILE / 2;
+          g.moveTo(cx, cy).lineTo(ox, oy).stroke({ width: 1.5, color: accent, alpha: 0.3 });
+          g.circle(ox, oy, 4).fill({ color: accent, alpha: 0.5 });
+        }
+      } else if (def.attack === 'economy') {
+        g.ellipse(cx, cy + 6, TILE * 0.48, TILE * 0.3).fill({ color: 0xe8c33a, alpha: 0.12 + 0.05 * Math.sin(this.auraPhase * 3) });
       }
     }
   }
@@ -310,7 +399,7 @@ export class PixiRenderer implements Renderer {
         this.towerLayer.addChild(body);
         let turret: Sprite | null = null;
         if (hasTurret(def)) {
-          const te = this.sprites!.turret(def, t.tier, t.branch);
+          const te = this.sprites!.turret(def, t.tier, t.branch, entry.image);
           if (te) {
             turret = new Sprite(te.texture);
             turret.anchor.set(te.ax, te.ay);
@@ -320,9 +409,40 @@ export class PixiRenderer implements Renderer {
             this.towerLayer.addChild(turret);
           }
         }
-        view = { body, turret, key, aim: view?.aim ?? -Math.PI / 2, targetAim: view?.targetAim ?? -Math.PI / 2, recoil: 0, mount };
+        const phase = ((t.id * 0.618) % 1) * Math.PI * 2;
+        const idle = entry.image ? this.sprites!.towerStrip(def, t.tier, t.branch, 'idle') : null;
+        const fire = entry.image ? this.sprites!.towerStrip(def, t.tier, t.branch, 'fire') : null;
+        const turretFire = turret ? this.sprites!.turretStrip(def, t.tier, t.branch) : null;
+        view = {
+          body,
+          turret,
+          key,
+          aim: view?.aim ?? -Math.PI / 2,
+          targetAim: view?.targetAim ?? -Math.PI / 2,
+          recoil: 0,
+          mount,
+          anim: new StripPlayer(body, entry.texture, idle, phase),
+          turretAnim: turret ? new StripPlayer(turret, turret.texture, null) : null,
+          fire,
+          turretFire,
+          phase,
+          flinch: 0,
+          baseW: body.width,
+          baseH: body.height,
+          painted: entry.image,
+        };
         this.towers.set(t.id, view);
         this.towerDefOf.set(t.id, t.def);
+      }
+      // animation: a strip when there is one, otherwise a slow breath and a flinch on fire
+      view.anim.update(dt);
+      view.turretAnim?.update(dt);
+      view.flinch = Math.max(0, view.flinch - 0.2 * dt);
+      if (view.painted && !view.anim.animated) {
+        const breath = 1 + 0.015 * Math.sin(this.auraPhase * 2.2 + view.phase);
+        const squash = view.flinch > 0 && !view.turret ? 1 + 0.06 * view.flinch : 1;
+        view.body.width = view.baseW * breath * squash;
+        view.body.height = (view.baseH * (2 - breath)) / squash;
       }
       if (view.turret) {
         // ease toward the target angle along the shortest arc
@@ -391,7 +511,26 @@ export class PixiRenderer implements Renderer {
         this.groundFxLayer.addChild(slowRing);
         this.creepLayer.addChild(body);
         this.hpLayer.addChild(hpBack, hpFront);
-        v = { body, shadow, hpBack, hpFront, slowRing, stun, dripTimer: 0 };
+        const walk = entry.image ? this.sprites!.creepStrip(def, 'walk') : null;
+        const die = entry.image ? this.sprites!.creepStrip(def, 'die') : null;
+        const phase = ((c.id * 0.618) % 1) * Math.PI * 2;
+        v = {
+          body,
+          painted: entry.image,
+          facing: 1,
+          anim: new StripPlayer(body, entry.texture, walk, phase),
+          die,
+          phase,
+          baseW: body.width,
+          baseH: body.height,
+          speed: def.speed,
+          shadow,
+          hpBack,
+          hpFront,
+          slowRing,
+          stun,
+          dripTimer: 0,
+        };
         this.creeps.set(c.id, v);
       }
       const x = (c.px + (c.x - c.px) * alpha) * TILE;
@@ -400,7 +539,34 @@ export class PixiRenderer implements Renderer {
       v.shadow.position.set(x + 2, y + 5);
       const dx = c.x - c.px;
       const dy = c.y - c.py;
-      if (dx !== 0 || dy !== 0) v.body.rotation = Math.atan2(dy, dx);
+      const moving = (dx !== 0 || dy !== 0) && c.stunTicks === 0;
+      if (v.painted) {
+        // A three-quarter-view sprite rotated to face down or left reads as lying on its side or
+        // upside down, so painted creeps keep upright: mirror when heading left, lean a little
+        // into vertical travel, and never rotate past that.
+        if (dx > 0.001) v.facing = 1;
+        else if (dx < -0.001) v.facing = -1;
+        // walk strip at a cadence tied to speed, or a procedural bob and roll
+        v.anim.rate = moving ? Math.max(0.5, v.speed / 1.5) * (c.slowFactor < 1 ? c.slowFactor : 1) : 0;
+        v.anim.update(dt);
+        let bobY = 0;
+        let roll = 0;
+        let stretch = 1;
+        if (!v.anim.animated && moving) {
+          const cadence = this.auraPhase * 10 * Math.max(0.5, v.speed / 1.5) + v.phase;
+          bobY = -Math.abs(Math.sin(cadence)) * 2.2;
+          roll = Math.sin(cadence) * 0.06;
+          stretch = 1 + Math.sin(cadence * 2) * 0.025;
+        }
+        v.body.width = v.baseW * stretch;
+        v.body.height = v.baseH / stretch;
+        v.body.scale.x = Math.abs(v.body.scale.x) * v.facing;
+        v.body.position.set(x, y + bobY);
+        const lean = dy !== 0 || dx !== 0 ? Math.atan2(dy, Math.abs(dx) + 0.0001) : 0;
+        v.body.rotation = v.facing * Math.max(-0.35, Math.min(0.35, lean * 0.4)) + roll;
+      } else if (dx !== 0 || dy !== 0) {
+        v.body.rotation = Math.atan2(dy, dx);
+      }
 
       // status visuals
       const slowed = c.slowTicks > 0 && c.slowFactor < 1;

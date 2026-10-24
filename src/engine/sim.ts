@@ -1,8 +1,8 @@
-// Extra Terram — src/engine/sim.ts v0.2.0 — emits render events per tick
+// Extra Terram — src/engine/sim.ts v0.4.0 — splash, beams, economy, support buffs, crits, slow-on-hit
 // The deterministic simulation: 20 Hz fixed tick, plain-JSON state, no wall clock, no Math.random.
 // Everything here runs identically in the browser, in Node (scripts/sim-smoke.ts) and, later,
 // on the server for replay verification. Keep it that way.
-import { createRng, nextInt } from './rng';
+import { createRng, nextFloat, nextInt } from './rng';
 import { parseMap, cellIndex } from './map';
 import {
   ENGINE_VERSION,
@@ -79,25 +79,76 @@ export interface TowerStats {
   stunTicksOnEntry: number;
   bleedPerSecond: number;
   bleedTicks: number;
+  splash: number;
+  chain: number;
+  critChance: number;
+  slowOnHit: number;
+  slowTicks: number;
+  income: number;
+  buff: { damageMult: number; rangeMult: number; cooldownMult: number } | null;
 }
 
-/** Effective stats for a tower at its tier and branch. Pure; used by the sim and the UI alike. */
-export function towerStats(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null): TowerStats {
+/** A support tower's effect on a neighbour. The identity buff means "none". */
+export interface Buff {
+  damageMult: number;
+  rangeMult: number;
+  cooldownMult: number;
+}
+export const NO_BUFF: Buff = { damageMult: 1, rangeMult: 1, cooldownMult: 1 };
+
+/** Effective stats for a tower at its tier and branch, under an optional support buff. Pure; used by the sim and the UI alike. */
+export function towerStats(def: TowerDef, tier: 1 | 2 | 3, branch: 'a' | 'b' | null, buff: Buff = NO_BUFF): TowerStats {
   const t = def.tiers[tier - 1];
   const fx = branch ? def.branches[branch].effects : {};
+  const tierScale = 1 + (tier - 1) * 0.5; // economy and support grow with tier too
   return {
-    range: def.range * t.rangeMult * (fx.rangeMult ?? 1),
-    damage: def.damage * t.damageMult * (fx.damageMult ?? 1),
-    cooldownTicks: Math.max(1, Math.round(def.cooldownTicks * t.cooldownMult)),
+    range: def.range * t.rangeMult * (fx.rangeMult ?? 1) * buff.rangeMult,
+    damage: def.damage * t.damageMult * (fx.damageMult ?? 1) * buff.damageMult,
+    cooldownTicks: Math.max(1, Math.round(def.cooldownTicks * t.cooldownMult * (fx.cooldownMult ?? 1) * buff.cooldownMult)),
     multishot: fx.multishot ?? 1,
     armorPierce: fx.armorPierce ?? false,
     slow: def.aura ? Math.min(0.9, def.aura.slow + (fx.slowBonus ?? 0)) : 0,
-    dotPerSecond: def.aura ? def.aura.dotPerSecond * t.damageMult * (fx.damageMult ?? 1) : 0,
+    dotPerSecond: def.aura ? def.aura.dotPerSecond * t.damageMult * (fx.damageMult ?? 1) * buff.damageMult : 0,
     dotType: def.aura ? def.aura.dotType : def.damageType,
     stunTicksOnEntry: fx.stunTicksOnEntry ?? 0,
     bleedPerSecond: fx.bleedPerSecond ?? 0,
     bleedTicks: fx.bleedTicks ?? 0,
+    splash: (def.splash ?? 0) * (fx.splashMult ?? 1) * t.rangeMult,
+    chain: (def.chain ?? 0) + (fx.chain ?? 0),
+    critChance: fx.critChance ?? 0,
+    slowOnHit: fx.slowOnHit ?? 0,
+    slowTicks: fx.slowTicks ?? 0,
+    income: def.income ? Math.round(def.income * tierScale * (fx.incomeMult ?? 1)) : 0,
+    buff: def.buff
+      ? {
+          damageMult: 1 + (def.buff.damageMult - 1) * tierScale + (fx.buffBonus ?? 0),
+          rangeMult: 1 + (def.buff.rangeMult - 1) * tierScale + (fx.buffBonus ?? 0),
+          cooldownMult: Math.max(0.4, 1 - (1 - def.buff.cooldownMult) * tierScale - (fx.buffBonus ?? 0)),
+        }
+      : null,
   };
+}
+
+/** The strongest support buff reaching a tower. Pure; the UI shows it too. */
+export function buffFor(state: SimState, ctx: SimContext, tower: Tower): Buff {
+  let best: Buff = NO_BUFF;
+  let bestScore = 1;
+  for (const s of state.towers) {
+    if (s.id === tower.id) continue;
+    const def = ctx.towerIndex[s.def];
+    if (def.attack !== 'support' || !def.buff) continue;
+    const st = towerStats(def, s.tier, s.branch);
+    if (!st.buff) continue;
+    const dx = s.col - tower.col;
+    const dy = s.row - tower.row;
+    if (dx * dx + dy * dy > st.range * st.range) continue;
+    const score = st.buff.damageMult * st.buff.rangeMult * (2 - st.buff.cooldownMult);
+    if (score > bestScore) {
+      bestScore = score;
+      best = st.buff;
+    }
+  }
+  return best;
 }
 
 /** Damage multiplier from the matrix; armor-piercing never does worse than 1.0 against Plated. */
@@ -135,7 +186,7 @@ export function stepSim(state: SimState, ctx: SimContext): void {
   for (const c of state.creeps) byId.set(c.id, c);
 
   updateTowers(state, ctx, buckets);
-  updateProjectiles(state, ctx, byId);
+  updateProjectiles(state, ctx, byId, buckets);
   updateCreeps(state, ctx);
 
   if (state.creeps.some((c) => !c.alive)) state.creeps = state.creeps.filter((c) => c.alive);
@@ -201,6 +252,16 @@ function completeWave(state: SimState, ctx: SimContext): void {
   state.resources += ctx.waves.waveBonus;
   state.score += ctx.waves.waveBonus;
   state.stats.earned += ctx.waves.waveBonus;
+  // economy towers pay out at the end of every wave
+  for (const t of state.towers) {
+    const def = ctx.towerIndex[t.def];
+    if (def.attack !== 'economy') continue;
+    const income = towerStats(def, t.tier, t.branch).income;
+    if (income <= 0) continue;
+    state.resources += income;
+    state.stats.earned += income;
+    state.events.push({ kind: 'income', tower: t.id, x: t.col + 0.5, y: t.row + 0.5, amount: income });
+  }
   if (state.waveIndex >= ctx.waves.waves.length - 1) {
     finish(state, ctx, 'won');
   } else {
@@ -264,9 +325,11 @@ function creepsInRange(state: SimState, buckets: Buckets, cx: number, cy: number
 const scratch: Creep[] = [];
 
 function updateTowers(state: SimState, ctx: SimContext, buckets: Buckets): void {
+  const anySupport = state.towers.some((t) => ctx.towerIndex[t.def].attack === 'support');
   for (const tower of state.towers) {
     const def = ctx.towerIndex[tower.def];
-    const stats = towerStats(def, tower.tier, tower.branch);
+    if (def.attack === 'economy' || def.attack === 'support') continue;
+    const stats = towerStats(def, tower.tier, tower.branch, anySupport ? buffFor(state, ctx, tower) : NO_BUFF);
     const cx = tower.col + 0.5;
     const cy = tower.row + 0.5;
 
@@ -292,6 +355,33 @@ function updateTowers(state: SimState, ctx: SimContext, buckets: Buckets): void 
     if (targets.length === 0) continue;
     // "First" targeting: the creep furthest along the path. Ties break by id for determinism.
     targets.sort((a, b) => b.dist - a.dist || a.id - b.id);
+
+    if (def.attack === 'beam') {
+      // Hitscan: damage lands this tick. The beam may chain to the nearest creeps after the first.
+      const first = targets[0];
+      state.events.push({ kind: 'fire', tower: tower.id, x: cx, y: cy, tx: first.x, ty: first.y, damageType: def.damageType });
+      const hit: Creep[] = [first];
+      if (stats.chain > 0) {
+        const rest = targets.slice(1).sort((a, b) => dist2(a, first) - dist2(b, first) || a.id - b.id);
+        for (let i = 0; i < Math.min(stats.chain, rest.length); i++) hit.push(rest[i]);
+      }
+      let fromX = cx;
+      let fromY = cy;
+      for (let i = 0; i < hit.length; i++) {
+        const target = hit[i];
+        const dmg = stats.damage * (i === 0 ? 1 : 0.6) * rollCrit(state, stats.critChance);
+        const hpBefore = target.hp;
+        applyDamage(state, ctx, target, dmg, def.damageType, stats.armorPierce, tower);
+        if (stats.slowOnHit > 0 && target.alive) applySlow(target, stats.slowOnHit, stats.slowTicks);
+        state.events.push({ kind: 'beam', tower: tower.id, x: fromX, y: fromY, tx: target.x, ty: target.y, damageType: def.damageType });
+        state.events.push({ kind: 'hit', x: target.x, y: target.y, damageType: def.damageType, amount: hpBefore - target.hp, kill: !target.alive });
+        fromX = target.x;
+        fromY = target.y;
+      }
+      tower.cooldown = stats.cooldownTicks;
+      continue;
+    }
+
     const shots = Math.min(stats.multishot, targets.length);
     state.events.push({ kind: 'fire', tower: tower.id, x: cx, y: cy, tx: targets[0].x, ty: targets[0].y, damageType: def.damageType });
     for (let i = 0; i < shots; i++) {
@@ -309,6 +399,10 @@ function updateTowers(state: SimState, ctx: SimContext, buckets: Buckets): void 
         armorPierce: stats.armorPierce,
         bleedPerSecond: stats.bleedPerSecond,
         bleedTicks: stats.bleedTicks,
+        splash: stats.splash,
+        slowOnHit: stats.slowOnHit,
+        slowTicks: stats.slowTicks,
+        critChance: stats.critChance,
         owner: tower.id,
         alive: true,
       });
@@ -317,9 +411,26 @@ function updateTowers(state: SimState, ctx: SimContext, buckets: Buckets): void 
   }
 }
 
+function dist2(a: Creep, b: Creep): number {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  return dx * dx + dy * dy;
+}
+
+/** 2x damage on a crit, rolled on the sim RNG so every client agrees. */
+function rollCrit(state: SimState, chance: number): number {
+  if (chance <= 0) return 1;
+  return nextFloat(state.rng) < chance ? 2 : 1;
+}
+
+function applySlow(creep: Creep, slow: number, ticks: number): void {
+  creep.slowTicks = Math.max(creep.slowTicks, ticks);
+  creep.slowFactor = Math.min(creep.slowFactor, 1 - slow);
+}
+
 // ---------------------------------------------------------------- projectiles
 
-function updateProjectiles(state: SimState, ctx: SimContext, byId: Map<number, Creep>): void {
+function updateProjectiles(state: SimState, ctx: SimContext, byId: Map<number, Creep>, buckets: Buckets): void {
   for (const p of state.projectiles) {
     if (!p.alive) continue;
     const target = byId.get(p.target);
@@ -336,13 +447,26 @@ function updateProjectiles(state: SimState, ctx: SimContext, byId: Map<number, C
       p.y = target.y;
       p.alive = false;
       const owner = state.towers.find((t) => t.id === p.owner);
-      const hpBefore = target.hp;
-      applyDamage(state, ctx, target, p.damage, p.damageType, p.armorPierce, owner);
-      state.events.push({ kind: 'hit', x: p.x, y: p.y, damageType: p.damageType, amount: hpBefore - target.hp, kill: !target.alive });
-      if (p.bleedTicks > 0 && target.alive) {
-        target.bleedPerSecond = Math.max(target.bleedPerSecond, p.bleedPerSecond);
-        target.bleedTicks = Math.max(target.bleedTicks, p.bleedTicks);
+      const dmg = p.damage * rollCrit(state, p.critChance);
+      const victims: Creep[] = p.splash > 0 ? creepsInRange(state, buckets, p.x, p.y, p.splash, scratch).slice() : [target];
+      if (p.splash > 0 && !victims.includes(target)) victims.push(target);
+      victims.sort((a, b) => a.id - b.id);
+      let dealt = 0;
+      let killed = false;
+      for (const v of victims) {
+        const hpBefore = v.hp;
+        applyDamage(state, ctx, v, dmg, p.damageType, p.armorPierce, owner);
+        dealt += hpBefore - v.hp;
+        if (!v.alive) killed = true;
+        if (v.alive) {
+          if (p.bleedTicks > 0) {
+            v.bleedPerSecond = Math.max(v.bleedPerSecond, p.bleedPerSecond);
+            v.bleedTicks = Math.max(v.bleedTicks, p.bleedTicks);
+          }
+          if (p.slowOnHit > 0) applySlow(v, p.slowOnHit, p.slowTicks);
+        }
       }
+      state.events.push({ kind: 'hit', x: p.x, y: p.y, damageType: p.damageType, amount: dealt, kill: killed, splash: p.splash || undefined });
     } else {
       p.x += (dx / d) * step;
       p.y += (dy / d) * step;

@@ -1,0 +1,170 @@
+{
+  "id": "assembly-scrap-01",
+  "map": "assembly-scrap-01",
+  "startingResources": 200,
+  "lives": 16,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "waves": [
+    {
+      "name": "Skitter probe",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 9,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Brood front",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 13,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Beetles",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 9,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Carapace column",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 7,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Swarm",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 15,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "Siege arrives",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "skitterling",
+          "count": 15,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Hive tide",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 11,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "skitterling",
+          "count": 15,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Siege line",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 7,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 9,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Skitter storm",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 31,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 13,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "The Queen's order",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 10,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 15,
+          "intervalTicks": 18,
+          "delayTicks": 80
+        },
+        {
+          "creep": "skitterling",
+          "count": 26,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    }
+  ],
+  "content_version": "0.2.0"
+}

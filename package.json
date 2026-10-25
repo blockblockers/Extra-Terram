@@ -1,6 +1,6 @@
 {
   "name": "extra-terram",
-  "version": "0.7.2",
+  "version": "0.8.2",
   "private": true,
   "description": "Extra Terram: The Alien Race Tower Defense — Phase 1–3: vertical slice, four races, accounts",
   "type": "module",
@@ -12,13 +12,15 @@
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate-content.mjs",
     "sim": "tsx scripts/sim-smoke.ts",
+    "calibrate": "tsx scripts/calibrate.ts",
     "art": "python scripts/gen-background.py && python scripts/gen-icons.py && python scripts/cut-sheets.py && python scripts/sprites.py --fit && python scripts/gen-guides.py",
     "sprites": "python scripts/sprites.py",
     "cut-sheets": "python scripts/cut-sheets.py && python scripts/sprites.py --fit",
     "guides": "python scripts/gen-guides.py",
+    "check-map": "python scripts/check-map.py",
     "cut-strip": "python scripts/cut-strip.py",
     "optimize-strips": "python scripts/optimize-strips.py",
-    "art-drop": "python scripts/sprites.py --refit && python scripts/optimize-strips.py && python scripts/sprites.py"
+    "art-drop": "python scripts/clean-stills.py && python scripts/sprites.py --refit && python scripts/optimize-strips.py && python scripts/sprites.py"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",

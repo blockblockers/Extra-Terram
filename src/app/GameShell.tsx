@@ -1,4 +1,4 @@
-// Extra Terram — src/app/GameShell.tsx v0.7.0 — idle strips keep playing between waves (unless battery saver)
+// Extra Terram — src/app/GameShell.tsx v0.8.0 — parallel-race wiring: board broadcasts, live standings, finish report
 // Owns one run: sim state (in a ref, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,11 +23,13 @@ import {
   type Tower,
   type TowerStats,
 } from '../engine';
+import { rankStandings, type ActiveMatch, type MatchEvent, type Standing } from '../net';
 import { PixiRenderer } from '../render/PixiRenderer';
 import type { RenderOverlay } from '../render/renderer';
 import { BuildBar } from '../ui/BuildBar';
 import { Hud } from '../ui/Hud';
 import { PauseOverlay, ResultOverlay } from '../ui/Overlays';
+import { RivalsBar } from '../ui/RivalsBar';
 import { TowerPanel, type SelectedTower } from '../ui/TowerPanel';
 import type { SaveStatus } from './App';
 import { GameLoop } from './loop';
@@ -40,6 +42,8 @@ interface Props {
   settings: Settings;
   saveStatus: SaveStatus;
   signedIn: boolean;
+  /** Present during a parallel race: the live channel and the seats. */
+  match?: ActiveMatch;
   /** Called exactly once, when the run ends, with the result and the input log for replay/verification. */
   onResult(result: SimResult, view: SimView, inputLog: LoggedInput[]): void;
   onExit(): void;
@@ -56,9 +60,12 @@ interface Game {
 
 const SNAPSHOT_MS = 100; // 10 Hz: the HUD updates at human speed
 
-export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn, onResult, onExit, onReplay, onNewSeed }: Props) {
+export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn, match, onResult, onExit, onReplay, onNewSeed }: Props) {
   const roster = useRef(towersForRace(raceId)).current;
   const reported = useRef(false);
+  const [standings, setStandings] = useState<Standing[]>(() => (match ? initialStandings(match) : []));
+  const standingsRef = useRef(standings);
+  standingsRef.current = standings;
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const game = useRef<Game | null>(null);
@@ -257,6 +264,49 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     return () => window.removeEventListener('keydown', onKey);
   }, [startPlacing, select, togglePause, roster]);
 
+  // ---------------------------------------------------------------- parallel race
+  useEffect(() => {
+    if (!match) return;
+    const { channel } = match;
+    const patch = (userId: string, f: (row: Standing) => Standing) =>
+      setStandings((rows) => rows.map((r) => (r.userId === userId ? f(r) : r)));
+    const off = channel.on((ev: MatchEvent, from: string) => {
+      if (ev.type === 'board') {
+        setStandings((rows) => {
+          const known = rows.some((r) => r.userId === from);
+          const next = known
+            ? rows.map((r) => (r.userId === from && !r.finished ? { ...r, wave: ev.wave, lives: ev.lives, score: ev.score } : r))
+            : [...rows, { seat: ev.seat, userId: from, name: `Seat ${ev.seat + 1}`, raceId: 'rootkin', wave: ev.wave, lives: ev.lives, score: ev.score, finished: false, result: null, me: false }];
+          return next;
+        });
+      } else if (ev.type === 'finished') {
+        patch(from, (r) => ({ ...r, finished: true, result: ev.result, score: ev.score, lives: ev.lives, wave: ev.wave }));
+      }
+    });
+    const beat = window.setInterval(() => {
+      const g = game.current;
+      if (!g) return;
+      const v = simView(g.state, g.ctx);
+      channel.send({ type: 'board', seat: match.me.seat, tick: v.tick, lives: v.lives, wave: v.wave, score: v.score, income: v.resources });
+      patch(match.me.userId, (r) => (r.finished ? r : { ...r, wave: v.wave, lives: v.lives, score: v.score }));
+    }, 1000);
+    return () => {
+      off();
+      window.clearInterval(beat);
+    };
+  }, [match]);
+
+  // Everyone has reported: submit the final placement (the first submit on finish was provisional).
+  const allFinished = standings.length > 0 && standings.every((s) => s.finished);
+  useEffect(() => {
+    if (!match || !allFinished) return;
+    const ranked = rankStandings(standingsRef.current);
+    const mine = ranked.findIndex((s) => s.me);
+    const me = ranked[mine];
+    if (!me || !me.result) return;
+    void match.service.submitResult(match.matchId, me.result, mine + 1, me.score, me.lives).catch(() => undefined);
+  }, [match, allFinished]);
+
   // ---------------------------------------------------------------- result
   const result = view?.result ?? null;
   useEffect(() => {
@@ -264,7 +314,15 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     if (!result || !view || !g || reported.current) return;
     reported.current = true;
     onResult(result, view, g.state.inputLog);
-  }, [result, view, onResult]);
+    if (match) {
+      match.channel.send({ type: 'finished', seat: match.me.seat, result: result.outcome, score: result.score, lives: view.lives, wave: view.wave });
+      setStandings((rows) => rows.map((r) => (r.me ? { ...r, finished: true, result: result.outcome, score: result.score, lives: view.lives, wave: view.wave } : r)));
+      const ranked = rankStandings(standingsRef.current.map((r) => (r.me ? { ...r, finished: true, result: result.outcome, score: result.score, lives: view.lives, wave: view.wave } : r)));
+      const placement = ranked.findIndex((s) => s.me) + 1;
+      void match.service.submitResult(match.matchId, result.outcome, placement, result.score, view.lives).catch(() => undefined);
+    }
+  }, [result, view, onResult, match]);
+  const ranked = match ? rankStandings(standings) : [];
 
   // ---------------------------------------------------------------- render
 
@@ -275,9 +333,10 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       {/* The canvas host is full-bleed: backgrounds are never inset. */}
       <div ref={hostRef} className="relative min-h-0 flex-1 overflow-hidden">
         <canvas ref={canvasRef} className="h-full w-full" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave} onPointerDown={onPointerDown} />
+        {match && <RivalsBar standings={ranked} />}
         {toast && <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1.5 text-sm text-amber-200">{toast}</div>}
         {paused && !result && <PauseOverlay onResume={togglePause} onExit={onExit} />}
-        {result && view && <ResultOverlay view={view} seed={seed} saveStatus={saveStatus} signedIn={signedIn} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
+        {result && view && <ResultOverlay view={view} seed={seed} saveStatus={saveStatus} signedIn={signedIn} standings={match ? ranked : null} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
       </div>
 
       {/* Fixed-height footer slot: the build bar and the tower panel swap inside it without resizing the board. */}
@@ -315,4 +374,19 @@ function describeTower(ctx: SimContext, tower: Tower): SelectedTower {
     upgradeCost: upgradeCost(ctx, tower),
     sellValue: sellValue(tower),
   };
+}
+
+function initialStandings(match: ActiveMatch): Standing[] {
+  return match.players.map((p) => ({
+    seat: p.seat,
+    userId: p.userId,
+    name: p.name,
+    raceId: p.raceId,
+    wave: 0,
+    lives: 0,
+    score: 0,
+    finished: false,
+    result: null,
+    me: p.userId === match.me.userId,
+  }));
 }

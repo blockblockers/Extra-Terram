@@ -6,6 +6,13 @@
   "firstBuildTicks": 600,
   "buildTicks": 300,
   "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.228,
+    "speedMult": 1.065,
+    "countMult": 1.097,
+    "hpPerWave": 0.0325,
+    "speedPerWave": 0.0097
+  },
   "waves": [
     {
       "name": "Skitter probe",
@@ -109,6 +116,23 @@
       ]
     },
     {
+      "name": "Lumenari raid",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 18,
+          "intervalTicks": 10,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 5,
+          "intervalTicks": 30,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
       "name": "Siege line",
       "groups": [
         {
@@ -143,28 +167,103 @@
       ]
     },
     {
-      "name": "The Queen's order",
+      "name": "Mixed front",
       "groups": [
         {
-          "creep": "siege-beetle",
-          "count": 10,
-          "intervalTicks": 40,
+          "creep": "sentinel",
+          "count": 8,
+          "intervalTicks": 24,
           "delayTicks": 0
         },
         {
           "creep": "carapace-beetle",
-          "count": 15,
-          "intervalTicks": 18,
-          "delayTicks": 80
+          "count": 10,
+          "intervalTicks": 20,
+          "delayTicks": 40
         },
         {
           "creep": "skitterling",
-          "count": 26,
+          "count": 20,
           "intervalTicks": 8,
           "delayTicks": 200
         }
       ]
+    },
+    {
+      "name": "Bastion escort",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Hive tide II",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 18,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "skitterling",
+          "count": 30,
+          "intervalTicks": 7,
+          "delayTicks": 80
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 5,
+          "intervalTicks": 50,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "The Queen's order",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 12,
+          "intervalTicks": 36,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 18,
+          "intervalTicks": 16,
+          "delayTicks": 80
+        },
+        {
+          "creep": "skitterling",
+          "count": 34,
+          "intervalTicks": 7,
+          "delayTicks": 200
+        },
+        {
+          "creep": "bastion",
+          "count": 3,
+          "intervalTicks": 80,
+          "delayTicks": 400
+        }
+      ]
     }
   ],
-  "content_version": "0.2.0"
+  "content_version": "0.3.0"
 }

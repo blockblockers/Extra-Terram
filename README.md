@@ -30,7 +30,8 @@ src/content/   JSON content + schemas; every file carries content_version
 src/render/    PixiJS v8 renderer behind a small Renderer interface
 src/app/       the loop (fixed 20 Hz timestep, interpolated render, fps cap, idle between waves) and the game shell
 src/ui/        React HUD, build bar, tower panel, overlays, menu (static styling, safe-area insets)
-src/net/       Supabase: client, auth (OAuth / email link + code / guest), run results + offline queue, leaderboards, match plumbing
+src/net/       Supabase: client, auth (email + password / link + code / guest), run results + offline queue, leaderboards,
+               match service (Supabase Realtime online, BroadcastChannel between tabs when offline) for the parallel race
 supabase/      the SQL migration (tables, RLS, RPCs) and the dashboard setup guide
 scripts/       validate-content, sim-smoke, art generators
 public/maps/   painted backgrounds, one per map; public/icons/ PWA icons; public/art/ key art

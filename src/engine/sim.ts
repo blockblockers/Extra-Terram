@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/sim.ts v0.4.0 — splash, beams, economy, support buffs, crits, slow-on-hit
+// Extra Terram — src/engine/sim.ts v0.5.0 — difficulty scaling at spawn — splash, beams, economy, support buffs, crits, slow-on-hit
 // The deterministic simulation: 20 Hz fixed tick, plain-JSON state, no wall clock, no Math.random.
 // Everything here runs identically in the browser, in Node (scripts/sim-smoke.ts) and, later,
 // on the server for replay verification. Keep it that way.
@@ -19,7 +19,9 @@ import {
   type SimView,
   type Tower,
   type TowerDef,
+  type WaveScaling,
   type WaveScript,
+  DEFAULT_SCALING,
 } from './types';
 
 /** Bundle content, map and waves into the static context the sim reads from. */
@@ -204,8 +206,10 @@ export function beginWave(state: SimState, ctx: SimContext): void {
   state.events.push({ kind: 'wave', index: state.waveIndex });
   const wave = ctx.waves.waves[state.waveIndex];
   const queue = state.spawnQueue;
+  const scaling = levelScaling(ctx);
   for (const g of wave.groups) {
-    for (let i = 0; i < g.count; i++) {
+    const count = Math.ceil(g.count * scaling.countMult);
+    for (let i = 0; i < count; i++) {
       // A little seeded jitter keeps identical scripts from feeling metronomic; still deterministic.
       queue.push({ creep: g.creep, tick: state.tick + g.delayTicks + i * g.intervalTicks + nextInt(state.rng, 0, 2) });
     }
@@ -222,14 +226,27 @@ function spawnDue(state: SimState, ctx: SimContext): void {
   q.splice(0, n);
 }
 
+export function levelScaling(ctx: SimContext): WaveScaling {
+  return { ...DEFAULT_SCALING, ...(ctx.waves.scaling ?? {}) };
+}
+
+/** hp and speed multipliers for creeps spawned in wave `waveIndex` (0-based). */
+export function waveMultipliers(ctx: SimContext, waveIndex: number): { hp: number; speed: number } {
+  const s = levelScaling(ctx);
+  return { hp: s.hpMult * (1 + s.hpPerWave * waveIndex), speed: s.speedMult * (1 + s.speedPerWave * waveIndex) };
+}
+
 function spawnCreep(state: SimState, ctx: SimContext, defId: string): Creep {
   const def = ctx.creepIndex[defId];
   const start = state.waypoints[0];
+  const mult = waveMultipliers(ctx, state.waveIndex);
+  const hp = Math.round(def.hp * mult.hp);
   const creep: Creep = {
     id: state.nextId++,
     def: defId,
-    hp: def.hp,
-    maxHp: def.hp,
+    hp,
+    maxHp: hp,
+    speedMult: Math.round(mult.speed * 1000) / 1000,
     x: start.x,
     y: start.y,
     px: start.x,
@@ -493,7 +510,7 @@ function updateCreeps(state: SimState, ctx: SimContext): void {
       continue;
     }
 
-    let remaining = def.speed * TICK_SEC * c.slowFactor;
+    let remaining = def.speed * c.speedMult * TICK_SEC * c.slowFactor;
     if (c.slowTicks > 0) c.slowTicks--;
     else c.slowFactor = 1;
 

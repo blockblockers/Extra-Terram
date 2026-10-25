@@ -1,4 +1,4 @@
-// Extra Terram — src/render/sprites.ts v0.5.0 — stills, animation strips, vector fallbacks
+// Extra Terram — src/render/sprites.ts v0.6.0 — tiers grow by draw scale (art is footprint-fitted) — stills, animation strips, vector fallbacks
 // The art handoff doc (Project) describes the image spec. Any sprite listed in public/sprites/manifest.json
 // is loaded and used; anything else is drawn here with Pixi Graphics and cached as a texture.
 // Keys: tower:<id>:<tier>:<branch|->   turret:<id>:<tier>:<branch|->   creep:<id>   projectile:<towerId>
@@ -129,8 +129,11 @@ export class SpriteLibrary {
     if (cached) return cached;
     const file = `${def.race}/${def.id}/${tierFile(tier, branch)}`;
     const image = this.imageTexture(file);
+    // Every state is fitted to the same footprint rule (bottom at y=182 of 256), so tiers grow on
+    // screen by a draw scale rather than by overflowing the canvas: tier 3 is 14% larger than tier 1.
+    const grow = tier === 3 ? 1.14 : tier === 2 ? 1.05 : 1;
     const entry: SpriteEntry = image
-      ? { texture: image, width: TILE * 1.85, height: TILE * 1.85, ax: 0.5, ay: TOWER_ANCHOR_Y, image: true }
+      ? { texture: image, width: TILE * 1.85 * grow, height: TILE * 1.85 * grow, ax: 0.5, ay: TOWER_ANCHOR_Y, image: true }
       : this.generate((g) => drawTower(g, def, tier, branch, TILE));
     this.cache.set(key, entry);
     return entry;

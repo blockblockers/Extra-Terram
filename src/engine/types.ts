@@ -1,9 +1,9 @@
-// Extra Terram — src/engine/types.ts v0.4.0 — splash, beam, economy, support towers; more branch effects
+// Extra Terram — src/engine/types.ts v0.5.0 — per-level difficulty scaling (hp, speed, count, per-wave ramp)
 // Content types (mirroring src/content/schemas) and simulation state.
 // Everything in SimState is plain JSON so a snapshot is just JSON.stringify(state).
 import type { RngState } from './rng';
 
-export const ENGINE_VERSION = '0.1.0';
+export const ENGINE_VERSION = '0.2.0';
 export const TICK_RATE = 20; // sim ticks per second
 export const TICK_SEC = 1 / TICK_RATE; // seconds per tick
 export const SELL_REFUND = 0.7;
@@ -151,6 +151,21 @@ export interface WaveDef {
   groups: WaveGroup[];
 }
 
+/**
+ * Difficulty scaling for a level: level-wide multipliers plus a ramp per wave. hp(wave n) =
+ * def.hp × hpMult × (1 + hpPerWave × n), same shape for speed; counts are multiplied and rounded up.
+ * Bounties are not scaled, so harder levels are harder, not richer.
+ */
+export interface WaveScaling {
+  hpMult: number;
+  speedMult: number;
+  countMult: number;
+  hpPerWave: number;
+  speedPerWave: number;
+}
+
+export const DEFAULT_SCALING: WaveScaling = { hpMult: 1, speedMult: 1, countMult: 1, hpPerWave: 0, speedPerWave: 0 };
+
 export interface WaveScript {
   id: string;
   map: string;
@@ -159,6 +174,7 @@ export interface WaveScript {
   firstBuildTicks: number;
   buildTicks: number;
   waveBonus: number;
+  scaling?: Partial<WaveScaling>;
   waves: WaveDef[];
   content_version: string;
 }
@@ -196,6 +212,7 @@ export interface Creep {
   def: string;
   hp: number;
   maxHp: number;
+  speedMult: number; // level scaling × wave ramp, fixed at spawn
   x: number;
   y: number;
   px: number; // position at the previous tick, for render interpolation

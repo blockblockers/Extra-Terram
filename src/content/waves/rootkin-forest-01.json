@@ -6,6 +6,13 @@
   "firstBuildTicks": 600,
   "buildTicks": 300,
   "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.123,
+    "speedMult": 1.035,
+    "countMult": 1.052,
+    "hpPerWave": 0.0175,
+    "speedPerWave": 0.0052
+  },
   "waves": [
     {
       "name": "Survey crew",
@@ -166,5 +173,5 @@
       ]
     }
   ],
-  "content_version": "0.2.0"
+  "content_version": "0.3.0"
 }

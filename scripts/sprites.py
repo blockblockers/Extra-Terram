@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/sprites.py v0.3.0 — sprite inbox fitter, in-place refit, manifest writer
+"""Extra Terram — scripts/sprites.py v0.4.0 — footprint-safe fit (no tier-3 sag), refit checks the anchor too
 
 Three jobs, matching the art handoff doc:
 
@@ -13,7 +13,9 @@ Three jobs, matching the art handoff doc:
                                       size as the painted towers). Strips are never touched.
 
 Canvas rules (from the handoff):
-  towers   256x256, footprint centre at (128, 168); t1/t2 fill 70% of the box, t3a/t3b fill 85%
+  towers   256x256, footprint centre at (128, 168); t1/t2 fill 70% of the box, t3a/t3b up to 85% wide —
+           but never taller than the anchor allows (bottom edge at y=182), so a tall tier-3 is capped at
+           ~70% height; the renderer draws tier 3 a little larger instead
   turrets  128x128, pivot at centre, pointing right
   creeps   128x128, centred, facing right
   projectile 64x64, centred, pointing right
@@ -57,13 +59,17 @@ def fit(src: Path, dst: Path, canvas: int, ratio: float, ax: float, ay: float) -
     img = img.crop(bbox)
     w, h = img.size
     scale = (canvas * ratio) / max(w, h)
+    if ay > 0.5:
+        # the footprint must stay on the anchor: never let the sprite be taller than the room above it
+        bottom = canvas * ay + canvas * 0.055  # 182 px on a 256 canvas
+        scale = min(scale, (bottom - 3) / h)
     img = img.resize((max(1, round(w * scale)), max(1, round(h * scale))), Image.LANCZOS)
     out = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
     # place so the unit's footprint (its bottom centre) sits at the anchor for towers,
     # or its centre at the anchor for everything else
     if ay > 0.5:
         x = round(canvas * ax - img.width / 2)
-        y = round(canvas * ay - img.height * 0.92)  # bottom edge a little below the anchor line
+        y = round(bottom - img.height)  # bottom edge on the footprint line (y = 182 on a 256 canvas)
     else:
         x = round(canvas * ax - img.width / 2)
         y = round(canvas * ay - img.height / 2)
@@ -105,10 +111,14 @@ def refit_in_place(tolerance: float = 0.08) -> int:
             continue
         canvas, ratio, ax, ay = spec_for(rel)
         content = max(bbox[2] - bbox[0], bbox[3] - bbox[1]) / canvas
-        if abs(content - ratio) <= tolerance:
+        expected_bottom = canvas * ay + canvas * 0.055
+        bottom_off = abs(bbox[3] - expected_bottom)
+        too_tall = bbox[3] - bbox[1] > expected_bottom - 3
+        if abs(content - ratio) <= tolerance and bottom_off <= 6 and not too_tall:
             continue
         fit(png, png, canvas, ratio, ax, ay)
-        print(f"refitted {rel.as_posix()}: filled {content:.0%}, rule {ratio:.0%}")
+        why = f"filled {content:.0%} vs rule {ratio:.0%}" if abs(content - ratio) > tolerance else f"footprint at y={bbox[3]} (expected ~{expected_bottom:.0f})"
+        print(f"refitted {rel.as_posix()}: {why}")
         n += 1
     return n
 

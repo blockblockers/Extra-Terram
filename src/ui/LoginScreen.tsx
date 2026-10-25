@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/LoginScreen.tsx v0.2.0 — email + password first; OAuth parked; guest always available
+// Extra Terram — src/ui/LoginScreen.tsx v0.3.0 — panels reveal after the title intro
 // Same shape as Deadblock's door, minus the provider buttons for now: they render only when
 // VITE_AUTH_PROVIDERS names a provider (see supabase/README.md, section 5). Sign-in is Supabase's own
 // email + password, with "email me a link" and "forgot password" as the two side doors.
@@ -9,7 +9,7 @@ import type { Provider } from '@supabase/supabase-js';
 import { CONTENT_VERSION } from '../content';
 import { ENGINE_VERSION } from '../engine';
 import { queuedRunCount, useAuth } from '../net';
-import { LogoLockup, TitleColumn } from './Title';
+import { LogoLockup, Reveal, TitleColumn } from './Title';
 
 const PROVIDER_LABEL: Record<string, string> = {
   google: 'Google',
@@ -157,6 +157,7 @@ export function LoginScreen() {
       <LogoLockup />
       <div className="flex-1" />
 
+      <Reveal>
       <section className="rounded-xl border border-grove-700/80 bg-grove-900/85 p-4 backdrop-blur-sm" aria-labelledby="login-title">
         <h2 id="login-title" className="text-xs uppercase tracking-wide text-grove-300/60">
           Sign in
@@ -306,6 +307,7 @@ export function LoginScreen() {
       <p className="mt-3 text-center text-[11px] text-grove-300/40">
         engine {ENGINE_VERSION} · content {CONTENT_VERSION}
       </p>
+      </Reveal>
     </TitleColumn>
   );
 }
@@ -340,6 +342,7 @@ export function NewPasswordScreen() {
     <TitleColumn>
       <LogoLockup />
       <div className="flex-1" />
+      <Reveal>
       <section className="rounded-xl border border-grove-700/80 bg-grove-900/85 p-4 backdrop-blur-sm" aria-labelledby="newpw-title">
         <h2 id="newpw-title" className="text-xs uppercase tracking-wide text-grove-300/60">
           Choose a new password
@@ -360,6 +363,7 @@ export function NewPasswordScreen() {
           </button>
         </form>
       </section>
+      </Reveal>
     </TitleColumn>
   );
 }

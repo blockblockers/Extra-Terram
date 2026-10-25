@@ -6,6 +6,13 @@
   "firstBuildTicks": 600,
   "buildTicks": 300,
   "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.21,
+    "speedMult": 1.06,
+    "countMult": 1.09,
+    "hpPerWave": 0.03,
+    "speedPerWave": 0.009
+  },
   "waves": [
     {
       "name": "Seedlings",
@@ -109,6 +116,23 @@
       ]
     },
     {
+      "name": "Skitter raid",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 6,
+          "intervalTicks": 30,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
       "name": "Deep roots",
       "groups": [
         {
@@ -143,6 +167,69 @@
       ]
     },
     {
+      "name": "Machine raid",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 20,
+          "intervalTicks": 9,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 100
+        },
+        {
+          "creep": "dozer",
+          "count": 2,
+          "intervalTicks": 80,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Pincer",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 45,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 12,
+          "intervalTicks": 18,
+          "delayTicks": 0
+        },
+        {
+          "creep": "seedling",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 150
+        }
+      ]
+    },
+    {
+      "name": "Thicket II",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 22,
+          "intervalTicks": 14,
+          "delayTicks": 0
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
       "name": "Worldroot stirs",
       "groups": [
         {
@@ -164,7 +251,129 @@
           "delayTicks": 200
         }
       ]
+    },
+    {
+      "name": "Three fronts",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 30,
+          "intervalTicks": 7,
+          "delayTicks": 0
+        },
+        {
+          "creep": "compactor",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "seedling",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 120
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Siege",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 8,
+          "intervalTicks": 36,
+          "delayTicks": 0
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 5,
+          "intervalTicks": 50,
+          "delayTicks": 60
+        },
+        {
+          "creep": "dozer",
+          "count": 5,
+          "intervalTicks": 50,
+          "delayTicks": 120
+        },
+        {
+          "creep": "thornbeast",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 240
+        }
+      ]
+    },
+    {
+      "name": "The long night",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 44,
+          "intervalTicks": 6,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 20,
+          "intervalTicks": 12,
+          "delayTicks": 120
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 240
+        },
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 40,
+          "delayTicks": 400
+        }
+      ]
+    },
+    {
+      "name": "Worldroot wakes",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 12,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dozer",
+          "count": 6,
+          "intervalTicks": 45,
+          "delayTicks": 100
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 6,
+          "intervalTicks": 45,
+          "delayTicks": 200
+        },
+        {
+          "creep": "thornbeast",
+          "count": 20,
+          "intervalTicks": 12,
+          "delayTicks": 300
+        },
+        {
+          "creep": "seedling",
+          "count": 36,
+          "intervalTicks": 6,
+          "delayTicks": 500
+        }
+      ]
     }
   ],
-  "content_version": "0.2.0"
+  "content_version": "0.3.0"
 }

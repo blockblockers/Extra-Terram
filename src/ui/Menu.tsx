@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Menu.tsx v0.6.0 — account bar and per-level leaderboard; shared title backdrop
+// Extra Terram — src/ui/Menu.tsx v0.8.0 — panels reveal after the title intro
 import { useState } from 'react';
 import { CONTENT_VERSION, content, levels, raceById, towersForRace, type LevelEntry } from '../content';
 import { ENGINE_VERSION } from '../engine';
@@ -6,13 +6,14 @@ import { randomSeed, type Settings } from '../app/settings';
 import { online } from '../net';
 import { AccountBar } from './AccountBar';
 import { Leaderboard } from './Leaderboard';
-import { LogoLockup, TitleColumn } from './Title';
+import { LogoLockup, Reveal, TitleColumn } from './Title';
 import { TowerIcon } from './TowerIcon';
 
 interface Props {
   settings: Settings;
   onSettings(next: Settings): void;
   onPlay(level: LevelEntry, raceId: string, seed: string): void;
+  onMultiplayer(raceId: string, levelId: string): void;
 }
 
 const WORLD_NAMES: Record<string, string> = {
@@ -24,7 +25,7 @@ const WORLD_NAMES: Record<string, string> = {
 
 type Panel = 'none' | 'code' | 'scores' | 'settings';
 
-export function Menu({ settings, onSettings, onPlay }: Props) {
+export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
   const [raceId, setRaceId] = useState(() => settings.lastRace ?? 'rootkin');
   const [levelId, setLevelId] = useState(() => settings.lastLevel ?? levels[0].id);
   const [panel, setPanel] = useState<Panel>('none');
@@ -45,10 +46,13 @@ export function Menu({ settings, onSettings, onPlay }: Props) {
   return (
     <TitleColumn>
       <LogoLockup />
-      <AccountBar />
+      <Reveal>
+        <AccountBar />
+      </Reveal>
 
       <div className="flex-1" />
 
+      <Reveal>
       <section className="rounded-xl border border-grove-700/80 bg-grove-900/85 p-3 backdrop-blur-sm">
         <h2 className="text-xs uppercase tracking-wide text-grove-300/60">Your race</h2>
         <div className="mt-2 grid grid-cols-4 gap-2" role="radiogroup" aria-label="Race">
@@ -102,9 +106,20 @@ export function Menu({ settings, onSettings, onPlay }: Props) {
           })}
         </div>
 
-        <button onClick={play} className="mt-3 w-full rounded-lg bg-grove-500 px-4 py-3 text-lg font-semibold text-grove-950 hover:bg-grove-300">
-          Play
-        </button>
+        <div className="mt-3 grid grid-cols-[2fr_1fr] gap-2">
+          <button onClick={play} className="rounded-lg bg-grove-500 px-4 py-3 text-lg font-semibold text-grove-950 hover:bg-grove-300">
+            Play
+          </button>
+          <button
+            onClick={() => {
+              onSettings({ ...settings, lastRace: raceId, lastLevel: level.id });
+              onMultiplayer(raceId, level.id);
+            }}
+            className="rounded-lg border border-grove-500 px-3 py-3 font-semibold text-grove-300 hover:bg-grove-700"
+          >
+            Multiplayer
+          </button>
+        </div>
 
         <div className="mt-2 flex items-center justify-between gap-3 text-xs">
           <button onClick={() => toggle('code')} className="text-grove-300/80 underline-offset-2 hover:underline">
@@ -146,6 +161,7 @@ export function Menu({ settings, onSettings, onPlay }: Props) {
       <p className="mt-3 text-center text-[11px] text-grove-300/40">
         engine {ENGINE_VERSION} · content {CONTENT_VERSION}
       </p>
+      </Reveal>
     </TitleColumn>
   );
 }

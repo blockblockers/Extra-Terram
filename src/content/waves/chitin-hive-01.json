@@ -6,6 +6,13 @@
   "firstBuildTicks": 600,
   "buildTicks": 300,
   "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.455,
+    "speedMult": 1.13,
+    "countMult": 1.195,
+    "hpPerWave": 0.065,
+    "speedPerWave": 0.0195
+  },
   "waves": [
     {
       "name": "Wisps",
@@ -109,6 +116,23 @@
       ]
     },
     {
+      "name": "Assembly raid",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 18,
+          "intervalTicks": 10,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 5,
+          "intervalTicks": 30,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
       "name": "Bastion wall",
       "groups": [
         {
@@ -143,28 +167,103 @@
       ]
     },
     {
-      "name": "Eclipse",
+      "name": "Convoy",
       "groups": [
         {
-          "creep": "bastion",
+          "creep": "dump-hauler",
           "count": 10,
-          "intervalTicks": 40,
+          "intervalTicks": 22,
           "delayTicks": 0
         },
         {
           "creep": "sentinel",
-          "count": 16,
-          "intervalTicks": 18,
-          "delayTicks": 80
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 40
         },
         {
           "creep": "wisp",
-          "count": 28,
+          "count": 20,
           "intervalTicks": 8,
           "delayTicks": 200
         }
       ]
+    },
+    {
+      "name": "Dozer escort",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 24,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "bastion",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Long dusk II",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 18,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 30,
+          "intervalTicks": 7,
+          "delayTicks": 80
+        },
+        {
+          "creep": "bastion",
+          "count": 5,
+          "intervalTicks": 50,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Eclipse",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 12,
+          "intervalTicks": 36,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 18,
+          "intervalTicks": 16,
+          "delayTicks": 80
+        },
+        {
+          "creep": "wisp",
+          "count": 34,
+          "intervalTicks": 7,
+          "delayTicks": 200
+        },
+        {
+          "creep": "dozer",
+          "count": 3,
+          "intervalTicks": 80,
+          "delayTicks": 400
+        }
+      ]
     }
   ],
-  "content_version": "0.2.0"
+  "content_version": "0.3.0"
 }

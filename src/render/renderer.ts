@@ -1,4 +1,4 @@
-// Extra Terram — src/render/renderer.ts v0.2.0 — events and effects scale
+// Extra Terram — src/render/renderer.ts v0.4.0 — pending build pad (confirm step), pad picked before a tower
 // The thin interface the app drives. PixiRenderer is the one implementation today; keeping the
 // surface small means a Canvas 2D fallback or a different engine could slot in without touching
 // the sim or the UI.
@@ -18,6 +18,12 @@ export interface RenderOverlay {
   selected: number | null;
   /** Show every build pad (true while placing or when the player turns the grid on). */
   showPads: boolean;
+  /** The seat looking at this board: its wallet decides placement colour; others' towers get an owner mark. */
+  seat: number;
+  /** A pad waiting for the player to confirm the build (touch flow): the ghost and range ring stay on it. */
+  pending: Cell | null;
+  /** An empty pad tapped before a tower was chosen: highlighted until a tower is picked. */
+  padPick: Cell | null;
 }
 
 export interface RenderFrame {

@@ -1,15 +1,16 @@
-// Extra Terram — src/render/PixiRenderer.ts v0.7.0 — reports idle strips so the loop keeps them moving between waves
+// Extra Terram — src/render/PixiRenderer.ts v0.9.0 — upgrade-ready badges, a pending build pad, passive effect sprites (optional art)
 // PixiJS v8 renderer. It is driven by the app's loop (no Pixi ticker): the loop decides when a
 // frame is worth drawing, this class only draws. Heat controls live in the loop (fps cap, idle
 // between waves) and here (resolution cap, generated textures cached once, no per-frame filters,
 // one pooled effects batch).
 import { Application, Assets, Container, Graphics, Sprite, Texture } from 'pixi.js';
-import { TILE as TILE_KIND, cellIndex, towerStats, type SimContext, type SimEvent, type SimState, type Tower } from '../engine';
+import { TILE as TILE_KIND, cellIndex, passiveFor, passiveMods, towerCost, towerStats, upgradeCost, wallet, type SimContext, type SimEvent, type SimState, type Tower } from '../engine';
 import { StripPlayer } from './anim';
 import { Effects } from './effects';
 import type { Cell, RenderFrame, Renderer } from './renderer';
 import { SpriteLibrary, TILE, hasTurret, type Strip } from './sprites';
 import { projectileColor, turretMount } from './vectorArt';
+import { seatColorHex } from './seats';
 
 export { TILE };
 const MAX_RESOLUTION = 2;
@@ -35,6 +36,10 @@ interface TowerView {
   baseW: number;
   baseH: number;
   painted: boolean;
+  /** Passive effect sprites, made only when the race's fx art exists. */
+  fxGround: Sprite | null; // rooted tendrils under the tower
+  fxGlow: Sprite | null; // spin-up ring or overcharge flash at the mount
+  burst: number; // overcharge shot flash, decays
 }
 
 interface CreepView {
@@ -78,7 +83,9 @@ export class PixiRenderer implements Renderer {
   private rangeLayer = new Graphics();
   private shadowLayer = new Container();
   private groundFxLayer = new Container();
+  private threadLayer = new Container(); // hive-link threads between towers
   private towerLayer = new Container();
+  private glowLayer = new Container(); // passive glows above the towers
   private creepLayer = new Container();
   private projectileLayer = new Container();
   private hpLayer = new Container();
@@ -99,6 +106,7 @@ export class PixiRenderer implements Renderer {
   private auraPhase = 0;
   private lastTick = 0;
   private towerDefOf = new Map<number, string>();
+  private threads = new Map<string, Sprite>();
 
   async mount(canvas: HTMLCanvasElement, width: number, height: number, ctx: SimContext): Promise<void> {
     this.canvas = canvas;
@@ -124,7 +132,9 @@ export class PixiRenderer implements Renderer {
       this.rangeLayer,
       this.shadowLayer,
       this.groundFxLayer,
+      this.threadLayer,
       this.towerLayer,
+      this.glowLayer,
       this.creepLayer,
       this.projectileLayer,
       this.effects.container,
@@ -227,12 +237,16 @@ export class PixiRenderer implements Renderer {
     };
     for (const ev of events) {
       this.effects.handle(ev, colorOf);
-      if (ev.kind === 'fire') {
+      if (ev.kind === 'beam' && ev.alpha) {
+        const view = this.towers.get(ev.tower);
+        if (view) view.burst = 1;
+      } else if (ev.kind === 'fire') {
         const view = this.towers.get(ev.tower);
         if (view) {
           view.targetAim = Math.atan2(ev.ty - ev.y, ev.tx - ev.x);
           view.recoil = 1;
           view.flinch = 1;
+          if (ev.alpha) view.burst = 1;
           if (view.fire) view.anim.play(view.fire);
           if (view.turretAnim && view.turretFire) view.turretAnim.play(view.turretFire);
         }
@@ -293,6 +307,7 @@ export class PixiRenderer implements Renderer {
     this.mounted = false;
     for (const g of this.ghosts) g.sprite.destroy();
     this.ghosts.length = 0;
+    this.threads.clear();
     this.towers.clear();
     this.creeps.clear();
     this.projectiles.clear();
@@ -388,6 +403,8 @@ export class PixiRenderer implements Renderer {
         if (view) {
           view.body.destroy();
           view.turret?.destroy();
+          view.fxGround?.destroy();
+          view.fxGlow?.destroy();
         }
         const entry = this.sprites!.tower(def, t.tier, t.branch);
         const mount = entry.image ? TILE * 0.5 : turretMount(def, t.tier, TILE);
@@ -430,6 +447,9 @@ export class PixiRenderer implements Renderer {
           baseW: body.width,
           baseH: body.height,
           painted: entry.image,
+          fxGround: null,
+          fxGlow: null,
+          burst: 0,
         };
         this.towers.set(t.id, view);
         this.towerDefOf.set(t.id, t.def);
@@ -460,8 +480,126 @@ export class PixiRenderer implements Renderer {
       if (!seen.has(id)) {
         view.body.destroy();
         view.turret?.destroy();
+        view.fxGround?.destroy();
+        view.fxGlow?.destroy();
         this.towers.delete(id);
         this.towerDefOf.delete(id);
+      }
+    }
+    this.drawPassiveFx(state, ctx, dt);
+  }
+
+  /**
+   * The race passives, when their effect art exists (`public/sprites/<race>/fx/`): rooted tendrils that
+   * grow with the waves stood, a spin-up ring that brightens with heat, hive-link threads between
+   * linked towers, an overcharge glow while the alpha shot is ready and a flash when it fires.
+   * Without the files nothing is drawn and nothing is computed.
+   */
+  private drawPassiveFx(state: SimState, ctx: SimContext, dt: number): void {
+    const lib = this.sprites!;
+    const liveThreads = new Set<string>();
+    for (const t of state.towers) {
+      const view = this.towers.get(t.id);
+      if (!view) continue;
+      const def = ctx.towerIndex[t.def];
+      const passive = passiveFor(ctx, def);
+      const cx = t.col * TILE + TILE / 2;
+      const cy = t.row * TILE + TILE / 2;
+      view.burst = Math.max(0, view.burst - 0.12 * dt);
+      switch (passive.id) {
+        case 'rooted': {
+          const tex = lib.fx(def.race, 'rooted');
+          if (!tex) break;
+          const mods = passiveMods(state, ctx, t);
+          const grow = mods.wavesStood / Math.max(1, passive.growthCapWaves ?? 6);
+          if (!view.fxGround) {
+            view.fxGround = new Sprite(tex);
+            view.fxGround.anchor.set(0.5, 0.5);
+            this.groundFxLayer.addChild(view.fxGround);
+          }
+          const size = TILE * (0.8 + 0.6 * grow);
+          view.fxGround.width = size;
+          view.fxGround.height = size * 0.6;
+          view.fxGround.position.set(cx, cy + 8);
+          view.fxGround.alpha = 0.35 + 0.65 * grow;
+          break;
+        }
+        case 'spin-up': {
+          const tex = lib.fx(def.race, 'spin-up');
+          if (!tex || !(def.attack === 'projectile' || def.attack === 'beam')) break;
+          const mods = passiveMods(state, ctx, t);
+          const max = Math.max(1, Math.floor((passive.spinUpMax ?? 0.3) / (passive.spinUpPerShot ?? 0.06)));
+          const heat = mods.heat / max;
+          if (!view.fxGlow) {
+            view.fxGlow = new Sprite(tex);
+            view.fxGlow.anchor.set(0.5, 0.5);
+            view.fxGlow.blendMode = 'add';
+            this.glowLayer.addChild(view.fxGlow);
+          }
+          view.fxGlow.width = TILE * 0.9;
+          view.fxGlow.height = TILE * 0.9;
+          view.fxGlow.position.set(cx, cy - view.mount);
+          view.fxGlow.rotation += dt * (0.1 + 0.5 * heat);
+          view.fxGlow.alpha = heat * 0.9;
+          view.fxGlow.visible = heat > 0;
+          break;
+        }
+        case 'hive': {
+          const tex = lib.fx(def.race, 'hive-link');
+          if (!tex) break;
+          const r2 = (passive.hiveRadius ?? 1.5) ** 2;
+          let linked = 0;
+          for (const o of state.towers) {
+            if (o.id <= t.id || linked >= (passive.hiveMaxNeighbours ?? 3)) continue;
+            const dx = o.col - t.col;
+            const dy = o.row - t.row;
+            if (dx * dx + dy * dy > r2) continue;
+            linked++;
+            const key = `${t.id}:${o.id}`;
+            liveThreads.add(key);
+            let thread = this.threads.get(key);
+            if (!thread) {
+              thread = new Sprite(tex);
+              thread.anchor.set(0, 0.5);
+              thread.alpha = 0.85;
+              this.threadLayer.addChild(thread);
+              this.threads.set(key, thread);
+            }
+            const ox = o.col * TILE + TILE / 2;
+            const oy = o.row * TILE + TILE / 2;
+            thread.position.set(cx, cy + 4);
+            thread.rotation = Math.atan2(oy - cy, ox - cx);
+            thread.width = Math.sqrt((ox - cx) ** 2 + (oy - cy) ** 2);
+            thread.height = TILE * 0.22;
+          }
+          break;
+        }
+        case 'overcharge': {
+          const tex = lib.fx(def.race, 'overcharge');
+          if (!tex || !(def.attack === 'projectile' || def.attack === 'beam')) break;
+          const mods = passiveMods(state, ctx, t);
+          if (!view.fxGlow) {
+            view.fxGlow = new Sprite(tex);
+            view.fxGlow.anchor.set(0.5, 0.5);
+            view.fxGlow.blendMode = 'add';
+            this.glowLayer.addChild(view.fxGlow);
+          }
+          const pulse = 0.5 + 0.5 * Math.sin(this.auraPhase * 6 + view.phase);
+          const ready = mods.alphaReady ? 0.35 + 0.35 * pulse : 0;
+          const size = TILE * (0.5 + 0.2 * pulse + 0.9 * view.burst);
+          view.fxGlow.width = size;
+          view.fxGlow.height = size;
+          view.fxGlow.position.set(cx, cy - view.mount);
+          view.fxGlow.alpha = Math.min(1, ready + view.burst);
+          view.fxGlow.visible = view.fxGlow.alpha > 0.02;
+          break;
+        }
+      }
+    }
+    for (const [key, thread] of this.threads) {
+      if (!liveThreads.has(key)) {
+        thread.destroy();
+        this.threads.delete(key);
       }
     }
   }
@@ -511,6 +649,12 @@ export class PixiRenderer implements Renderer {
         this.groundFxLayer.addChild(slowRing);
         this.creepLayer.addChild(body);
         this.hpLayer.addChild(hpBack, hpFront);
+        if (c.sentBy >= 0) {
+          // a rival's send: its shadow and health bar carry the sender's seat colour
+          shadow.tint = seatColorHex(c.sentBy);
+          shadow.alpha = 0.6;
+          hpFront.tint = seatColorHex(c.sentBy);
+        }
         const walk = entry.image ? this.sprites!.creepStrip(def, 'walk') : null;
         const die = entry.image ? this.sprites!.creepStrip(def, 'die') : null;
         const phase = ((c.id * 0.618) % 1) * Math.PI * 2;
@@ -685,18 +829,49 @@ export class PixiRenderer implements Renderer {
       }
     }
 
-    if (overlay.hover) {
-      const { col, row } = overlay.hover;
+    if (state.seats > 1) {
+      // a shared board: a thin ring in the owner's colour under every tower that is not yours
+      for (const t of state.towers) {
+        if (t.owner === overlay.seat) continue;
+        g.ellipse(t.col * TILE + TILE / 2, t.row * TILE + TILE / 2 + 9, TILE * 0.4, TILE * 0.2).stroke({ width: 2, color: seatColorHex(t.owner), alpha: 0.75 });
+      }
+    }
+
+    // upgrade-ready badge: a small chevron over every tower of yours whose next tier you can afford now
+    const sap = wallet(state, overlay.seat);
+    for (const t of state.towers) {
+      if (t.owner !== overlay.seat) continue;
+      const cost = upgradeCost(ctx, t);
+      if (cost === null || sap < cost) continue;
+      const x = t.col * TILE + TILE / 2 + TILE * 0.34;
+      const y = t.row * TILE + TILE / 2 - TILE * 0.52 - 2 * Math.sin(this.auraPhase * 5 + t.id);
+      g.circle(x, y, 13).fill({ color: 0x0b1a12, alpha: 0.9 }).stroke({ width: 2.5, color: 0xf2c14e, alpha: 1 });
+      g.poly([x - 7, y + 4, x, y - 6, x + 7, y + 4], true).fill({ color: 0xf2c14e });
+    }
+
+    // a pad tapped before a tower was chosen
+    if (overlay.padPick && !overlay.placing && !overlay.pending) {
+      const cx = overlay.padPick.col * TILE + TILE / 2;
+      const cy = overlay.padPick.row * TILE + TILE / 2;
+      const pulse = 0.5 + 0.5 * Math.sin(this.auraPhase * 8);
+      g.ellipse(cx, cy + 8, TILE * 0.4, TILE * 0.22).stroke({ width: 3, color: 0xffe9a6, alpha: 0.6 + 0.4 * pulse });
+    }
+
+    // the ghost: on the pending pad (confirm step) or under the pointer
+    const target = overlay.pending ?? overlay.hover;
+    if (target) {
+      const { col, row } = target;
       const i = cellIndex(state.cols, col, row);
       const cx = col * TILE + TILE / 2;
       const cy = row * TILE + TILE / 2;
       if (overlay.placing) {
         const def = ctx.towerIndex[overlay.placing];
-        const valid = state.grid[i] === TILE_KIND.pad && state.occupied[i] === -1 && state.resources >= def.cost;
+        const valid = state.grid[i] === TILE_KIND.pad && state.occupied[i] === -1 && sap >= towerCost(ctx, def);
         const color = valid ? 0x7fd36b : 0xe85a3a;
         const stats = towerStats(def, 1, null);
-        r.circle(cx, cy, stats.range * TILE).fill({ color, alpha: 0.08 }).stroke({ width: 2, color, alpha: 0.45 });
-        g.ellipse(cx, cy + 8, TILE * 0.36, TILE * 0.2).fill({ color, alpha: 0.35 }).stroke({ width: 2, color, alpha: 0.9 });
+        const pending = overlay.pending !== null;
+        r.circle(cx, cy, stats.range * TILE).fill({ color, alpha: pending ? 0.12 : 0.08 }).stroke({ width: pending ? 3 : 2, color, alpha: pending ? 0.7 : 0.45 });
+        g.ellipse(cx, cy + 8, TILE * 0.36, TILE * 0.2).fill({ color, alpha: 0.35 }).stroke({ width: pending ? 3 : 2, color, alpha: 0.9 });
       } else if (state.occupied[i] !== -1 || state.grid[i] === TILE_KIND.pad) {
         g.ellipse(cx, cy + 8, TILE * 0.38, TILE * 0.2).stroke({ width: 2, color: 0xffffff, alpha: 0.35 });
       }

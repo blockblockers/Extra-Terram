@@ -213,3 +213,79 @@ Verified: lint, typecheck, validate, sim smoke; headless: intro hold with the hi
 Verified: lint, typecheck, build; headless: one round-1 and one round-5 tower side by side for all four races, no console errors.
 
 Still missing from the art (specific, for the next drop): the six Lumenari re-crops above; turrets (128 × 128, pivot centre, pointing right) for Whirlseed, Spirebirch, Mortar, Acid Bloat, Stalker Eye, Nova — 4 states each, `turret-t1.png` … `turret-t3b.png`; projectiles (64 × 64) for Whirlseed and Spirebirch; the four painted map backgrounds (now with the kit); the text-free key art regenerated at 1536 × 2048; walk/die strips for the nine creeps without them and idle/fire strips for the painted towers without them.
+
+## v0.9.0 — invites, race weapons that differ, Mirror and Co-op (2026-10-25, later)
+
+**Invites (the Deadblock pattern).** `supabase/migrations/0002_invites_and_search.sql` (run after 0001; re-runnable): `search_players(query)` matches a username / display-name **prefix** or an **exact** email and never returns emails or lists everyone; `match_invites` + `invite_to_match`, `my_invites`, `respond_invite` behind RLS and `SECURITY DEFINER`. Client: `src/net/invites.ts` (RPCs + a Broadcast nudge on the invitee's personal channel `user:<id>`), `src/net/useInvites.ts` (list, nudge, 30 s poll). In the lobby (online only) a search box finds a player and *Invite* sends it; the invitee gets a toast on the menu with *Join* (straight into the lobby), a count badge on the Multiplayer button, and the pending list at the top of the multiplayer screen with *Join* / *Ignore*. Invites expire with the lobby (and after an hour). Tested on local Postgres as three users; the Supabase round trip is yours to try after running 0002.
+
+**Races now fight differently (engine 0.3.0 → 0.4.0, content 0.4.0).** Each race has one passive, in `src/content/races.json` (`passive` block; every number is tunable there, no code):
+
+| Race | Passive | What it does | Trade-off |
+| --- | --- | --- | --- |
+| Rootkin | **Rooted** | Towers start at 85% damage and gain +5% damage / +2.5% range for every full wave they stand through (cap 6 waves → 115% / +15%) | Rewards planting early and never selling; weak when rebuilt late |
+| The Assembly | **Spin-up** | Every consecutive shot fires 6% faster, up to 30%; a 1 s pause resets it. +10% bounty on their kills | Upgrades cost 20% more: cheap to field, dear to grow |
+| Chitin Swarm | **Hive link** | Each tower within 1.5 tiles of another fires 10% faster (up to 3 links); acid bleeds stack to 3; selling refunds 50% (not 70%) | Clusters are strong; spread-out or sold towers are not |
+| Lumenari | **Overcharge** | A tower idle for 2 s fires its next shot at 2.5×; beams pierce through 2 extra creeps at half damage | Base cooldowns 8% slower: burst and crowds, weak sustained fire |
+
+Also: the damage matrix softens energy vs shielded to 0.8 (was 0.7) so the Lumenari mirror is not hopeless. Sim: `passiveMods` / `effectiveStats` in `src/engine/sim.ts` (towers carry `placedWave`, `lastFireTick`, `heat`; creeps carry `bleedStacks`), costs in `inputs.ts`. UI: race picker shows the tagline, the passive and the matchups; the tower panel shows what the passive is doing to the selected tower right now ("Spun up ×4: fires 24% faster"). Balance table (`npm run sim`): easy all won with 20 lives; Slag Trench all won (Rootkin 8 lives); Brood Gallery three won, Lumenari lost at wave 7; Prism Span Rootkin won with 12, the others fall on wave 18 — as before, hard wants a human. **No new art needed** for the passives; optional later: a small effect sprite per passive (root tendrils, a spin glow, hive link threads, an overcharge flash) — listed in the Round 6 doc addendum.
+
+**Seats in the engine.** `SimState.resources` became `wallets[]` (one per seat; `createSim(ctx, seed, { seats, party, coop })`), towers carry their `owner`, inputs are charged to their seat and only the owner upgrades or sells; bounties go to the killing tower's owner, the wave bonus to every seat, economy income to the owner; `simView(state, ctx, seat)`. Single player is seat 0 and unchanged (identical smoke scores). Co-op waves scale with the party: hp × (1 + 0.3 × (players − 1)), count × (1 + 0.25 × (players − 1)) (`COOP_*` in `types.ts`).
+
+**Mirror (open).** Own boards as in the parallel race, plus a *Send* tab in the footer: your race's three creeps, cost = bounty × 2.5 (rusher 13, workhorse 28, tank 75 for Rootkin), ×1 / ×3 / ×5. A send is an input on your board (`send`: pays, books income) and a `send` event to one rival still playing (random when several); on their board it becomes a `receive` input (so the run stays replayable) that queues the creeps now, or at the front of the next wave during a build phase — even if that wave is called early. Every creep sent pays its sender ceil(cost / 8) sap on every later wave (+2 / +4 / +10), shown on the tab. Sent creeps carry the sender's seat colour on their shadow and health bar. Constants `SEND_*` in `types.ts`.
+
+**Co-op (open).** One board, one maze, a shared life pool, a wallet each, towers owned by whoever built them (a thin ring in the owner's colour under other players' towers; their panel shows the owner and no upgrade/sell). `src/app/lockstep.ts`: every input goes to the host; at every 5th tick the host applies the inputs it holds (its own included), broadcasts the frame (the inputs that applied, with its speed) and steps on; a client applies each frame at that tick and may step only up to the next boundary, so every board applies every input on the same tick. Clients send a hash every 20 ticks; a mismatch, a lost frame or a late join gets a host snapshot (the board without its log, addressed to that peer) and the client swaps its board in place ("Board resynced"). Inputs the host refuses (a pad taken a frame earlier) come back as a `reject` toast. Only the host pauses or changes speed (clients show "Host paces" and follow the frame speed; a client more than two frames behind runs 1.5× until caught up); a client that has waited 1.5 s shows "Waiting for the host…"; a host gone from presence for 8 s ends the match for the clients. A team strip over the board shows every player's colour, sap and tower count. The result is shared; each client submits placement 1.
+
+**Leaving.** On own boards a rival absent from presence for 8 s is scored as having left (so the final placement can be submitted and sends stop targeting them).
+
+**Lanes and King of the Maze** stay *Soon*: both need maps with a lane per player (one spawn/exit each) and, for King, team bases. The map requirements are in the Round 6 art doc addendum; the engine side (per-lane spawn/exit, lane-targeted sends, team pools) comes after those maps exist.
+
+Scripts: `npm run sim:seats` (wallets, owners, sends, replay with seats), `npm run sim:lockstep` (the protocol over an in-memory channel: in step through a wave, a rejected input, a lost frame → snapshot → back in step, a tampered board caught by the hash). `window.__et` (tick, hash, towers, wallets, creeps) is a read-only handle the headless tests use; the game never reads it.
+
+Verified: lint, typecheck, validate, build, `sim`, `sim:seats`, `sim:lockstep`; headless two-tab on the local transport: Mirror (send ×3 from A: A pays and shows +6/wave, B gets the toast and the creeps lead its wave), Co-op (both place, both boards show both towers with the right owners and wallets, B's panel on A's tower refuses, host pause stalls B with the waiting label, host 3× is mirrored on B, equal hashes at the same tick after resume), parallel race unchanged, solo unchanged; no console errors. The Supabase transport is the same code on the real channel and is not exercised here.
+
+## v0.9.1 — towers that differ by race, race details, upgrade clarity, confirm-before-building (2026-10-25, evening)
+
+**Each race's weapons now behave differently, not just look different (content 0.5.0).** A tower can carry base `effects` from tier 1 (same fields as a branch; `mergeEffects` in `sim.ts` combines them: multipliers multiply, counts/chances take the larger, chain adds, flags OR; schema updated). The 20 attacking towers were re-specced around one identity per race:
+
+| Race | Weapon identity | Examples |
+| --- | --- | --- |
+| Rootkin | Thorn and sap: wounds that keep bleeding, staggering heavy hits, the strongest poison field | Needlespire bleeds from tier 1; Ironbark staggers (30% slow, 0.5 s); Weepvine 4 bio/s; Whirlseed leaves smouldering ground |
+| The Assembly | Ordnance: fastest fire, biggest shells, longest artillery, no poison | Nailgun fires every 3 ticks (made for spin-up); Pile driver's shockwave splashes; Mortar reaches 3.2; Railgun pierces plating from tier 1 |
+| Chitin Swarm | Venom and numbers: cheap, short reach, acid on everything, the strongest web | Spitter 45 sap with acid; Mandible range 1.6, 84 per bite; Acid bloat leaves acid in the whole splash; Web spinner 50% slow, no damage; Stalker eye darts paralyse |
+| Lumenari | Light: beams that jump, long sight, cold splash, dear | Prism chains to a 2nd target; Lance pierces plating; Pulsar 4.8 range and jumps; Nova's burst chills; Chrono field the widest field |
+
+The race picker's **Race details** panel shows all of it: play style, strong/weak vs (with the enemy races named), and each tower's role, cost, description, tier-1 traits (dps, range, splash, chains, bleeds, slows, pierce) and its two tier-3 branches.
+
+Re-tuned with `npm run calibrate`: Slag Trench d = 1.0, Brood Gallery 1.5, Prism Span 0.75. Builder table: easy all won (20 lives); Slag Trench all won; Brood Gallery three won, Lumenari lost on the last wave; Prism Span Assembly and Lumenari won, Rootkin and Chitin fell at waves 18 / 16.
+
+**Upgrades are easier to find and to read.**
+- A gold ▲ badge bobs over every tower of yours whose next tier you can afford right now; the shop hint says "▲ on a tower = upgrade ready: tap it".
+- Every upgrade button spells out what changes, computed from the content (`upgradeChanges` in `TowerPanel.tsx`): tier 2 e.g. "damage 8→11 · fires 17% faster · 27→45 dps · range 2.3→2.5"; each tier-3 branch shows its description plus its numbers ("+ hits 2 targets", "+ pierces plating", "slow 40%→55%", "income 21→42 per wave").
+
+**Building on a phone.**
+- *Confirm before building* (Settings; on by default on touch screens, off with a mouse): pick a tower, tap a pad → the ghost and its range ring park there with a **Build / ✕** bar over the board; tap Build (or the same pad again) to plant, or another pad to move it. Nothing is spent until Build.
+- *Pad first*: tap an empty pad with no tower chosen → it pulses; pick a tower in the shop and the ghost goes there (with confirm) or it is planted (without).
+
+**Passive effect sprites are wired** (the art addendum): drop `public/sprites/<race>/fx/{rooted,spin-up,hive-link,overcharge}.png`, run `npm run sprites`, and the renderer shows them — rooted tendrils grow with waves stood, the spin-up ring brightens and spins with heat, hive-link threads stretch between linked towers, the overcharge glow pulses while the alpha shot is ready and flashes when it fires (fire/beam events now carry `alpha`). Without the files nothing is drawn.
+
+Verified: lint, typecheck, validate, build, `sim`, `sim:seats`, `sim:lockstep`; headless phone: race details, confirm flow (tap → bar, Build → planted, double-tap → planted, pad-first → bar), badges, upgrade text; two-tab Mirror, Co-op (15 shared hash checkpoints equal across both boards — `window.__et.hashes()`), parallel race; no console errors.
+
+After the v0.9.1 zip: `scripts/optimize-strips.py` v0.1.1 never quantises `public/sprites/<race>/fx/` (soft glows band under a palette). Not needed for the spec as written — the hive-link thread is 128 × 48, which is not a strip shape — but it rides in the next zip. The Round 6 art doc's addendum now carries the exact effect-sprite spec the renderer implements (sizes, additive glows, stretched thread, ground decal) and records the one branch rename (Pile Driver T3B *Double ram* → *Seismic ram*; the existing painting fits).
+
+## v0.9.2 — one icon for the whole game (2026-10-25, evening)
+
+The app icon, the iOS home-screen icon and the favicon (what phones show next to the site in search results and tabs) were a single Rootkin tree. They now show the title screen in miniature, built only from delivered art: the key art's planet as a curved horizon with a lit rim (shaded into night at the bottom, which also hides the key art's floating islands), with one tower per race standing on it — Ironbark, Nailgun, Spitter, Prism, left to right as on the title screen — under a starry sky. The four race colours (green-gold, yellow, violet, ice blue) still read at favicon size.
+
+`scripts/gen-icons.py` v0.3.0 (also in `npm run art`) draws it at 1024 and scales down: `icon-512/192` (rounded tile), `icon-maskable-512` (full bleed, content inside the safe zone), `apple-touch-icon` (full-bleed square: iOS rounds it, transparent corners would turn black), `favicon-16/32/48` and a new `public/favicon.ico` (16/32/48). `index.html` and the manifest point at them with `?v=2` so browsers and installed apps drop the cached tree; the `.ico` is precached. To swap a tower, edit `TOWERS` at the top of the script and rerun.
+
+Updating on devices: browsers pick the favicon up on the next load; an installed Android app refreshes its icon on its own within about a day; on iPhone remove the home-screen icon and add it again; Google refreshes the search-result favicon on its next crawl (days to a few weeks).
+
+Also in this zip: `scripts/optimize-strips.py` v0.1.1 (effect sprites are never quantised).
+
+## v0.9.3 — icon: the defence cannon in front of the alien world (2026-10-25, evening)
+
+Replaces the v0.9.2 four-tower icon, at the user's direction: the planet-only version (the key art's planet as a full disc with its atmosphere glow) plus the cannon painting the user supplied (`art/icon/cannon-source.png`, kept in the repo as the source). `scripts/gen-icons.py` v0.4.0 keys the cannon out of its blue background (grown in from the edges, warm sparks kept, cold specks dropped), fades the muzzle beam out before the painting's edge so it does not end in a hard cut, adds a soft dark halo so it separates from the planet, and places it large in the lower left with the planet up and to the right. Same outputs as v0.9.2 (512/192 rounded, maskable with the content pulled into the safe zone, full-bleed apple-touch, favicons 16/32/48 and `favicon.ico`). Icon URLs now carry `?v=3`. Layout knobs are the constants at the top of the script (`PLANET_CENTRE`, `PLANET_DIAMETER`, `CANNON_WIDTH`, `CANNON_BASE`).
+
+## v0.9.4 — icon: the world defended from every island (2026-10-25, evening)
+
+At the user's direction the single large cannon became six small ones, one on each floating island of the key art's planet, so the icon reads as the world shooting back from every land mass. `scripts/gen-icons.py` v0.5.0: the planet disc is centred again (as in the planet-only version), and each island in `SPOTS` (disc coordinates, cannon width, facing, tilt) gets the cannon from `art/icon/cannon-source.png` — mirrored to aim up-left on the left-hand islands, up-right on the right — graded toward the scene (less saturated, darker, bluer, slightly softened), a contact shadow on the island, a muzzle flash and a glowing bolt with a white-hot head flying out into space (`BOLT_LENGTH`). Same outputs as before; icon URLs now `?v=4`.

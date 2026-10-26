@@ -1,17 +1,17 @@
 {
-  "content_version": "0.3.0",
+  "content_version": "0.5.0",
   "towers": [
     {
       "id": "needlespire",
       "race": "rootkin",
       "name": "Needlespire",
       "role": "starter",
-      "description": "Rapid needle volleys. Cheap and fast; kinetic damage.",
+      "description": "Thorn volleys from a sapling spire. Steady needles; its wounds keep bleeding after the hit.",
       "cost": 60,
-      "range": 2.2,
-      "damage": 7,
+      "range": 2.3,
+      "damage": 8,
       "damageType": "kinetic",
-      "cooldownTicks": 5,
+      "cooldownTicks": 6,
       "attack": "projectile",
       "projectileSpeed": 10,
       "tiers": [
@@ -38,9 +38,9 @@
         "a": {
           "id": "barbed",
           "name": "Barbed needles",
-          "description": "Hits leave a bleeding wound: 4 bio damage per second for 2 s.",
+          "description": "Deeper wounds: 5 bio damage per second for 2 s.",
           "effects": {
-            "bleedPerSecond": 4,
+            "bleedPerSecond": 5,
             "bleedTicks": 40
           }
         },
@@ -53,19 +53,23 @@
           }
         }
       },
-      "color": "#7fd36b"
+      "color": "#7fd36b",
+      "effects": {
+        "bleedPerSecond": 2,
+        "bleedTicks": 20
+      }
     },
     {
       "id": "ironbark",
       "race": "rootkin",
       "name": "Ironbark",
       "role": "heavy",
-      "description": "Slow, heavy acorn cannon. Big single hits; weak against plating until pierced.",
+      "description": "A slow, heavy acorn cannon. Big single hits that stagger the target for a moment.",
       "cost": 110,
       "range": 2.8,
-      "damage": 52,
+      "damage": 56,
       "damageType": "kinetic",
-      "cooldownTicks": 30,
+      "cooldownTicks": 32,
       "attack": "projectile",
       "projectileSpeed": 7,
       "tiers": [
@@ -100,20 +104,24 @@
         "b": {
           "id": "double-acorn",
           "name": "Double acorn",
-          "description": "Fires two acorns per shot at two targets.",
+          "description": "Two acorns per shot, at two targets.",
           "effects": {
             "multishot": 2
           }
         }
       },
-      "color": "#8b5a2b"
+      "color": "#8b5a2b",
+      "effects": {
+        "slowOnHit": 0.3,
+        "slowTicks": 10
+      }
     },
     {
       "id": "weepvine",
       "race": "rootkin",
       "name": "Weepvine",
       "role": "control",
-      "description": "A root field that slows every creep in range and seeps sap into them (bio damage over time).",
+      "description": "A root field that slows every creep in range and seeps sap into them: the strongest poison field in the game.",
       "cost": 90,
       "range": 1.8,
       "damage": 0,
@@ -121,8 +129,8 @@
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
-        "slow": 0.4,
-        "dotPerSecond": 3,
+        "slow": 0.35,
+        "dotPerSecond": 4,
         "dotType": "bio"
       },
       "tiers": [
@@ -152,7 +160,7 @@
           "description": "Wider field and a stronger slow.",
           "effects": {
             "rangeMult": 1.3,
-            "slowBonus": 0.1
+            "slowBonus": 0.15
           }
         },
         "b": {
@@ -171,7 +179,7 @@
       "race": "rootkin",
       "name": "Whirlseed",
       "role": "splash",
-      "description": "A spinning disc of samara seeds. Each seed bursts on impact and scatters damage around the target.",
+      "description": "A spinning disc of samara seeds. Each seed bursts on impact and leaves the ground smouldering with sap.",
       "cost": 120,
       "range": 2.4,
       "damage": 22,
@@ -212,14 +220,18 @@
         "b": {
           "id": "burning-husk",
           "name": "Burning husk",
-          "description": "Seeds smoulder: hits leave 3 bio damage per second for 2 s.",
+          "description": "Seeds smoulder: hits leave 4 bio damage per second for 2 s.",
           "effects": {
-            "bleedPerSecond": 3,
+            "bleedPerSecond": 4,
             "bleedTicks": 40
           }
         }
       },
-      "color": "#c9a63a"
+      "color": "#c9a63a",
+      "effects": {
+        "bleedPerSecond": 2,
+        "bleedTicks": 20
+      }
     },
     {
       "id": "spirebirch",
@@ -229,7 +241,7 @@
       "description": "The tallest tree. Sees far, fires rarely, hits hard.",
       "cost": 140,
       "range": 4.2,
-      "damage": 70,
+      "damage": 72,
       "damageType": "kinetic",
       "cooldownTicks": 45,
       "attack": "projectile",
@@ -389,14 +401,14 @@
       "race": "assembly",
       "name": "Nailgun turret",
       "role": "starter",
-      "description": "A box on a tripod with a magazine drum. Cheap, fast nails.",
+      "description": "A box on a tripod with a magazine drum. Cheap, very fast nails \u2014 the gun its spin-up was made for.",
       "cost": 60,
-      "range": 2.2,
-      "damage": 7,
+      "range": 2.1,
+      "damage": 5,
       "damageType": "kinetic",
-      "cooldownTicks": 5,
+      "cooldownTicks": 3,
       "attack": "projectile",
-      "projectileSpeed": 12,
+      "projectileSpeed": 14,
       "tiers": [
         {
           "upgradeCost": 45,
@@ -421,16 +433,15 @@
         "a": {
           "id": "hollow-point",
           "name": "Hollow point",
-          "description": "Nails tear: hits leave 3 damage per second for 2 s.",
+          "description": "Nails punch through plating: full damage against Plated armor.",
           "effects": {
-            "bleedPerSecond": 3,
-            "bleedTicks": 40
+            "armorPierce": true
           }
         },
         "b": {
           "id": "twin-drum",
           "name": "Twin drum",
-          "description": "Fires at two targets at once.",
+          "description": "Two nails per shot, at two targets.",
           "effects": {
             "multishot": 2
           }
@@ -443,12 +454,12 @@
       "race": "assembly",
       "name": "Pile driver",
       "role": "heavy",
-      "description": "A hydraulic ram on a wide base. Slow, crushing blows.",
+      "description": "A hydraulic ram on a wide base. Short reach, crushing blows, and every blow sends a shockwave through the ground.",
       "cost": 110,
-      "range": 2.6,
-      "damage": 54,
+      "range": 2.2,
+      "damage": 64,
       "damageType": "kinetic",
-      "cooldownTicks": 30,
+      "cooldownTicks": 34,
       "attack": "projectile",
       "projectileSpeed": 7,
       "tiers": [
@@ -475,28 +486,29 @@
         "a": {
           "id": "breaker",
           "name": "Breaker",
-          "description": "Punches through plating: full damage against Plated armour.",
+          "description": "The ram punches through plating: full damage against Plated armor.",
           "effects": {
             "armorPierce": true
           }
         },
         "b": {
           "id": "double-ram",
-          "name": "Double ram",
-          "description": "Two rams, two targets.",
+          "name": "Seismic ram",
+          "description": "A wider shockwave: splash radius +60%.",
           "effects": {
-            "multishot": 2
+            "splashMult": 1.6
           }
         }
       },
-      "color": "#c47a1e"
+      "color": "#c47a1e",
+      "splash": 0.6
     },
     {
       "id": "tar-sprayer",
       "race": "assembly",
       "name": "Tar sprayer",
       "role": "control",
-      "description": "A tank with a nozzle. Everything in range wades through tar.",
+      "description": "A tank with a nozzle. Everything in range wades through hot tar \u2014 a slow that also burns.",
       "cost": 90,
       "range": 1.8,
       "damage": 0,
@@ -504,8 +516,8 @@
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
-        "slow": 0.4,
-        "dotPerSecond": 1.5,
+        "slow": 0.35,
+        "dotPerSecond": 2,
         "dotType": "energy"
       },
       "tiers": [
@@ -541,7 +553,7 @@
         "b": {
           "id": "hot-tar",
           "name": "Hot tar",
-          "description": "The tar burns: twice the energy damage per second to everything in it.",
+          "description": "The tar burns twice as hard.",
           "effects": {
             "damageMult": 2.0
           }
@@ -554,15 +566,15 @@
       "race": "assembly",
       "name": "Mortar",
       "role": "splash",
-      "description": "A short fat tube on a plate. Lobs shells that burst on impact.",
-      "cost": 120,
-      "range": 2.8,
-      "damage": 24,
+      "description": "A short fat tube on a plate. True artillery: the longest reach of any splash weapon and the biggest shells, slow to reload.",
+      "cost": 125,
+      "range": 3.2,
+      "damage": 28,
       "damageType": "kinetic",
-      "cooldownTicks": 26,
+      "cooldownTicks": 30,
       "attack": "projectile",
       "projectileSpeed": 6,
-      "splash": 1.0,
+      "splash": 1.2,
       "tiers": [
         {
           "upgradeCost": 95,
@@ -595,7 +607,7 @@
         "b": {
           "id": "incendiary",
           "name": "Incendiary",
-          "description": "Shells burn: 3 damage per second for 2 s on everything hit.",
+          "description": "Shells burn: hits leave 3 energy damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 3,
             "bleedTicks": 40
@@ -609,12 +621,12 @@
       "race": "assembly",
       "name": "Railgun",
       "role": "range",
-      "description": "A long rail on a swivel base. One slug, a long way, right now.",
-      "cost": 140,
-      "range": 4.4,
-      "damage": 64,
+      "description": "A long rail on a swivel base. One slug, a long way, right now \u2014 and it goes through plating.",
+      "cost": 145,
+      "range": 4.6,
+      "damage": 70,
       "damageType": "energy",
-      "cooldownTicks": 44,
+      "cooldownTicks": 48,
       "attack": "beam",
       "tiers": [
         {
@@ -640,7 +652,7 @@
         "a": {
           "id": "capacitor",
           "name": "Capacitor bank",
-          "description": "Fires 30% faster.",
+          "description": "Reloads 30% faster.",
           "effects": {
             "cooldownMult": 0.7
           }
@@ -648,14 +660,16 @@
         "b": {
           "id": "sabot",
           "name": "Sabot round",
-          "description": "Punches through plating; one shot in four crits.",
+          "description": "One slug in three finds a seam for double damage.",
           "effects": {
-            "armorPierce": true,
-            "critChance": 0.25
+            "critChance": 0.33
           }
         }
       },
-      "color": "#4fd8e8"
+      "color": "#4fd8e8",
+      "effects": {
+        "armorPierce": true
+      }
     },
     {
       "id": "salvage-rig",
@@ -772,10 +786,10 @@
       "race": "chitin",
       "name": "Spitter",
       "role": "starter",
-      "description": "A mound with a single puckered spout. Fast acid gobs.",
-      "cost": 50,
-      "range": 2.2,
-      "damage": 7,
+      "description": "A mound with a single puckered spout. Cheap acid gobs; the acid keeps eating after the hit, and the hive stacks it.",
+      "cost": 45,
+      "range": 2.0,
+      "damage": 6,
       "damageType": "bio",
       "cooldownTicks": 5,
       "attack": "projectile",
@@ -804,7 +818,7 @@
         "a": {
           "id": "caustic",
           "name": "Caustic spit",
-          "description": "Acid clings: 4 bio damage per second for 2 s.",
+          "description": "Stronger acid: 4 bio damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 4,
             "bleedTicks": 40
@@ -819,19 +833,23 @@
           }
         }
       },
-      "color": "#9fe84a"
+      "color": "#9fe84a",
+      "effects": {
+        "bleedPerSecond": 2,
+        "bleedTicks": 30
+      }
     },
     {
       "id": "mandible",
       "race": "chitin",
       "name": "Mandible",
       "role": "heavy",
-      "description": "Two great jaws rising from the ground. Short reach, savage bite.",
+      "description": "Two great jaws rising from the ground. The shortest reach in the game and the hardest single bite.",
       "cost": 95,
-      "range": 2.0,
-      "damage": 66,
+      "range": 1.6,
+      "damage": 84,
       "damageType": "bio",
-      "cooldownTicks": 26,
+      "cooldownTicks": 24,
       "attack": "beam",
       "tiers": [
         {
@@ -857,7 +875,7 @@
         "a": {
           "id": "crushing-jaws",
           "name": "Crushing jaws",
-          "description": "One bite in three crits.",
+          "description": "One bite in three crushes for double damage.",
           "effects": {
             "critChance": 0.33
           }
@@ -865,7 +883,7 @@
         "b": {
           "id": "venom-bite",
           "name": "Venom bite",
-          "description": "Bitten creeps crawl: slowed 40% for 1.5 s.",
+          "description": "Bitten creeps crawl: 40% slower for 1.5 s.",
           "effects": {
             "slowOnHit": 0.4,
             "slowTicks": 30
@@ -879,7 +897,7 @@
       "race": "chitin",
       "name": "Web spinner",
       "role": "control",
-      "description": "A spinneret dome with silk guy-lines. Everything in range is webbed.",
+      "description": "A spinneret dome with silk guy-lines. Everything in range is webbed \u2014 the strongest slow, no poison.",
       "cost": 80,
       "range": 1.8,
       "damage": 0,
@@ -887,8 +905,8 @@
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
-        "slow": 0.4,
-        "dotPerSecond": 2,
+        "slow": 0.5,
+        "dotPerSecond": 0,
         "dotType": "bio"
       },
       "tiers": [
@@ -924,7 +942,7 @@
         "b": {
           "id": "sticky-silk",
           "name": "Sticky silk",
-          "description": "Each creep entering the web is held for half a second.",
+          "description": "Each creep entering the web is held still for half a second.",
           "effects": {
             "stunTicksOnEntry": 10
           }
@@ -937,15 +955,15 @@
       "race": "chitin",
       "name": "Acid bloat",
       "role": "splash",
-      "description": "A swollen sac that lobs acid. The splash eats plating.",
+      "description": "A swollen sac that lobs acid. Every creep in the splash is left eaten by acid, and the hive stacks it.",
       "cost": 105,
-      "range": 2.4,
-      "damage": 22,
+      "range": 2.3,
+      "damage": 18,
       "damageType": "bio",
       "cooldownTicks": 24,
       "attack": "projectile",
       "projectileSpeed": 6,
-      "splash": 1.0,
+      "splash": 1.1,
       "tiers": [
         {
           "upgradeCost": 95,
@@ -970,7 +988,7 @@
         "a": {
           "id": "wide-burst",
           "name": "Wide burst",
-          "description": "Splash radius +40%.",
+          "description": "Wider burst: splash radius +40%.",
           "effects": {
             "splashMult": 1.4
           }
@@ -978,26 +996,30 @@
         "b": {
           "id": "lingering-acid",
           "name": "Lingering acid",
-          "description": "Everything splashed keeps burning: 3 bio per second for 2 s.",
+          "description": "Stronger acid: 4 bio damage per second for 3 s.",
           "effects": {
-            "bleedPerSecond": 3,
-            "bleedTicks": 40
+            "bleedPerSecond": 4,
+            "bleedTicks": 60
           }
         }
       },
-      "color": "#9fe84a"
+      "color": "#9fe84a",
+      "effects": {
+        "bleedPerSecond": 2,
+        "bleedTicks": 40
+      }
     },
     {
       "id": "stalker-eye",
       "race": "chitin",
       "name": "Stalker eye",
       "role": "range",
-      "description": "A stalk with one large eye. Long sight, but the swarm was never built for sniping.",
-      "cost": 120,
-      "range": 3.8,
-      "damage": 58,
+      "description": "A stalk with one large eye. The swarm's only long sight \u2014 shorter than the others' snipers, and its darts paralyse.",
+      "cost": 115,
+      "range": 3.6,
+      "damage": 50,
       "damageType": "bio",
-      "cooldownTicks": 46,
+      "cooldownTicks": 40,
       "attack": "projectile",
       "projectileSpeed": 14,
       "tiers": [
@@ -1032,14 +1054,18 @@
         "b": {
           "id": "paralytic",
           "name": "Paralytic dart",
-          "description": "Darts slow their target 50% for 2 s.",
+          "description": "Darts paralyse: 50% slower for 2 s.",
           "effects": {
             "slowOnHit": 0.5,
             "slowTicks": 40
           }
         }
       },
-      "color": "#c99cff"
+      "color": "#c99cff",
+      "effects": {
+        "slowOnHit": 0.25,
+        "slowTicks": 20
+      }
     },
     {
       "id": "resin-nest",
@@ -1156,9 +1182,9 @@
       "race": "lumenari",
       "name": "Prism",
       "role": "starter",
-      "description": "A floating triangular crystal. A steady beam, no projectile to dodge.",
+      "description": "A floating triangular crystal. A steady beam that refracts into a second target \u2014 no projectile to dodge.",
       "cost": 65,
-      "range": 2.3,
+      "range": 2.4,
       "damage": 9,
       "damageType": "energy",
       "cooldownTicks": 7,
@@ -1187,7 +1213,7 @@
         "a": {
           "id": "refraction",
           "name": "Refraction",
-          "description": "The beam splits to one extra target.",
+          "description": "The beam refracts once more: a third target.",
           "effects": {
             "chain": 1
           }
@@ -1195,25 +1221,28 @@
         "b": {
           "id": "focused",
           "name": "Focused lens",
-          "description": "Damage +35%.",
+          "description": "A tighter beam: +35% damage.",
           "effects": {
             "damageMult": 1.35
           }
         }
       },
-      "color": "#4fd8e8"
+      "color": "#4fd8e8",
+      "effects": {
+        "chain": 1
+      }
     },
     {
       "id": "lance",
       "race": "lumenari",
       "name": "Lance",
       "role": "heavy",
-      "description": "A long floating spear of light. Slow, piercing strikes.",
+      "description": "A long floating spear of light. Slow, piercing strikes that go through plating.",
       "cost": 120,
-      "range": 2.8,
-      "damage": 58,
+      "range": 3.0,
+      "damage": 60,
       "damageType": "energy",
-      "cooldownTicks": 30,
+      "cooldownTicks": 32,
       "attack": "beam",
       "tiers": [
         {
@@ -1239,37 +1268,39 @@
         "a": {
           "id": "piercing-light",
           "name": "Piercing light",
-          "description": "Punches through plating; one strike in four crits.",
+          "description": "One strike in four finds the core for double damage.",
           "effects": {
-            "armorPierce": true,
             "critChance": 0.25
           }
         },
         "b": {
           "id": "twin-lance",
           "name": "Twin lance",
-          "description": "The strike forks to a second target.",
+          "description": "The spear splits: a second target.",
           "effects": {
             "chain": 1
           }
         }
       },
-      "color": "#f4fbff"
+      "color": "#f4fbff",
+      "effects": {
+        "armorPierce": true
+      }
     },
     {
       "id": "chrono-field",
       "race": "lumenari",
       "name": "Chrono field",
       "role": "control",
-      "description": "A ring of slowly turning rune shards. Time drags for everything inside.",
+      "description": "A ring of slowly turning rune shards. Time drags for everything inside \u2014 the widest reach of any field.",
       "cost": 95,
-      "range": 1.9,
+      "range": 2.1,
       "damage": 0,
       "damageType": "energy",
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
-        "slow": 0.45,
+        "slow": 0.4,
         "dotPerSecond": 0,
         "dotType": "energy"
       },
@@ -1297,7 +1328,7 @@
         "a": {
           "id": "wide-field",
           "name": "Wide field",
-          "description": "Wider field and a stronger slow.",
+          "description": "Wider field and a stronger drag.",
           "effects": {
             "rangeMult": 1.3,
             "slowBonus": 0.1
@@ -1319,15 +1350,15 @@
       "race": "lumenari",
       "name": "Nova",
       "role": "splash",
-      "description": "A sphere with orbiting fragments. Hurls orbs that detonate on impact.",
+      "description": "A sphere with orbiting fragments. Hurls orbs of cold light that detonate on impact and chill everything in the burst.",
       "cost": 125,
-      "range": 2.5,
+      "range": 2.6,
       "damage": 22,
       "damageType": "energy",
-      "cooldownTicks": 24,
+      "cooldownTicks": 26,
       "attack": "projectile",
       "projectileSpeed": 8,
-      "splash": 0.9,
+      "splash": 1.0,
       "tiers": [
         {
           "upgradeCost": 95,
@@ -1352,7 +1383,7 @@
         "a": {
           "id": "supernova",
           "name": "Supernova",
-          "description": "Splash radius +40%.",
+          "description": "Wider burst: splash radius +40%.",
           "effects": {
             "splashMult": 1.4
           }
@@ -1360,26 +1391,30 @@
         "b": {
           "id": "cold-light",
           "name": "Cold light",
-          "description": "Everything in the blast is slowed 35% for 1.5 s.",
+          "description": "A deeper chill: 40% slower for 1.5 s.",
           "effects": {
-            "slowOnHit": 0.35,
+            "slowOnHit": 0.4,
             "slowTicks": 30
           }
         }
       },
-      "color": "#a8f1ff"
+      "color": "#a8f1ff",
+      "effects": {
+        "slowOnHit": 0.2,
+        "slowTicks": 20
+      }
     },
     {
       "id": "pulsar",
       "race": "lumenari",
       "name": "Pulsar",
       "role": "range",
-      "description": "A tall thin obelisk with a star at the tip. Sees the whole lane.",
-      "cost": 145,
-      "range": 4.6,
-      "damage": 62,
+      "description": "A tall thin obelisk with a star at the tip. Sees the whole lane, and its pulse jumps to a second target.",
+      "cost": 150,
+      "range": 4.8,
+      "damage": 66,
       "damageType": "energy",
-      "cooldownTicks": 46,
+      "cooldownTicks": 48,
       "attack": "beam",
       "tiers": [
         {
@@ -1413,13 +1448,16 @@
         "b": {
           "id": "cascade",
           "name": "Cascade",
-          "description": "The pulse chains to two more targets.",
+          "description": "The pulse jumps twice more.",
           "effects": {
             "chain": 2
           }
         }
       },
-      "color": "#f4fbff"
+      "color": "#f4fbff",
+      "effects": {
+        "chain": 1
+      }
     },
     {
       "id": "solar-collector",

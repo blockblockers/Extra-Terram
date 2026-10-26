@@ -1,4 +1,4 @@
-// Extra Terram — vite.config.ts v0.7.0 — key art (jpg) joins the precache
+// Extra Terram — vite.config.ts v0.8.0 — new game-wide icons (versioned URLs), favicon.ico precached
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png', 'maps/*.png', 'art/*.jpg', 'sprites/**/*.png', 'sprites/manifest.json'],
+      includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.png', 'art/*.jpg', 'sprites/**/*.png', 'sprites/manifest.json'],
       manifest: {
         name: 'Extra Terram: The Alien Race Tower Defense',
         short_name: 'Extra Terram',
@@ -19,14 +19,14 @@ export default defineConfig({
         orientation: 'any',
         start_url: '/',
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: '/icons/icon-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: '/icons/icon-192.png?v=4', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png?v=4', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-maskable-512.png?v=4', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
         // Single-player must work offline: precache the app shell, content JSON and map art.
-        globPatterns: ['**/*.{js,css,html,png,jpg,svg,json,woff2}'],
+        globPatterns: ['**/*.{js,css,html,png,jpg,svg,json,woff2,ico}'],
         maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
       },
     }),

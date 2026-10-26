@@ -4,12 +4,16 @@ Everything the game needs from Supabase lives in this folder plus three environm
 The game also runs with **no** Supabase at all (no login screen, scores stay on the device), so
 nothing here blocks local play or a fresh clone.
 
-## 1. Run the migration
+## 1. Run the migrations
 
 Dashboard → **SQL Editor** → New query → paste the whole of
 [`migrations/0001_accounts_and_matches.sql`](migrations/0001_accounts_and_matches.sql) → **Run**.
 Expected result: "Success. No rows returned" (plus a few NOTICEs about policies not existing yet).
-The file is re-runnable: every statement is `if not exists` / `or replace` / `drop … if exists`.
+Then do the same with [`migrations/0002_invites_and_search.sql`](migrations/0002_invites_and_search.sql)
+(player search + lobby invites; it needs 0001 first). Both files are re-runnable: every statement
+is `if not exists` / `or replace` / `drop … if exists`, so running one twice is harmless.
+
+Already ran 0001 before 0002 existed? Just run 0002 now — nothing in 0001 changes.
 
 What it creates:
 
@@ -20,6 +24,8 @@ What it creates:
 | `run_results` | Every finished single-player run (level, race, mode, seed, outcome, score, stars, waves, lives, duration, versions, optional input log). Public read, insert only through `submit_run`. **The source of truth for leaderboards.** |
 | `matches`, `match_players`, `match_logs` | Phase 4 lobbies and results. Visible to participants only. |
 | RPCs | `ensure_profile`, `set_username`, `submit_run`, `save_settings`, `leaderboard`, `my_best`, `create_match`, `join_match`, `start_match`, `submit_match_result`, `save_match_log`, `rating_current`. All `SECURITY DEFINER`, all validate `auth.uid()` and their inputs. |
+| `match_invites` (0002) | One row per invite to a lobby (`from_user`, `to_user`, `status`). Readable by the two parties only; written only through RPCs. |
+| RPCs (0002) | `search_players(query)` — username / display-name **prefix**, or an **exact** email; never returns emails, never lists everyone, skips the caller. `invite_to_match`, `my_invites` (pending, lobby still open, last hour), `respond_invite`. |
 
 Rules carried over from Deadblock, baked into the SQL:
 
@@ -31,8 +37,12 @@ Rules carried over from Deadblock, baked into the SQL:
 - Live multiplayer uses Realtime **Broadcast + Presence**, never `postgres_changes`, so there is no
   publication / replica-identity setup to get wrong.
 
-Check it worked: **Table Editor** lists the six tables, each with the shield icon (RLS on);
+Check it worked: **Table Editor** lists the seven tables, each with the shield icon (RLS on);
 **Database → Functions** lists the RPCs.
+
+How invites reach the other player: the row in `match_invites` is the record (`my_invites` lists
+it after a reload); a Realtime **Broadcast** on the invitee's personal channel `user:<id>` is the
+nudge that pops the toast while their game is open. Nothing to configure for either.
 
 ## 2. Keys and environment variables
 

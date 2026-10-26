@@ -1,4 +1,4 @@
-// Extra Terram — src/app/loop.ts v0.7.0 — low-rate frames between waves while idle strips play
+// Extra Terram — src/app/loop.ts v0.8.0 — a step may refuse (lockstep client waiting on the host)
 // The requestAnimationFrame loop: fixed-timestep sim (20 Hz), interpolated render, fast-forward,
 // pause on backgrounding, and the heat controls (fps cap, no frames while nothing moves).
 import { TICK_RATE } from '../engine';
@@ -8,8 +8,8 @@ const MAX_TICKS_PER_FRAME = 12; // after a long stall, catch up this much and dr
 const SETTLE_FRAMES = 90; // about 1.5 s at 60 fps: long enough for the longest particle burst
 
 export interface LoopHooks {
-  /** Advance the sim by one tick. */
-  step(): void;
+  /** Advance the sim by one tick. Returning false means the sim may not step yet (a lockstep client without its next frame). */
+  step(): boolean | void;
   /** Draw a frame; alpha is 0..1 between the previous tick and the current one. */
   render(alpha: number): void;
   /** True while something on the board moves; false lets the loop skip frames between waves. */
@@ -75,7 +75,10 @@ export class GameLoop {
       this.acc += dt * this.speed;
       let n = 0;
       while (this.acc >= TICK_MS && n < MAX_TICKS_PER_FRAME) {
-        this.hooks.step();
+        if (this.hooks.step() === false) {
+          this.acc = 0; // waiting on the host: no burst of catch-up ticks when the frame lands
+          break;
+        }
         this.acc -= TICK_MS;
         n++;
       }

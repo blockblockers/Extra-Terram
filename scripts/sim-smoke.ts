@@ -56,7 +56,7 @@ function buildPhase(state: SimState, ctx: SimContext, roster: TowerDef[], pads: 
   };
   const place = (role: string): boolean => {
     const def = byRole(role);
-    if (!def || state.resources < def.cost || state.towers.length >= MAX_TOWERS) return false;
+    if (!def || state.wallets[0] < def.cost || state.towers.length >= MAX_TOWERS) return false;
     const pad = freePad(role === 'economy');
     if (!pad) return false;
     return applyInput(state, ctx, { type: 'place', tower: def.id, col: pad.col, row: pad.row }).ok;
@@ -134,7 +134,7 @@ export function runLevel(levelId: string, raceId: string, seed: string, verbose:
     stepSim(state, ctx);
     if (verbose && state.waveIndex !== lastWave && state.phase === 'wave') {
       lastWave = state.waveIndex;
-      console.log(`    wave ${state.waveIndex + 1}/${ctx.waves.waves.length} "${ctx.waves.waves[state.waveIndex].name}" at tick ${state.tick}: lives ${state.lives}, sap ${state.resources}, towers ${state.towers.length}`);
+      console.log(`    wave ${state.waveIndex + 1}/${ctx.waves.waves.length} "${ctx.waves.waves[state.waveIndex].name}" at tick ${state.tick}: lives ${state.lives}, sap ${state.wallets[0]}, towers ${state.towers.length}`);
     }
   }
   return state;

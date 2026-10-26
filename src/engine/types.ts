@@ -1,12 +1,29 @@
-// Extra Terram — src/engine/types.ts v0.5.0 — per-level difficulty scaling (hp, speed, count, per-wave ramp)
+// Extra Terram — src/engine/types.ts v0.8.0 — base weapon effects per tower (`effects`), seats, sends
 // Content types (mirroring src/content/schemas) and simulation state.
 // Everything in SimState is plain JSON so a snapshot is just JSON.stringify(state).
 import type { RngState } from './rng';
 
-export const ENGINE_VERSION = '0.2.0';
+export const ENGINE_VERSION = '0.4.0';
 export const TICK_RATE = 20; // sim ticks per second
 export const TICK_SEC = 1 / TICK_RATE; // seconds per tick
 export const SELL_REFUND = 0.7;
+
+/**
+ * Sends (Mirror mode): a player pays sap to drop extra creeps into a rival's lane and earns a
+ * little income on every later wave for it. cost = bounty × SEND_COST_MULT; income per wave =
+ * ceil(cost / SEND_INCOME_DIV). A rusher costs 13 and pays 2 a wave, a tank 75 and pays 10.
+ */
+export const SEND_COST_MULT = 2.5;
+export const SEND_INCOME_DIV = 8;
+export const SEND_INTERVAL_TICKS = 6; // spacing between creeps of one send on the receiving board
+export const SEND_MAX_COUNT = 10;
+
+/**
+ * Co-op (one shared board): every seat has its own wallet and the full starting sap, so the waves
+ * grow with the party: hp × (1 + HP × (players − 1)), count × (1 + COUNT × (players − 1)).
+ */
+export const COOP_HP_PER_PLAYER = 0.3;
+export const COOP_COUNT_PER_PLAYER = 0.25;
 
 // ---------------------------------------------------------------- content
 
@@ -15,13 +32,50 @@ export type ArmorType = 'organic' | 'plated' | 'shielded';
 export type TowerRole = 'starter' | 'heavy' | 'control' | 'splash' | 'range' | 'economy' | 'trap' | 'support';
 export type CreepArchetype = 'rusher' | 'workhorse' | 'tank' | 'tower-attacker' | 'flyer' | 'path-skipper' | 'buffer' | 'boss';
 
+/**
+ * What makes a race play differently from the others. One passive per race; every field is optional
+ * so a race's JSON only states what it uses. Effects are applied in the sim (src/engine/sim.ts,
+ * `passiveFor` and the call sites named below) and shown in the tower panel.
+ */
+export interface RacePassive {
+  id: 'rooted' | 'spin-up' | 'hive' | 'overcharge';
+  name: string;
+  description: string;
+  /** Rooted (Rootkin): towers start weaker and gain damage and range for every wave they stand through. */
+  startDamageMult?: number;
+  growthDamagePerWave?: number;
+  growthRangePerWave?: number;
+  growthCapWaves?: number;
+  /** Spin-up (Assembly): each shot within `spinUpResetTicks` of the last speeds the next; kills pay more; upgrades cost more. */
+  spinUpPerShot?: number;
+  spinUpMax?: number;
+  spinUpResetTicks?: number;
+  bountyMult?: number;
+  upgradeCostMult?: number;
+  /** Hive (Chitin): towers near other towers fire faster; acid stacks; selling refunds less. */
+  hiveRadius?: number;
+  hiveCooldownPerNeighbour?: number;
+  hiveMaxNeighbours?: number;
+  bleedStacks?: number;
+  sellRefund?: number;
+  /** Overcharge (Lumenari): the first shot after idling hits harder; beams pierce; everything costs and cools slower. */
+  alphaIdleTicks?: number;
+  alphaMult?: number;
+  beamPierce?: number;
+  cooldownMult?: number;
+  costMult?: number;
+}
+
 export interface RaceDef {
   id: string;
   name: string;
   description: string;
+  /** One line for the race picker: how it plays. */
+  tagline: string;
   damageTypes: DamageType[];
   creepArmor: ArmorType;
   palette: { primary: string; secondary: string };
+  passive: RacePassive;
 }
 
 export interface DamageMatrix {
@@ -107,6 +161,8 @@ export interface TowerDef {
   buff?: BuffDef;
   tiers: TierDef[]; // index 0 = tier 1
   branches: { a: BranchDef; b: BranchDef };
+  /** Weapon traits the tower has from tier 1 (same fields as a branch); a branch adds to or multiplies them. */
+  effects?: BranchEffects;
   color: string;
 }
 
@@ -194,6 +250,7 @@ export interface SimContext {
   waves: WaveScript;
   towerIndex: Record<string, TowerDef>;
   creepIndex: Record<string, CreepDef>;
+  raceIndex: Record<string, RaceDef>;
 }
 
 // ---------------------------------------------------------------- state
@@ -225,18 +282,24 @@ export interface Creep {
   stunnedBy: number; // tower id that last entangled this creep
   bleedPerSecond: number;
   bleedTicks: number;
+  bleedStacks: number; // hive acid stacks (1 = a single application)
+  sentBy: number; // seat that sent this creep (Mirror), -1 for the level's own waves
   alive: boolean;
 }
 
 export interface Tower {
   id: number;
   def: string;
+  owner: number; // seat that built it (0 in single player); only the owner upgrades or sells it
   col: number;
   row: number;
   tier: 1 | 2 | 3;
   branch: 'a' | 'b' | null;
   cooldown: number;
   placedTick: number;
+  placedWave: number; // waveIndex when placed (rooted growth counts waves stood since)
+  lastFireTick: number; // -1 until the first shot (spin-up decay, overcharge idle check)
+  heat: number; // spin-up stacks
   invested: number;
   kills: number;
   damageDealt: number;
@@ -266,6 +329,7 @@ export interface Projectile {
 export interface SpawnEntry {
   creep: string;
   tick: number;
+  sentBy?: number; // seat that sent it (Mirror); absent for the level's waves
 }
 
 export type Phase = 'build' | 'wave' | 'won' | 'lost';
@@ -274,7 +338,11 @@ export type SimInput =
   | { type: 'place'; tower: string; col: number; row: number }
   | { type: 'upgrade'; towerId: number; branch?: 'a' | 'b' }
   | { type: 'sell'; towerId: number }
-  | { type: 'start-wave' };
+  | { type: 'start-wave' }
+  /** Mirror: pay to send creeps to a rival (this board only pays and books the income). */
+  | { type: 'send'; creep: string; count: number }
+  /** Mirror: creeps a rival sent arrive on this board (queued for now, or for the next wave during a build phase). */
+  | { type: 'receive'; creep: string; count: number; from: number };
 
 /** An input as recorded in the log: who sent it and the tick it applied on. */
 export type LoggedInput = SimInput & { tick: number; seat: number; seq: number };
@@ -284,16 +352,18 @@ export type LoggedInput = SimInput & { tick: number; seat: number; seq: number }
  * step, excluded from the state hash, never read by the sim itself.
  */
 export type SimEvent =
-  | { kind: 'fire'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType }
+  | { kind: 'fire'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType; alpha?: boolean }
   | { kind: 'hit'; x: number; y: number; damageType: DamageType; amount: number; kill: boolean; splash?: number }
-  | { kind: 'beam'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType }
+  | { kind: 'beam'; tower: number; x: number; y: number; tx: number; ty: number; damageType: DamageType; alpha?: boolean }
   | { kind: 'income'; tower: number; x: number; y: number; amount: number }
   | { kind: 'kill'; creep: string; x: number; y: number; armor: ArmorType }
   | { kind: 'leak'; creep: string; x: number; y: number }
   | { kind: 'place'; tower: number; x: number; y: number }
   | { kind: 'upgrade'; tower: number; x: number; y: number; tier: number }
   | { kind: 'sell'; x: number; y: number }
-  | { kind: 'wave'; index: number };
+  | { kind: 'wave'; index: number }
+  | { kind: 'send'; creep: string; count: number; seat: number }
+  | { kind: 'incoming'; creep: string; count: number; from: number };
 
 export interface SimStats {
   kills: number;
@@ -301,6 +371,18 @@ export interface SimStats {
   spent: number;
   earned: number;
   damageDealt: number;
+  sent: number; // creeps this board sent to rivals
+  received: number; // creeps rivals sent here
+}
+
+/** How a sim is set up beyond the level: seats for a shared board, sends for mirrored ones. */
+export interface SimOptions {
+  /** Wallets to create (one per seat). 1 in single player; the lobby size in co-op. */
+  seats?: number;
+  /** Players actually in the party (drives co-op wave scaling). */
+  party?: number;
+  /** Shared-board co-op: scale the waves for the party. */
+  coop?: boolean;
 }
 
 export interface SimResult {
@@ -321,7 +403,11 @@ export interface SimState {
   waveIndex: number; // -1 before the first wave
   buildTimer: number; // ticks until the next wave auto-starts
   waveStartTick: number;
-  resources: number;
+  seats: number;
+  party: number;
+  coop: boolean;
+  wallets: number[]; // sap per seat; single player uses wallets[0]
+  sendIncome: number[]; // per seat: extra sap paid at the end of every wave, earned by sending
   lives: number;
   score: number;
   rng: RngState;
@@ -349,7 +435,10 @@ export interface SimView {
   waves: number;
   waveName: string;
   buildTimer: number;
-  resources: number;
+  seat: number; // the seat this view is for
+  resources: number; // that seat's wallet
+  wallets: number[];
+  sendIncome: number; // that seat's income from sends, per wave
   lives: number;
   score: number;
   creepsAlive: number;

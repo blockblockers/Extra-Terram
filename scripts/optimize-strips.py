@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/optimize-strips.py v0.1.0 — shrink animation strips for the PWA precache
+"""Extra Terram — scripts/optimize-strips.py v0.1.1 — effect sprites (<race>/fx/) are never quantised; shrink animation strips for the PWA precache
 
 Animation strips are wide PNGs of near-identical frames, and PNG cannot share pixels between frames,
 so a 6-frame idle strip at 256 px weighs 300–500 KB as 32-bit RGBA. Quantising each strip to a
@@ -31,8 +31,9 @@ def main() -> None:
     before = after = 0
     done = skipped = 0
     for png in sorted(SPRITES.rglob("*.png")):
-        if png.relative_to(SPRITES).parts[0].startswith("_"):
-            continue
+        rel = png.relative_to(SPRITES)
+        if rel.parts[0].startswith("_") or "fx" in rel.parts[:-1]:
+            continue  # parked files, and passive effect sprites (soft glows band under a palette)
         img = Image.open(png)
         if not is_strip(img):
             continue

@@ -1,5 +1,5 @@
 {
-  "content_version": "0.3.0",
+  "content_version": "0.5.0",
   "multipliers": {
     "kinetic": {
       "organic": 1.0,
@@ -9,7 +9,7 @@
     "energy": {
       "organic": 1.25,
       "plated": 1.0,
-      "shielded": 0.7
+      "shielded": 0.8
     },
     "bio": {
       "organic": 0.9,

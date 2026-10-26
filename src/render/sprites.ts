@@ -1,4 +1,4 @@
-// Extra Terram — src/render/sprites.ts v0.6.0 — tiers grow by draw scale (art is footprint-fitted) — stills, animation strips, vector fallbacks
+// Extra Terram — src/render/sprites.ts v0.7.0 — optional passive effect sprites (<race>/fx/<name>.png); tiers grow by draw scale; stills, strips, vector fallbacks
 // The art handoff doc (Project) describes the image spec. Any sprite listed in public/sprites/manifest.json
 // is loaded and used; anything else is drawn here with Pixi Graphics and cached as a texture.
 // Keys: tower:<id>:<tier>:<branch|->   turret:<id>:<tier>:<branch|->   creep:<id>   projectile:<towerId>
@@ -108,6 +108,14 @@ export class SpriteLibrary {
   }
 
   /**
+   * A race's passive effect sprite (`<race>/fx/<name>.png`), or null until the art exists. Optional
+   * art: the passives work without it, the sprite only shows them. Names: rooted, spin-up, hive-link, overcharge.
+   */
+  fx(race: string, name: string): Texture | null {
+    return this.imageTexture(`${race}/fx/${name}.png`);
+  }
+
+  /**
    * Draw vector art into a texture at its natural size, with the anchor placed at the drawing's
    * (0, 0): the ground-contact point for towers, the centre for creeps and projectiles, the pivot
    * for turrets. No stretching: the sprite is shown at the bounds the drawing actually has.
@@ -192,6 +200,11 @@ export class SpriteLibrary {
 /** Public path of a sprite image, for the UI (build bar, menu). The UI hides the img if it 404s. */
 export function spriteUrl(race: string, towerId: string, state: 't1' | 't2' | 't3a' | 't3b' = 't1'): string {
   return `/sprites/${race}/${towerId}/${state}.png`;
+}
+
+/** Public path of a creep still, for the UI (send bar). */
+export function creepUrl(race: string, creepId: string): string {
+  return `/sprites/${race}/creeps/${creepId}.png`;
 }
 
 export function hasTurret(def: TowerDef): boolean {

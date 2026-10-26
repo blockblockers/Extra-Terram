@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Hud.tsx v0.2.0 — fixed two-row layout so the board never shifts
+// Extra Terram — src/ui/Hud.tsx v0.3.0 — speed and pause follow the host on a shared board
 // Top bar. Inset by the top safe area; static styling only (no animations: the canvas is the only moving surface).
 // Both rows are always rendered at the same height, whichever phase the sim is in, so the canvas
 // host below keeps its size and the board never jumps when a wave starts or ends.
@@ -8,13 +8,15 @@ interface Props {
   view: SimView | null;
   speed: number;
   paused: boolean;
+  /** False for a client on a shared board: the host sets the pace, so the controls only show it. */
+  canControl?: boolean;
   onSpeed(n: number): void;
   onPause(): void;
   onCallWave(): void;
   onExit(): void;
 }
 
-export function Hud({ view, speed, paused, onSpeed, onPause, onCallWave, onExit }: Props) {
+export function Hud({ view, speed, paused, canControl = true, onSpeed, onPause, onCallWave, onExit }: Props) {
   const seconds = view ? Math.ceil(view.buildTimer / TICK_RATE) : 0;
   const inBuild = view?.phase === 'build';
   const waveLabel = view ? (view.wave === 0 ? 'Get ready' : inBuild ? `Wave ${view.wave}/${view.waves} cleared` : `Wave ${view.wave}/${view.waves}`) : '';
@@ -43,14 +45,20 @@ export function Hud({ view, speed, paused, onSpeed, onPause, onCallWave, onExit 
         </button>
         <div className="flex overflow-hidden rounded-md border border-grove-700" role="group" aria-label="Game speed">
           {[1, 2, 3].map((n) => (
-            <button key={n} onClick={() => onSpeed(n)} className={`px-2 py-1 ${speed === n ? 'bg-grove-700 text-white' : 'text-grove-300 hover:bg-grove-800'}`}>
+            <button key={n} onClick={() => onSpeed(n)} disabled={!canControl} className={`px-2 py-1 disabled:cursor-default ${speed === n ? 'bg-grove-700 text-white' : 'text-grove-300 hover:bg-grove-800 disabled:opacity-40'}`} title={canControl ? undefined : 'The host sets the speed'}>
               {n}×
             </button>
           ))}
         </div>
-        <button onClick={onPause} className="rounded-md border border-grove-700 px-2 py-1 text-grove-300 hover:bg-grove-800" aria-pressed={paused}>
-          {paused ? 'Resume' : 'Pause'}
-        </button>
+        {canControl ? (
+          <button onClick={onPause} className="rounded-md border border-grove-700 px-2 py-1 text-grove-300 hover:bg-grove-800" aria-pressed={paused}>
+            {paused ? 'Resume' : 'Pause'}
+          </button>
+        ) : (
+          <span className="rounded-md border border-grove-800 px-2 py-1 text-xs text-grove-300/60" title="Only the host can pause a shared board">
+            Host paces
+          </span>
+        )}
       </div>
     </header>
   );

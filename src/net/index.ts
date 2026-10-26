@@ -1,4 +1,4 @@
-// Extra Terram — src/net/index.ts v0.3.0 — accounts, progress, and the match service (Supabase or local tabs)
+// Extra Terram — src/net/index.ts v0.4.0 — player search and lobby invites
 // The engine never imports from here (lint-enforced). The UI reaches the server only through
 // these modules, and every one of them works with `supabase === null` (an offline build).
 export { supabase, online, authProviders, errorMessage } from './supabase';
@@ -23,5 +23,7 @@ export {
 export { getMatchService, type MatchService } from './matchService';
 export { localUserId } from './localMatch';
 export { rankStandings, type ActiveMatch, type Standing } from './activeMatch';
+export { searchPlayers, invitePlayer, fetchInvites, respondInvite, listenForInvites, invitesAvailable, type PlayerHit, type Invite } from './invites';
+export { useInvites, type InvitesState } from './useInvites';
 
 export const NET_PHASE = 'accounts + progress (Phase 3); parallel race lobbies (Phase 4, first mode)';

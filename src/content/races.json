@@ -1,10 +1,10 @@
 {
-  "content_version": "0.3.0",
+  "content_version": "0.5.0",
   "races": [
     {
       "id": "rootkin",
       "name": "Rootkin",
-      "description": "Tree-aliens. Control and economy; a slow start that snowballs. Towers grow stronger the longer they stand.",
+      "description": "Tree-aliens. Bio and kinetic weapons: seeds, thorns, strangling vines. Every tower is rooted \u2014 it starts at 85% strength and gains damage and range for each wave it stands through (for up to six waves), so a Rootkin line that holds early becomes the strongest in the game. Strong against the Assembly's plating, weak against their own kind.",
       "damageTypes": [
         "kinetic",
         "bio"
@@ -13,12 +13,22 @@
       "palette": {
         "primary": "#3f8f3a",
         "secondary": "#6b4a2b"
+      },
+      "tagline": "Grows into the game: weak saplings, unstoppable elders.",
+      "passive": {
+        "id": "rooted",
+        "name": "Rooted",
+        "description": "Towers start at 85% damage and gain +5% damage and +2.5% range per wave they stand through, up to 6 waves.",
+        "startDamageMult": 0.85,
+        "growthDamagePerWave": 0.05,
+        "growthRangePerWave": 0.025,
+        "growthCapWaves": 6
       }
     },
     {
       "id": "assembly",
       "name": "The Assembly",
-      "description": "A machine collective. Raw damage and armor; its construction crew is the Phase 1 enemy.",
+      "description": "A machine collective. Kinetic ordnance: nailguns, pile drivers, mortars, a railgun. Guns spin up \u2014 every shot within a second of the last makes the next one faster, up to 30% \u2014 and kills pay 10% more scrap. The price: upgrades cost 20% more. Strong against Lumenari shields, weak against plating of their own make.",
       "damageTypes": [
         "kinetic",
         "energy"
@@ -27,12 +37,23 @@
       "palette": {
         "primary": "#e8c33a",
         "secondary": "#1a1a1a"
+      },
+      "tagline": "Burst and salvage: guns spin up, scrap pays, upgrades cost.",
+      "passive": {
+        "id": "spin-up",
+        "name": "Spin-up",
+        "description": "Each shot within 1 s of the last fires the next 6% sooner, up to 30%. Kills pay +10%. Upgrades cost +20%.",
+        "spinUpPerShot": 0.06,
+        "spinUpMax": 0.3,
+        "spinUpResetTicks": 20,
+        "bountyMult": 1.1,
+        "upgradeCostMult": 1.2
       }
     },
     {
       "id": "chitin",
       "name": "Chitin Swarm",
-      "description": "Insectoid hive. Numbers, cheap towers, acid damage over time.",
+      "description": "Insectoid hive. Bio weapons: acid, darts, webs. Towers are cheap and the hive links them \u2014 each other tower within 1.5 tiles makes a tower fire 10% faster (up to three) \u2014 and acid stacks three deep instead of refreshing. The price: a sold tower refunds only half. Strong against plating, weak against organic foes.",
       "damageTypes": [
         "bio"
       ],
@@ -40,12 +61,23 @@
       "palette": {
         "primary": "#8a4fc9",
         "secondary": "#9fe84a"
+      },
+      "tagline": "Numbers and acid: cheap towers that are stronger together.",
+      "passive": {
+        "id": "hive",
+        "name": "Hive link",
+        "description": "Each other tower within 1.5 tiles: +10% fire rate (max 3). Acid damage over time stacks up to 3\u00d7. Selling refunds 50%.",
+        "hiveRadius": 1.5,
+        "hiveCooldownPerNeighbour": 0.1,
+        "hiveMaxNeighbours": 3,
+        "bleedStacks": 3,
+        "sellRefund": 0.5
       }
     },
     {
       "id": "lumenari",
       "name": "Lumenari",
-      "description": "Energy beings. Few expensive towers; range, piercing beams, time tricks.",
+      "description": "Energy beings. Beams, pulses and time fields. Beams pierce through up to two creeps behind the target, and any tower that has waited 2 s opens with an overcharged shot at 2.5\u00d7 damage. The price: everything fires 8% slower. Strong against organic foes, weak against shields of their own kind.",
       "damageTypes": [
         "energy"
       ],
@@ -53,6 +85,16 @@
       "palette": {
         "primary": "#4fd8e8",
         "secondary": "#f4fbff"
+      },
+      "tagline": "Few and precise: pierce the line, open with an alpha strike.",
+      "passive": {
+        "id": "overcharge",
+        "name": "Overcharge",
+        "description": "After 2 s idle the next shot deals 2.5\u00d7. Beams pierce 2 extra creeps along the line at 50%. Towers fire 8% slower.",
+        "alphaIdleTicks": 40,
+        "alphaMult": 2.5,
+        "beamPierce": 2,
+        "cooldownMult": 1.08
       }
     }
   ]

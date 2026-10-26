@@ -1,4 +1,4 @@
-// Extra Terram — src/app/settings.ts v0.4.0 — remembers the last race and level
+// Extra Terram — src/app/settings.ts v0.5.0 — confirm-before-building (on by default for touch)
 // Player settings, persisted per device. Every storage access is wrapped: standalone PWAs and
 // private windows can refuse localStorage, and the game must still run without it.
 
@@ -7,6 +7,8 @@ export interface Settings {
   batterySaver: boolean;
   /** Always draw the build-pad rings, not only while placing a tower. */
   showPads: boolean;
+  /** Tap a pad, then confirm, instead of building on the first tap. Unset = on for touch screens, off for a mouse. */
+  confirmBuild?: boolean;
   lastRace?: string;
   lastLevel?: string;
 }
@@ -23,6 +25,16 @@ export function loadSettings(): Settings {
     return { ...defaultSettings, ...parsed };
   } catch {
     return { ...defaultSettings };
+  }
+}
+
+/** Whether building takes a confirm step: the player's choice, else on for coarse pointers (touch). */
+export function confirmBuildOn(settings: Settings): boolean {
+  if (settings.confirmBuild !== undefined) return settings.confirmBuild;
+  try {
+    return (typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches) || (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0);
+  } catch {
+    return false;
   }
 }
 

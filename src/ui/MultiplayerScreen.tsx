@@ -1,10 +1,10 @@
-// Extra Terram — src/ui/MultiplayerScreen.tsx v0.1.1 — panels reveal after the title intro
-// The first online mode is the parallel race: everyone plays the same level and waves on their own
-// board at the same time; live standings in the HUD; highest score among those who hold wins.
-// The shared-board modes and sends are listed so the roadmap is visible, but cannot be picked yet.
+// Extra Terram — src/ui/MultiplayerScreen.tsx v0.3.0 — Mirror and Co-op open; invites by name or email; pending invites with one-tap join
+// Parallel race: everyone plays the same level and waves on their own board; live standings; the
+// best score among those left standing wins. Mirror: the same, plus sends. Co-op: one shared board
+// in lockstep, a wallet each, a shared life pool. Lanes and King of the Maze wait for their maps.
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import { CONTENT_VERSION, content, levels, raceById, towersForRace, type LevelEntry } from '../content';
-import { getMatchService, localUserId, online, playerName, useAuth, type ActiveMatch, type MatchChannelLike, type MatchEvent, type MatchMode, type MatchRow, type MatchService, type SeatPresence } from '../net';
+import { getMatchService, invitePlayer, localUserId, online, playerName, searchPlayers, useAuth, type ActiveMatch, type Invite, type MatchChannelLike, type MatchEvent, type MatchMode, type MatchRow, type MatchService, type PlayerHit, type SeatPresence } from '../net';
 import { LogoLockup, Reveal, TitleColumn } from './Title';
 import { TowerIcon } from './TowerIcon';
 
@@ -18,14 +18,20 @@ export interface MatchRun {
 interface Props {
   defaultRace: string;
   defaultLevel: string;
+  /** Pending invites for this player (online only). */
+  invites: Invite[];
+  onAcceptInvite(inviteId: number): Promise<void>;
+  onDeclineInvite(inviteId: number): Promise<void>;
+  /** A lobby code to join as soon as the screen opens (from an invite toast). */
+  autoJoinCode?: string;
   onStart(run: MatchRun): void;
   onBack(): void;
 }
 
 const MODES: Array<{ id: MatchMode; name: string; blurb: string; available: boolean }> = [
   { id: 'parallel', name: 'Parallel race', blurb: 'Same level, same waves, your own board. Live standings; the best score among those left standing wins.', available: true },
-  { id: 'mirror', name: 'Mirror', blurb: 'Parallel boards, and the sap you bank can send extra creeps into a rival’s lane.', available: false },
-  { id: 'coop', name: 'Co-op', blurb: 'One board, one maze, a shared life pool. Each player owns their towers and wallet.', available: false },
+  { id: 'mirror', name: 'Mirror', blurb: 'Parallel boards, and the sap you bank can send extra creeps into a rival’s lane. Every send pays you income on later waves.', available: true },
+  { id: 'coop', name: 'Co-op', blurb: 'One board, one maze, a shared life pool. Each player owns their towers and wallet; the waves grow with the party.', available: true },
   { id: 'lanes', name: 'Lanes', blurb: 'One board with a lane per player; sends land in a random rival’s lane. 2v2 shares a team pool.', available: false },
   { id: 'king', name: 'King of the Maze', blurb: 'Teams defend bases on one board; the team that loses its base loses.', available: false },
 ];
@@ -34,7 +40,7 @@ const COUNTDOWN_MS = 3000;
 
 type View = { kind: 'pick' } | { kind: 'lobby'; match: MatchRow; seat: number; host: boolean };
 
-export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }: Props) {
+export function MultiplayerScreen({ defaultRace, defaultLevel, invites, onAcceptInvite, onDeclineInvite, autoJoinCode, onStart, onBack }: Props) {
   const auth = useAuth();
   const signedIn = auth.status === 'signed-in';
   const canPlayOnline = !online || signedIn;
@@ -53,6 +59,10 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
   const [ready, setReady] = useState(false);
   const [countdown, setCountdown] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [inviteQuery, setInviteQuery] = useState('');
+  const [hits, setHits] = useState<PlayerHit[] | null>(null);
+  const [invited, setInvited] = useState<Set<string>>(new Set());
+  const [inviteNote, setInviteNote] = useState<string | null>(null);
 
   const service = useRef<MatchService>(getMatchService(signedIn && auth.user ? auth.user.id : null));
   const channel = useRef<MatchChannelLike | null>(null);
@@ -82,7 +92,7 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
           level: chosen,
           raceId: me.raceId,
           seed: ev.seed,
-          match: { service: service.current, matchId: match.id, code: match.code, mode: match.mode, me, players: ch.presence(), channel: ch },
+          match: { service: service.current, matchId: match.id, code: match.code, mode: match.mode, me, players: ch.presence(), host: match.host_user_id === userId, seats: ev.seats, party: ev.party, channel: ch },
         });
       }, delay);
     },
@@ -117,22 +127,70 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
     }
   };
 
+  const joinByCode = useCallback(
+    async (raw: string) => {
+      const c = raw.trim().toUpperCase();
+      if (c.length < 4) {
+        setError('Enter the 6-character lobby code.');
+        return;
+      }
+      setError(null);
+      setBusy(true);
+      try {
+        const { match, seat } = await service.current.join(c, raceId);
+        await enterLobby(match, seat, match.host_user_id === userId);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Could not join that lobby.');
+      } finally {
+        setBusy(false);
+      }
+    },
+    [raceId, enterLobby, userId],
+  );
+
   const join = async (e: FormEvent) => {
     e.preventDefault();
-    const c = code.trim().toUpperCase();
-    if (c.length < 4) {
-      setError('Enter the 6-character lobby code.');
+    await joinByCode(code);
+  };
+
+  // Opened from an invite toast: go straight into that lobby.
+  const autoJoined = useRef(false);
+  useEffect(() => {
+    if (autoJoinCode && !autoJoined.current) {
+      autoJoined.current = true;
+      void joinByCode(autoJoinCode);
+    }
+  }, [autoJoinCode, joinByCode]);
+
+  const acceptInvite = async (inv: Invite) => {
+    await onAcceptInvite(inv.invite_id);
+    await joinByCode(inv.code);
+  };
+
+  const runSearch = async (e: FormEvent) => {
+    e.preventDefault();
+    const q = inviteQuery.trim();
+    if (q.length < 2) {
+      setInviteNote('Type at least two characters of a player name, or a full email.');
       return;
     }
-    setError(null);
-    setBusy(true);
+    setInviteNote(null);
     try {
-      const { match, seat } = await service.current.join(c, raceId);
-      await enterLobby(match, seat, match.host_user_id === userId);
+      const found = await searchPlayers(q);
+      setHits(found);
+      if (found.length === 0) setInviteNote(q.includes('@') ? 'No player with that exact email.' : 'No player name starts with that.');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not join that lobby.');
-    } finally {
-      setBusy(false);
+      setInviteNote(err instanceof Error ? err.message : 'Search failed.');
+    }
+  };
+
+  const sendInvite = async (hit: PlayerHit) => {
+    if (view.kind !== 'lobby') return;
+    try {
+      await invitePlayer(view.match.id, hit.user_id, name, view.match.code, view.match.mode, view.match.map_id);
+      setInvited((prev) => new Set(prev).add(hit.user_id));
+    } catch (err) {
+      setInviteNote(err instanceof Error ? err.message : 'Could not invite.');
     }
   };
 
@@ -153,7 +211,7 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
     setBusy(true);
     try {
       await service.current.start(view.match.id);
-      const ev: MatchEvent = { type: 'start', seed: view.match.seed, startAt: Date.now() + COUNTDOWN_MS, levelId: view.match.map_id };
+      const ev: MatchEvent = { type: 'start', seed: view.match.seed, startAt: Date.now() + COUNTDOWN_MS, levelId: view.match.map_id, seats: view.match.max_players, party: Math.max(1, players.length) };
       channel.current?.send(ev);
       beginCountdown(ev, view.match, view.seat); // broadcast does not echo to the sender
     } catch (err) {
@@ -227,7 +285,7 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
             </button>
           </div>
           <p className="mt-1 text-xs text-grove-300/60">
-            {levels.find((l) => l.id === view.match.map_id)?.map.name ?? view.match.map_id} · same waves for everyone
+            {levels.find((l) => l.id === view.match.map_id)?.map.name ?? view.match.map_id} · {view.match.mode === 'coop' ? 'one board, a wallet each' : 'same waves for everyone'}
             {service.current.kind === 'local' ? ' · local test: open this game in a second tab and join with the code' : ''}
           </p>
 
@@ -250,6 +308,36 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
             })}
             {players.length < view.match.max_players && <li className="rounded-lg border border-dashed border-grove-700 px-3 py-2 text-center text-xs text-grove-300/50">Waiting for a player to join with the code…</li>}
           </ul>
+
+          {service.current.kind === 'supabase' && players.length < view.match.max_players && (
+            <div className="mt-3 rounded-lg border border-grove-700 bg-grove-950/50 p-2">
+              <form onSubmit={runSearch} noValidate className="flex gap-2">
+                <label htmlFor="invite-query" className="sr-only">
+                  Player name or email
+                </label>
+                <input id="invite-query" value={inviteQuery} onChange={(e) => setInviteQuery(e.target.value)} placeholder="Invite: player name or email" autoCapitalize="off" autoCorrect="off" spellCheck={false} className="min-w-0 flex-1 rounded-md border border-grove-700 bg-grove-950/80 px-3 py-1.5 text-sm" />
+                <button type="submit" className="rounded-md border border-grove-500 px-3 py-1.5 text-sm font-semibold text-grove-300 hover:bg-grove-700">
+                  Find
+                </button>
+              </form>
+              {inviteNote && <p className="mt-1 text-xs text-grove-300/70">{inviteNote}</p>}
+              {hits && hits.length > 0 && (
+                <ul className="mt-1.5 flex flex-col gap-1" aria-label="Players found">
+                  {hits.map((h) => (
+                    <li key={h.user_id} className="flex items-center justify-between gap-2 rounded-md bg-grove-800/80 px-2 py-1 text-sm">
+                      <span className="min-w-0 truncate">
+                        {h.username ?? h.display_name ?? 'Player'}
+                        {h.username && h.display_name && <span className="ml-1 text-xs text-grove-300/60">{h.display_name}</span>}
+                      </span>
+                      <button onClick={() => void sendInvite(h)} disabled={invited.has(h.user_id)} className="shrink-0 rounded-md bg-grove-500 px-2 py-0.5 text-xs font-semibold text-grove-950 hover:bg-grove-300 disabled:opacity-60">
+                        {invited.has(h.user_id) ? 'Invited' : 'Invite'}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
 
           <h3 className="mt-3 text-xs uppercase tracking-wide text-grove-300/60">Your race</h3>
           <div className="mt-1 grid grid-cols-4 gap-2" role="radiogroup" aria-label="Race">
@@ -308,6 +396,30 @@ export function MultiplayerScreen({ defaultRace, defaultLevel, onStart, onBack }
           <h2 className="text-xs uppercase tracking-wide text-grove-300/60">Multiplayer</h2>
           <span className="text-xs text-grove-300/60">{service.current.kind === 'local' ? 'Local test (same browser)' : `Playing as ${name}`}</span>
         </div>
+        {invites.length > 0 && (
+          <ul className="mt-2 flex flex-col gap-1.5" aria-label="Invites">
+            {invites.map((inv) => (
+              <li key={inv.invite_id} className="flex items-center justify-between gap-2 rounded-lg border border-sap/60 bg-grove-800/80 px-3 py-2 text-sm">
+                <span className="min-w-0">
+                  <span className="block truncate">
+                    <span className="font-semibold">{inv.from_name}</span> invited you · {MODES.find((m) => m.id === inv.mode)?.name ?? inv.mode}
+                  </span>
+                  <span className="block truncate text-xs text-grove-300/70">
+                    {levels.find((l) => l.id === inv.map_id)?.map.name ?? inv.map_id} · {inv.seated} / {inv.max_players} seated · code {inv.code}
+                  </span>
+                </span>
+                <span className="flex shrink-0 gap-1">
+                  <button onClick={() => void acceptInvite(inv)} disabled={busy} className="rounded-md bg-grove-500 px-2 py-1 text-xs font-semibold text-grove-950 hover:bg-grove-300">
+                    Join
+                  </button>
+                  <button onClick={() => void onDeclineInvite(inv.invite_id)} className="rounded-md border border-grove-700 px-2 py-1 text-xs text-grove-300 hover:bg-grove-800">
+                    Ignore
+                  </button>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
         <div className="mt-2 flex flex-col gap-1.5" role="radiogroup" aria-label="Mode">
           {MODES.map((m) => {
             const active = m.id === mode;

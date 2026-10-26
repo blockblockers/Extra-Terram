@@ -1,7 +1,7 @@
 # Extra Terram: The Alien Race Tower Defense
 
-Phase 1 vertical slice: the Rootkin hold a forest moon against the Assembly's construction crew on one fixed maze.
-Web first (PWA on Netlify), Android and iOS later through Capacitor. The design doc in the Claude Project is the source of truth for everything beyond this slice.
+Four races with their own passives, four maps, single player plus online play: Parallel race, Mirror (sends) and Co-op (one shared board) are open; Lanes and King of the Maze wait for their maps.
+Web first (PWA on Netlify), Android and iOS later through Capacitor. The design doc in the Claude Project is the source of truth for everything beyond what is built.
 
 ## Run it
 
@@ -18,6 +18,9 @@ Other scripts:
 | --- | --- |
 | `npm run validate` | Checks every file in `src/content` against its JSON Schema and cross-checks ids |
 | `npm run sim` | Headless smoke test: determinism, replay-from-log, seed sensitivity, a wave-by-wave summary. `-- --max-towers 8` caps the scripted builder to probe difficulty |
+| `npm run sim:seats` | Wallets per seat, tower owners, creep sends and receives, replay with seats (Mirror / Co-op engine checks) |
+| `npm run sim:lockstep` | The shared-board protocol over an in-memory channel: frames, rejects, a lost frame, a hash mismatch |
+| `npm run calibrate` | Scans a difficulty factor per level and prints lives left per race |
 | `npm run lint` | ESLint, including the rules that keep `src/engine` headless and deterministic |
 | `npm run typecheck` | `tsc --noEmit` |
 | `npm run art` | Regenerates the placeholder background and icons (needs Python with numpy + pillow) |
@@ -28,11 +31,11 @@ Other scripts:
 src/engine/    headless, deterministic sim: no React, no Pixi, no DOM, no wall clock, no Math.random (lint-enforced)
 src/content/   JSON content + schemas; every file carries content_version
 src/render/    PixiJS v8 renderer behind a small Renderer interface
-src/app/       the loop (fixed 20 Hz timestep, interpolated render, fps cap, idle between waves) and the game shell
+src/app/       the loop (fixed 20 Hz timestep, interpolated render, fps cap, idle between waves), the game shell, lockstep.ts (Co-op frames)
 src/ui/        React HUD, build bar, tower panel, overlays, menu (static styling, safe-area insets)
 src/net/       Supabase: client, auth (email + password / link + code / guest), run results + offline queue, leaderboards,
-               match service (Supabase Realtime online, BroadcastChannel between tabs when offline) for the parallel race
-supabase/      the SQL migration (tables, RLS, RPCs) and the dashboard setup guide
+               player search + lobby invites, match service (Supabase Realtime online, BroadcastChannel between tabs when offline)
+supabase/      the SQL migrations (tables, RLS, RPCs; 0002 = search + invites) and the dashboard setup guide
 scripts/       validate-content, sim-smoke, art generators
 public/maps/   painted backgrounds, one per map; public/icons/ PWA icons; public/art/ key art
 art/           concept sheets, key-art originals, round notes and layout guides (not shipped)
@@ -56,4 +59,4 @@ Identifiers still to register when the time comes: domain (deferred), Android pa
 
 ## Controls
 
-Tap a tower in the build bar, then tap a build pad. Tap a planted tower to upgrade (a branch choice at tier 3) or sell it. Desktop: `1`–`3` pick a tower, `Esc` cancels, `Space` pauses. Calling the next wave early banks the remaining seconds as sap.
+Tap a tower in the build bar, then tap a build pad. Tap a planted tower to upgrade (a branch choice at tier 3) or sell it. Desktop: `1`–`9` pick a tower, `Esc` cancels, `Space` pauses. Calling the next wave early banks the remaining seconds as sap. In Mirror the footer has a *Send* tab; in Co-op only the host pauses or changes speed, and only a tower's owner upgrades or sells it.

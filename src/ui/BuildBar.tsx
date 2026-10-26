@@ -1,12 +1,16 @@
-// Extra Terram — src/ui/BuildBar.tsx v0.4.0 — seven towers per race in a horizontal snap-scrolling row
+// Extra Terram — src/ui/BuildBar.tsx v0.6.0 — the shell writes the hint line (confirm step, pad-first building)
 // Bottom shop bar. Inset by the bottom safe area. Tap a tower, then tap a build pad on the board.
 import type { TowerDef } from '../engine';
 import { TowerIcon } from './TowerIcon';
 
 interface Props {
   towers: TowerDef[];
+  /** Cost per tower id after the race passive (towerCost). */
+  costs: Record<string, number>;
   resources: number;
   placing: string | null;
+  /** The one-line hint under the shop; the shell knows the current step. */
+  hint?: string;
   onPick(towerId: string | null): void;
 }
 
@@ -21,12 +25,13 @@ const ROLE_LABEL: Record<string, string> = {
   trap: 'trap',
 };
 
-export function BuildBar({ towers, resources, placing, onPick }: Props) {
+export function BuildBar({ towers, costs, resources, placing, hint, onPick }: Props) {
   return (
     <footer className="bg-grove-900 pb-[calc(var(--safe-bottom)+0.5rem)] pt-2">
       <div className="flex snap-x gap-2 overflow-x-auto px-[calc(var(--safe-left)+0.75rem)] pr-[calc(var(--safe-right)+0.75rem)] [scrollbar-width:none]">
         {towers.map((t, i) => {
-          const affordable = resources >= t.cost;
+          const cost = costs[t.id] ?? t.cost;
+          const affordable = resources >= cost;
           const active = placing === t.id;
           return (
             <button
@@ -41,13 +46,13 @@ export function BuildBar({ towers, resources, placing, onPick }: Props) {
               <TowerIcon tower={t} size={44} />
               <span className="mt-1 w-full truncate text-xs font-semibold">{t.name}</span>
               <span className="text-[11px] text-grove-300/80">
-                {ROLE_LABEL[t.role] ?? t.role} · <span className="text-sap">{t.cost}</span>
+                {ROLE_LABEL[t.role] ?? t.role} · <span className="text-sap">{cost}</span>
               </span>
             </button>
           );
         })}
       </div>
-      <p className="mt-1.5 truncate px-3 text-xs text-grove-300/60">{placing ? 'Tap a build pad to plant. Tap the tower again to cancel.' : 'Pick a tower, then tap a build pad. Swipe for more. Tap a planted tower to upgrade or sell it.'}</p>
+      <p className="mt-1.5 truncate px-3 text-xs text-grove-300/60">{hint ?? (placing ? 'Tap a build pad to plant. Tap the tower again to cancel.' : 'Pick a tower, then tap a build pad. Swipe for more. Tap a planted tower to upgrade or sell it.')}</p>
     </footer>
   );
 }

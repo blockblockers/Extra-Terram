@@ -1,16 +1,19 @@
-// Extra Terram — src/ui/Menu.tsx v0.8.0 — panels reveal after the title intro
+// Extra Terram — src/ui/Menu.tsx v0.11.0 — race details panel (style, matchups, every tower and its trait); confirm-build setting
 import { useState } from 'react';
 import { CONTENT_VERSION, content, levels, raceById, towersForRace, type LevelEntry } from '../content';
-import { ENGINE_VERSION } from '../engine';
-import { randomSeed, type Settings } from '../app/settings';
+import { ENGINE_VERSION, type ArmorType, type RaceDef } from '../engine';
+import { confirmBuildOn, randomSeed, type Settings } from '../app/settings';
 import { online } from '../net';
 import { AccountBar } from './AccountBar';
 import { Leaderboard } from './Leaderboard';
 import { LogoLockup, Reveal, TitleColumn } from './Title';
+import { RaceDetails } from './RaceDetails';
 import { TowerIcon } from './TowerIcon';
 
 interface Props {
   settings: Settings;
+  /** Pending lobby invites, shown as a badge on the Multiplayer button. */
+  inviteCount?: number;
   onSettings(next: Settings): void;
   onPlay(level: LevelEntry, raceId: string, seed: string): void;
   onMultiplayer(raceId: string, levelId: string): void;
@@ -25,11 +28,12 @@ const WORLD_NAMES: Record<string, string> = {
 
 type Panel = 'none' | 'code' | 'scores' | 'settings';
 
-export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
+export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultiplayer }: Props) {
   const [raceId, setRaceId] = useState(() => settings.lastRace ?? 'rootkin');
   const [levelId, setLevelId] = useState(() => settings.lastLevel ?? levels[0].id);
   const [panel, setPanel] = useState<Panel>('none');
   const [code, setCode] = useState('');
+  const [details, setDetails] = useState(false);
   const level = levels.find((l) => l.id === levelId) ?? levels[0];
   const race = raceById(raceId);
   const roster = towersForRace(raceId);
@@ -74,8 +78,15 @@ export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-grove-300/80">{race.description}</p>
-        <p className="mt-1 truncate text-xs text-grove-300/60">{roster.map((t) => t.name).join(' · ')}</p>
+        <p className="mt-2 text-xs text-grove-300">{race.tagline}</p>
+        <p className="mt-1 text-xs text-grove-300/80">
+          <span className="font-semibold text-sap">{race.passive.name}.</span> {race.passive.description}
+        </p>
+        <p className="mt-1 text-xs text-grove-300/70">{matchupLine(race)}</p>
+        <button onClick={() => setDetails((v) => !v)} className="mt-1.5 text-xs text-sap underline-offset-2 hover:underline" aria-expanded={details}>
+          {details ? 'Hide race details' : `Race details: play style and all ${roster.length} towers`}
+        </button>
+        {details && <RaceDetails race={race} />}
       </section>
 
       <section className="mt-3 rounded-xl border border-grove-700/80 bg-grove-900/85 p-3 backdrop-blur-sm">
@@ -95,7 +106,7 @@ export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
                 <span className="min-w-0">
                   <span className="block truncate font-semibold">{l.map.name}</span>
                   <span className="block truncate text-xs text-grove-300/70">
-                    {WORLD_NAMES[l.map.world] ?? l.map.world} · {l.waves.waves.length} waves · {l.waves.lives} lives · vs {enemy.name}
+                    {WORLD_NAMES[l.map.world] ?? l.map.world} · {l.waves.waves.length} waves · {l.waves.lives} lives · vs {enemy.name} ({enemy.creepArmor})
                   </span>
                 </span>
                 <span className={`shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase ${l.map.difficulty === 'hard' ? 'bg-rust/30 text-rust' : l.map.difficulty === 'normal' ? 'bg-sap/20 text-sap' : 'bg-grove-500/30 text-grove-300'}`}>
@@ -115,9 +126,14 @@ export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
               onSettings({ ...settings, lastRace: raceId, lastLevel: level.id });
               onMultiplayer(raceId, level.id);
             }}
-            className="rounded-lg border border-grove-500 px-3 py-3 font-semibold text-grove-300 hover:bg-grove-700"
+            className="relative rounded-lg border border-grove-500 px-3 py-3 font-semibold text-grove-300 hover:bg-grove-700"
           >
             Multiplayer
+            {inviteCount > 0 && (
+              <span className="absolute -right-1.5 -top-1.5 min-w-[1.25rem] rounded-full bg-sap px-1.5 text-center text-[11px] font-bold text-grove-950" aria-label={`${inviteCount} invites`}>
+                {inviteCount}
+              </span>
+            )}
           </button>
         </div>
 
@@ -154,6 +170,7 @@ export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
           <div className="mt-2 border-t border-grove-700/60 pt-1">
             <Toggle label="Battery saver (render at 30 fps)" checked={settings.batterySaver} onChange={(v) => onSettings({ ...settings, batterySaver: v })} />
             <Toggle label="Always show build pads" checked={settings.showPads} onChange={(v) => onSettings({ ...settings, showPads: v })} />
+            <Toggle label="Confirm before building (tap pad, then Build)" checked={confirmBuildOn(settings)} onChange={(v) => onSettings({ ...settings, confirmBuild: v })} />
           </div>
         )}
       </section>
@@ -164,6 +181,19 @@ export function Menu({ settings, onSettings, onPlay, onMultiplayer }: Props) {
       </Reveal>
     </TitleColumn>
   );
+}
+
+/** "kinetic & bio · strong vs shielded, weak vs plated" from the damage matrix, so the counters are visible before a run. */
+function matchupLine(race: RaceDef): string {
+  const m = content.damage.multipliers;
+  const armours: ArmorType[] = ['organic', 'plated', 'shielded'];
+  const best = (armour: ArmorType) => Math.max(...race.damageTypes.map((t) => m[t][armour]));
+  const strong = armours.filter((a) => best(a) >= 1.2);
+  const weak = armours.filter((a) => best(a) <= 0.9);
+  const parts = [race.damageTypes.join(' & ')];
+  if (strong.length) parts.push(`strong vs ${strong.join(' and ')}`);
+  if (weak.length) parts.push(`weak vs ${weak.join(' and ')}`);
+  return parts.join(' · ');
 }
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange(v: boolean): void }) {

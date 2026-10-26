@@ -1,4 +1,4 @@
-// Extra Terram — src/net/match.ts v0.2.0 — match RPCs and the Supabase Broadcast channel behind the MatchChannelLike interface
+// Extra Terram — src/net/match.ts v0.3.0 — shared-board events (frames with speed, string hashes, rejects, addressed snapshots), party size in start
 // Postgres sees a match twice: when the lobby is made (create_match / join_match / start_match) and
 // when it ends (submit_match_result / save_match_log). Everything in between — ready flags, the
 // host's input frames for a shared board, creep sends and board summaries for mirrored boards,
@@ -108,14 +108,15 @@ export interface SeatPresence {
 /** Everything that crosses the wire during a match. Entity positions never do; inputs and summaries only. */
 export type MatchEvent =
   | { type: 'ready'; seat: number; ready: boolean }
-  | { type: 'start'; seed: string; startAt: number; levelId: string } // host: wall-clock ms for the shared countdown
+  | { type: 'start'; seed: string; startAt: number; levelId: string; seats: number; party: number } // host: wall-clock ms for the shared countdown; wallets to make and players present
   | { type: 'input'; seat: number; seq: number; input: SimInput } // client -> host (shared board)
-  | { type: 'frame'; tick: number; inputs: LoggedInput[] } // host -> all, every 5 ticks (shared board)
-  | { type: 'hash'; tick: number; hash: number } // all -> all, every 20 ticks
+  | { type: 'frame'; tick: number; inputs: LoggedInput[]; speed: number } // host -> all, every 5 ticks (shared board): the inputs that applied at that tick
+  | { type: 'reject'; seat: number; seq: number; reason: string } // host -> the client whose input failed on the host
+  | { type: 'hash'; tick: number; hash: string } // client -> host, every 20 ticks (shared board)
   | { type: 'board'; seat: number; tick: number; lives: number; wave: number; score: number; income: number } // mirrored boards
   | { type: 'send'; from: number; to: number; creep: string; count: number } // mirrored boards
   | { type: 'snapshot-request'; seat: number }
-  | { type: 'snapshot'; tick: number; state: string } // host -> rejoining peer (serialize(state))
+  | { type: 'snapshot'; to: string; tick: number; state: string } // host -> one peer (serialize(state) without the log)
   | { type: 'finished'; seat: number; result: 'won' | 'lost'; score: number; lives: number; wave: number }
   | { type: 'chat'; seat: number; text: string };
 

@@ -1,4 +1,4 @@
-// Extra Terram — src/net/activeMatch.ts v0.1.0 — what a running match hands from the lobby to the game shell
+// Extra Terram — src/net/activeMatch.ts v0.2.0 — host flag, seats and party size for shared boards
 import type { MatchChannelLike, MatchMode, SeatPresence } from './match';
 import type { MatchService } from './matchService';
 
@@ -10,6 +10,11 @@ export interface ActiveMatch {
   me: SeatPresence;
   /** Everyone seated when the match started, by seat. */
   players: SeatPresence[];
+  /** True for the lobby host: on a shared board the host sequences every input. */
+  host: boolean;
+  /** Wallets on a shared board (the lobby size) and how many players actually started (wave scaling). */
+  seats: number;
+  party: number;
   channel: MatchChannelLike;
 }
 

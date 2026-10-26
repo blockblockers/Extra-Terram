@@ -3,35 +3,182 @@
   "$id": "https://extraterram.app/schemas/race.schema.json",
   "title": "Races content file",
   "type": "object",
-  "required": ["content_version", "races"],
+  "required": [
+    "content_version",
+    "races"
+  ],
   "additionalProperties": false,
   "properties": {
-    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "content_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
     "races": {
       "type": "array",
       "minItems": 1,
       "items": {
         "type": "object",
-        "required": ["id", "name", "description", "damageTypes", "creepArmor", "palette"],
+        "required": [
+          "id",
+          "name",
+          "description",
+          "tagline",
+          "damageTypes",
+          "creepArmor",
+          "palette",
+          "passive"
+        ],
         "additionalProperties": false,
         "properties": {
-          "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-          "name": { "type": "string", "minLength": 1 },
-          "description": { "type": "string" },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string"
+          },
           "damageTypes": {
             "type": "array",
             "minItems": 1,
             "uniqueItems": true,
-            "items": { "enum": ["kinetic", "energy", "bio"] }
+            "items": {
+              "enum": [
+                "kinetic",
+                "energy",
+                "bio"
+              ]
+            }
           },
-          "creepArmor": { "enum": ["organic", "plated", "shielded"] },
+          "creepArmor": {
+            "enum": [
+              "organic",
+              "plated",
+              "shielded"
+            ]
+          },
           "palette": {
             "type": "object",
-            "required": ["primary", "secondary"],
+            "required": [
+              "primary",
+              "secondary"
+            ],
             "additionalProperties": false,
             "properties": {
-              "primary": { "$ref": "#/$defs/color" },
-              "secondary": { "$ref": "#/$defs/color" }
+              "primary": {
+                "$ref": "#/$defs/color"
+              },
+              "secondary": {
+                "$ref": "#/$defs/color"
+              }
+            }
+          },
+          "tagline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "passive": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "description"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "rooted",
+                  "spin-up",
+                  "hive",
+                  "overcharge"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "startDamageMult": {
+                "type": "number",
+                "minimum": 0
+              },
+              "growthDamagePerWave": {
+                "type": "number",
+                "minimum": 0
+              },
+              "growthRangePerWave": {
+                "type": "number",
+                "minimum": 0
+              },
+              "growthCapWaves": {
+                "type": "number",
+                "minimum": 0
+              },
+              "spinUpPerShot": {
+                "type": "number",
+                "minimum": 0
+              },
+              "spinUpMax": {
+                "type": "number",
+                "minimum": 0
+              },
+              "spinUpResetTicks": {
+                "type": "number",
+                "minimum": 0
+              },
+              "bountyMult": {
+                "type": "number",
+                "minimum": 0
+              },
+              "upgradeCostMult": {
+                "type": "number",
+                "minimum": 0
+              },
+              "hiveRadius": {
+                "type": "number",
+                "minimum": 0
+              },
+              "hiveCooldownPerNeighbour": {
+                "type": "number",
+                "minimum": 0
+              },
+              "hiveMaxNeighbours": {
+                "type": "number",
+                "minimum": 0
+              },
+              "bleedStacks": {
+                "type": "number",
+                "minimum": 0
+              },
+              "sellRefund": {
+                "type": "number",
+                "minimum": 0
+              },
+              "alphaIdleTicks": {
+                "type": "number",
+                "minimum": 0
+              },
+              "alphaMult": {
+                "type": "number",
+                "minimum": 0
+              },
+              "beamPierce": {
+                "type": "number",
+                "minimum": 0
+              },
+              "cooldownMult": {
+                "type": "number",
+                "minimum": 0
+              },
+              "costMult": {
+                "type": "number",
+                "minimum": 0
+              }
             }
           }
         }
@@ -39,6 +186,9 @@
     }
   },
   "$defs": {
-    "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+    "color": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    }
   }
 }

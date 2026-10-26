@@ -1,10 +1,10 @@
-// Extra Terram — src/app/App.tsx v0.7.0 — multiplayer screen; a match run carries its live channel into the shell
+// Extra Terram — src/app/App.tsx v0.8.0 — lobby invites: a toast on the menu, a count on the Multiplayer button, one tap to join
 // Splash -> Login (unless guest, signed in, or an offline build) -> Menu <-> Game, or Menu -> Multiplayer -> Game.
 // The game shell is remounted for every run so the canvas, renderer and sim start clean.
-import { useCallback, useState } from 'react';
-import { CONTENT_VERSION, type LevelEntry } from '../content';
+import { useCallback, useEffect, useState } from 'react';
+import { CONTENT_VERSION, levels, type LevelEntry } from '../content';
 import { ENGINE_VERSION, type LoggedInput, type SimResult, type SimView } from '../engine';
-import { invalidateLeaderboard, recordRun, useAuth, type ActiveMatch, type SaveOutcome } from '../net';
+import { invalidateLeaderboard, recordRun, useAuth, useInvites, type ActiveMatch, type SaveOutcome } from '../net';
 import { LoginScreen, NewPasswordScreen } from '../ui/LoginScreen';
 import { Menu } from '../ui/Menu';
 import { MultiplayerScreen, type MatchRun } from '../ui/MultiplayerScreen';
@@ -27,7 +27,15 @@ export function App() {
   const [settings, setSettings] = useState<Settings>(() => loadSettings());
   const [run, setRun] = useState<Run | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>(null);
-  const [lobby, setLobby] = useState<{ raceId: string; levelId: string } | null>(null);
+  const [lobby, setLobby] = useState<{ raceId: string; levelId: string; joinCode?: string } | null>(null);
+  const invites = useInvites();
+
+  // Invite toasts fade on their own; a toast that arrives mid-run waits on the menu as a count.
+  useEffect(() => {
+    if (!invites.nudge) return;
+    const t = window.setTimeout(invites.clearNudge, 8000);
+    return () => window.clearTimeout(t);
+  }, [invites.nudge, invites.clearNudge]);
 
   const updateSettings = (next: Settings) => {
     setSettings(next);
@@ -99,15 +107,51 @@ export function App() {
   }
 
   if (lobby) {
-    return <MultiplayerScreen defaultRace={lobby.raceId} defaultLevel={lobby.levelId} onStart={startMatch} onBack={() => setLobby(null)} />;
+    return (
+      <MultiplayerScreen
+        defaultRace={lobby.raceId}
+        defaultLevel={lobby.levelId}
+        invites={invites.invites}
+        onAcceptInvite={invites.accept}
+        onDeclineInvite={invites.decline}
+        autoJoinCode={lobby.joinCode}
+        onStart={startMatch}
+        onBack={() => setLobby(null)}
+      />
+    );
   }
 
+  const nudge = invites.nudge;
   return (
-    <Menu
-      settings={settings}
-      onSettings={updateSettings}
-      onPlay={(level, raceId, seed) => startRun({ level, raceId, seed, nonce: 0 })}
-      onMultiplayer={(raceId, levelId) => setLobby({ raceId, levelId })}
-    />
+    <>
+      <Menu
+        settings={settings}
+        inviteCount={invites.invites.length}
+        onSettings={updateSettings}
+        onPlay={(level, raceId, seed) => startRun({ level, raceId, seed, nonce: 0 })}
+        onMultiplayer={(raceId, levelId) => setLobby({ raceId, levelId })}
+      />
+      {nudge && (
+        <div role="status" className="fixed inset-x-3 top-[calc(var(--safe-top)+0.5rem)] z-40 mx-auto max-w-md rounded-xl border border-sap/70 bg-grove-900/95 p-3 text-sm shadow-lg backdrop-blur">
+          <p className="truncate">
+            <span className="font-semibold">{nudge.fromName}</span> invited you to a match.
+          </p>
+          <div className="mt-2 flex gap-2">
+            <button
+              onClick={() => {
+                invites.clearNudge();
+                setLobby({ raceId: settings.lastRace ?? 'rootkin', levelId: settings.lastLevel ?? levels[0].id, joinCode: nudge.code });
+              }}
+              className="rounded-md bg-grove-500 px-3 py-1 font-semibold text-grove-950 hover:bg-grove-300"
+            >
+              Join
+            </button>
+            <button onClick={invites.clearNudge} className="rounded-md border border-grove-700 px-3 py-1 text-grove-300 hover:bg-grove-800">
+              Later
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -21,7 +21,7 @@
           "archetype": { "enum": ["rusher", "workhorse", "tank", "tower-attacker", "flyer", "path-skipper", "buffer", "boss"] },
           "hp": { "type": "number", "exclusiveMinimum": 0 },
           "speed": { "type": "number", "exclusiveMinimum": 0, "description": "tiles per second" },
-          "armor": { "enum": ["organic", "plated", "shielded"] },
+          "armor": { "enum": ["bark", "plated", "carapace", "shielded"] },
           "bounty": { "type": "integer", "minimum": 0 },
           "leakCost": { "type": "integer", "minimum": 1 },
           "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5, "description": "tiles, for rendering and hit tests" },

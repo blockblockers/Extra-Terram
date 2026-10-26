@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/SendBar.tsx v0.1.0 — Mirror mode: pay sap to drop your race's creeps into a rival's lane
+// Extra Terram — src/ui/SendBar.tsx v0.2.0 — Mirror mode: pay your race's currency to drop your creeps into a rival's lane
 // Replaces the shop while the Send tab is open. Each creep shows its cost and the income it pays
 // the sender on every later wave. Sends land on one rival at random (the only rival, in a duel).
 import { useState } from 'react';
@@ -7,6 +7,8 @@ import { creepUrl } from '../render/sprites';
 
 interface Props {
   creeps: CreepDef[];
+  /** The player's currency, lower case. */
+  currency: string;
   resources: number;
   /** Income per wave already earned by sending. */
   income: number;
@@ -17,7 +19,7 @@ interface Props {
 
 const ARCH_LABEL: Record<string, string> = { rusher: 'fast', workhorse: 'steady', tank: 'tough' };
 
-export function SendBar({ creeps, resources, income, rivals, onSend }: Props) {
+export function SendBar({ creeps, currency, resources, income, rivals, onSend }: Props) {
   const [count, setCount] = useState(1);
   const noone = rivals.length === 0;
   return (
@@ -32,7 +34,7 @@ export function SendBar({ creeps, resources, income, rivals, onSend }: Props) {
               onClick={() => onSend(c.id, count)}
               disabled={!affordable}
               className={`flex w-[88px] shrink-0 snap-start flex-col items-center rounded-lg border px-1 py-2 text-center ${affordable ? 'border-grove-700 bg-grove-800 hover:bg-grove-700' : 'border-grove-800 bg-grove-900 opacity-50'}`}
-              title={`${c.name}: ${c.hp} hp, ${c.armor}. Costs ${cost}, pays +${sendIncomeFor(c) * count} sap every wave after.`}
+              title={`${c.name}: ${c.hp} hp, ${c.armor}. Costs ${cost}, pays +${sendIncomeFor(c) * count} ${currency} every wave after.`}
             >
               <CreepIcon creep={c} size={44} />
               <span className="mt-1 w-full truncate text-xs font-semibold">{c.name}</span>
@@ -51,7 +53,7 @@ export function SendBar({ creeps, resources, income, rivals, onSend }: Props) {
         </div>
       </div>
       <p className="mt-1.5 truncate px-3 text-xs text-grove-300/60">
-        {noone ? 'No rival can receive a send right now.' : `Sends hit ${rivals.length === 1 ? rivals[0] : 'a random rival'} · your send income +${income} sap a wave`}
+        {noone ? 'No rival can receive a send right now.' : `Sends hit ${rivals.length === 1 ? rivals[0] : 'a random rival'} · your send income +${income} ${currency} a wave`}
       </p>
     </footer>
   );

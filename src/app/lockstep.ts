@@ -1,4 +1,4 @@
-// Extra Terram — src/app/lockstep.ts v0.1.0 — host-sequenced lockstep for one shared board (Co-op)
+// Extra Terram — src/app/lockstep.ts v0.1.1 — rejects carry the price, so the client can say it in its own currency
 // Every client runs the same deterministic sim from the same seed. Inputs do not apply where they
 // are made: they go to the host, which applies them at the next frame boundary (every FRAME_TICKS)
 // and broadcasts the frame — the inputs that applied at that tick. A client may only step while it
@@ -16,7 +16,7 @@ const HASH_KEEP = 12;
 
 export interface LockstepHooks {
   /** An input of ours was refused on the host (someone took the pad first, the wallet ran dry). */
-  onReject(reason: string): void;
+  onReject(reason: string, need?: number): void;
   /** The board was replaced by a host snapshot. */
   onResync(): void;
 }
@@ -109,8 +109,8 @@ export class Lockstep {
     for (const p of batch) {
       const res = applyInput(state, ctx, p.input, p.seat);
       if (res.ok) continue;
-      if (p.seat === this.me.seat) this.hooks.onReject(res.reason);
-      else this.channel.send({ type: 'reject', seat: p.seat, seq: p.seq, reason: res.reason });
+      if (p.seat === this.me.seat) this.hooks.onReject(res.reason, res.need);
+      else this.channel.send({ type: 'reject', seat: p.seat, seq: p.seq, reason: res.reason, need: res.need });
     }
     this.channel.send({ type: 'frame', tick: state.tick, inputs: state.inputLog.slice(before), speed: this.hostSpeed });
     if (state.tick % HASH_EVERY === 0) {
@@ -159,7 +159,7 @@ export class Lockstep {
       if (ev.tick >= this.nextFrameTick) this.frames.set(ev.tick, ev);
       this.authorized = Math.max(this.authorized, ev.tick + FRAME_TICKS);
     } else if (ev.type === 'reject') {
-      if (ev.seat === this.me.seat) this.hooks.onReject(ev.reason);
+      if (ev.seat === this.me.seat) this.hooks.onReject(ev.reason, ev.need);
     } else if (ev.type === 'snapshot') {
       if (ev.to !== this.me.userId) return;
       const next = deserialize(ev.state);

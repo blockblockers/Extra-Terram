@@ -1,4 +1,4 @@
-# Extra Terram: The Alien Race Tower Defense
+# Extra-Terram: The Alien Race Tower Defense
 
 Four races with their own passives, four maps, single player plus online play: Parallel race, Mirror (sends) and Co-op (one shared board) are open; Lanes and King of the Maze wait for their maps.
 Web first (PWA on Netlify), Android and iOS later through Capacitor. The design doc in the Claude Project is the source of truth for everything beyond what is built.

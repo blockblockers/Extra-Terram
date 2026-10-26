@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Title.tsx v0.4.0 — the key art gets the screen to itself first; panels slide in after
+// Extra Terram — src/ui/Title.tsx v0.6.0 — the name is Extra-Terram; the lockup uses the game's display fonts
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 /**
@@ -17,6 +17,22 @@ let introDone = false;
 let introStartedAt = 0;
 
 const IntroContext = createContext<{ revealed: boolean }>({ revealed: true });
+
+/**
+ * Runs `run` once, shortly after the title intro has handed the screen to the panels (at once when
+ * there is no intro). Place it inside a TitleColumn. Used to open the how-to for new players without
+ * covering the painting's moment.
+ */
+export function OnRevealed({ run, delayMs = 500 }: { run(): void; delayMs?: number }) {
+  const { revealed } = useContext(IntroContext);
+  useEffect(() => {
+    if (!revealed) return;
+    const t = window.setTimeout(run, delayMs);
+    return () => window.clearTimeout(t);
+    // once per reveal: a new `run` identity on a re-render must not fire it again
+  }, [revealed]);
+  return null;
+}
 
 /** Wrap the panels of a title-backed screen: hidden during the intro, then slid in. */
 export function Reveal({ children, className = '' }: { children: ReactNode; className?: string }) {
@@ -57,14 +73,16 @@ export function LogoLockup() {
     // The lettering occupies the top quarter of the painting (y ≈ 60–510 of 2048 → 25% of the height).
     return (
       <header className="h-[25dvh] min-h-[6rem]">
-        <h1 className="sr-only">Extra Terram — The Alien Race Tower Defense</h1>
+        <h1 className="sr-only">Extra-Terram — The Alien Race Tower Defense</h1>
       </header>
     );
   }
   return (
-    <header className="text-center">
-      <h1 className="text-[2.6rem] font-black uppercase leading-none tracking-[0.18em] text-sap drop-shadow-[0_0_18px_rgba(232,195,58,0.45)]">Extra Terram</h1>
-      <p className="mt-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-grove-300">The Alien Race Tower Defense</p>
+    <header className="pb-2 text-center">
+      <h1 className="et-title">Extra-Terram</h1>
+      <p className="et-subtitle mt-3">
+        <span>The Alien Race Tower Defense</span>
+      </p>
     </header>
   );
 }
@@ -109,6 +127,13 @@ export function TitleColumn({ children }: { children: ReactNode }) {
     if (revealed) return;
     introDone = true;
     setRevealed(true);
+    // The tap that skips the intro must not also press whatever panel slides in under the finger.
+    const swallow = (e: Event) => {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+    window.addEventListener('click', swallow, { capture: true, once: true });
+    window.setTimeout(() => window.removeEventListener('click', swallow, { capture: true }), 600);
   };
 
   return (

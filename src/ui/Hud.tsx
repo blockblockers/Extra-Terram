@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Hud.tsx v0.3.0 — speed and pause follow the host on a shared board
+// Extra Terram — src/ui/Hud.tsx v0.4.0 — the money label is the race's currency (Sap, Scrap, Resin, Lumen)
 // Top bar. Inset by the top safe area; static styling only (no animations: the canvas is the only moving surface).
 // Both rows are always rendered at the same height, whichever phase the sim is in, so the canvas
 // host below keeps its size and the board never jumps when a wave starts or ends.
@@ -6,6 +6,8 @@ import { TICK_RATE, type SimView } from '../engine';
 
 interface Props {
   view: SimView | null;
+  /** The player's race currency, capitalised: "Scrap". */
+  currency: string;
   speed: number;
   paused: boolean;
   /** False for a client on a shared board: the host sets the pace, so the controls only show it. */
@@ -16,7 +18,7 @@ interface Props {
   onExit(): void;
 }
 
-export function Hud({ view, speed, paused, canControl = true, onSpeed, onPause, onCallWave, onExit }: Props) {
+export function Hud({ view, currency, speed, paused, canControl = true, onSpeed, onPause, onCallWave, onExit }: Props) {
   const seconds = view ? Math.ceil(view.buildTimer / TICK_RATE) : 0;
   const inBuild = view?.phase === 'build';
   const waveLabel = view ? (view.wave === 0 ? 'Get ready' : inBuild ? `Wave ${view.wave}/${view.waves} cleared` : `Wave ${view.wave}/${view.waves}`) : '';
@@ -28,7 +30,7 @@ export function Hud({ view, speed, paused, canControl = true, onSpeed, onPause, 
           ←<span className="ml-1 hidden sm:inline">Menu</span>
         </button>
         <Stat label="Lives" value={view ? String(view.lives) : '–'} tone={view && view.lives <= 5 ? 'warn' : 'ok'} />
-        <Stat label="Sap" value={view ? String(view.resources) : '–'} tone="sap" />
+        <Stat label={currency} value={view ? String(view.resources) : '–'} tone="sap" />
         <div className="min-w-0 flex-1 truncate text-right">
           <span className="font-semibold">{waveLabel}</span>
           {view?.waveName && view.wave > 0 && <span className="ml-2 hidden text-grove-300/80 sm:inline">{view.waveName}</span>}
@@ -39,7 +41,7 @@ export function Hud({ view, speed, paused, canControl = true, onSpeed, onPause, 
           onClick={onCallWave}
           disabled={!inBuild}
           className={`min-w-0 flex-1 truncate rounded-md px-3 py-1 text-left font-semibold ${inBuild ? 'bg-grove-500 text-grove-950 hover:bg-grove-300' : 'bg-grove-800 text-grove-300/70'}`}
-          title={inBuild ? 'Start the next wave now and bank the remaining seconds as sap' : 'A wave is running'}
+          title={inBuild ? `Start the next wave now and bank one ${currency.toLowerCase()} per second left` : 'A wave is running'}
         >
           {inBuild ? `Next wave in ${seconds}s · call it (+${seconds})` : view?.waveName ? `${view.waveName} incoming` : 'Wave running'}
         </button>

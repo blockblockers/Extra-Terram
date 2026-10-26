@@ -1,5 +1,5 @@
 {
-  "content_version": "0.5.0",
+  "content_version": "0.6.0",
   "towers": [
     {
       "id": "needlespire",
@@ -10,7 +10,7 @@
       "cost": 60,
       "range": 2.3,
       "damage": 8,
-      "damageType": "kinetic",
+      "damageType": "thorn",
       "cooldownTicks": 6,
       "attack": "projectile",
       "projectileSpeed": 10,
@@ -38,7 +38,7 @@
         "a": {
           "id": "barbed",
           "name": "Barbed needles",
-          "description": "Deeper wounds: 5 bio damage per second for 2 s.",
+          "description": "Deeper wounds: 5 damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 5,
             "bleedTicks": 40
@@ -68,7 +68,7 @@
       "cost": 110,
       "range": 2.8,
       "damage": 56,
-      "damageType": "kinetic",
+      "damageType": "thorn",
       "cooldownTicks": 32,
       "attack": "projectile",
       "projectileSpeed": 7,
@@ -96,7 +96,7 @@
         "a": {
           "id": "ironpiercer",
           "name": "Ironpiercer",
-          "description": "Acorns punch through plating: full damage against Plated armor.",
+          "description": "Acorns punch through any armour: full damage even against the race your towers are weak against.",
           "effects": {
             "armorPierce": true
           }
@@ -125,13 +125,13 @@
       "cost": 90,
       "range": 1.8,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "thorn",
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
         "slow": 0.35,
         "dotPerSecond": 4,
-        "dotType": "bio"
+        "dotType": "thorn"
       },
       "tiers": [
         {
@@ -183,7 +183,7 @@
       "cost": 120,
       "range": 2.4,
       "damage": 22,
-      "damageType": "kinetic",
+      "damageType": "thorn",
       "cooldownTicks": 22,
       "attack": "projectile",
       "projectileSpeed": 7,
@@ -220,7 +220,7 @@
         "b": {
           "id": "burning-husk",
           "name": "Burning husk",
-          "description": "Seeds smoulder: hits leave 4 bio damage per second for 2 s.",
+          "description": "Seeds smoulder: hits leave 4 damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 4,
             "bleedTicks": 40
@@ -242,7 +242,7 @@
       "cost": 140,
       "range": 4.2,
       "damage": 72,
-      "damageType": "kinetic",
+      "damageType": "thorn",
       "cooldownTicks": 45,
       "attack": "projectile",
       "projectileSpeed": 16,
@@ -295,7 +295,7 @@
       "cost": 100,
       "range": 1.0,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "thorn",
       "cooldownTicks": 0,
       "attack": "economy",
       "income": 14,
@@ -348,7 +348,7 @@
       "cost": 130,
       "range": 2.0,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "thorn",
       "cooldownTicks": 0,
       "attack": "support",
       "buff": {
@@ -433,7 +433,7 @@
         "a": {
           "id": "hollow-point",
           "name": "Hollow point",
-          "description": "Nails punch through plating: full damage against Plated armor.",
+          "description": "Nails punch through any armour: full damage even against the race your towers are weak against.",
           "effects": {
             "armorPierce": true
           }
@@ -486,7 +486,7 @@
         "a": {
           "id": "breaker",
           "name": "Breaker",
-          "description": "The ram punches through plating: full damage against Plated armor.",
+          "description": "The ram smashes through any armour: full damage even against the race your towers are weak against.",
           "effects": {
             "armorPierce": true
           }
@@ -512,13 +512,13 @@
       "cost": 90,
       "range": 1.8,
       "damage": 0,
-      "damageType": "energy",
+      "damageType": "kinetic",
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
         "slow": 0.35,
         "dotPerSecond": 2,
-        "dotType": "energy"
+        "dotType": "kinetic"
       },
       "tiers": [
         {
@@ -607,7 +607,7 @@
         "b": {
           "id": "incendiary",
           "name": "Incendiary",
-          "description": "Shells burn: hits leave 3 energy damage per second for 2 s.",
+          "description": "Shells burn: hits leave 3 damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 3,
             "bleedTicks": 40
@@ -621,11 +621,11 @@
       "race": "assembly",
       "name": "Railgun",
       "role": "range",
-      "description": "A long rail on a swivel base. One slug, a long way, right now \u2014 and it goes through plating.",
+      "description": "A long rail on a swivel base. One slug, a long way, right now \u2014 and it ignores armour.",
       "cost": 145,
       "range": 4.6,
       "damage": 70,
-      "damageType": "energy",
+      "damageType": "kinetic",
       "cooldownTicks": 48,
       "attack": "beam",
       "tiers": [
@@ -733,7 +733,7 @@
       "cost": 130,
       "range": 2.0,
       "damage": 0,
-      "damageType": "energy",
+      "damageType": "kinetic",
       "cooldownTicks": 0,
       "attack": "support",
       "buff": {
@@ -790,7 +790,7 @@
       "cost": 45,
       "range": 2.0,
       "damage": 6,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 5,
       "attack": "projectile",
       "projectileSpeed": 10,
@@ -818,7 +818,7 @@
         "a": {
           "id": "caustic",
           "name": "Caustic spit",
-          "description": "Stronger acid: 4 bio damage per second for 2 s.",
+          "description": "Stronger acid: 4 acid damage per second for 2 s.",
           "effects": {
             "bleedPerSecond": 4,
             "bleedTicks": 40
@@ -848,7 +848,7 @@
       "cost": 95,
       "range": 1.6,
       "damage": 84,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 24,
       "attack": "beam",
       "tiers": [
@@ -901,13 +901,13 @@
       "cost": 80,
       "range": 1.8,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 0,
       "attack": "aura",
       "aura": {
         "slow": 0.5,
         "dotPerSecond": 0,
-        "dotType": "bio"
+        "dotType": "acid"
       },
       "tiers": [
         {
@@ -959,7 +959,7 @@
       "cost": 105,
       "range": 2.3,
       "damage": 18,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 24,
       "attack": "projectile",
       "projectileSpeed": 6,
@@ -996,7 +996,7 @@
         "b": {
           "id": "lingering-acid",
           "name": "Lingering acid",
-          "description": "Stronger acid: 4 bio damage per second for 3 s.",
+          "description": "Stronger acid: 4 acid damage per second for 3 s.",
           "effects": {
             "bleedPerSecond": 4,
             "bleedTicks": 60
@@ -1018,7 +1018,7 @@
       "cost": 115,
       "range": 3.6,
       "damage": 50,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 40,
       "attack": "projectile",
       "projectileSpeed": 14,
@@ -1076,7 +1076,7 @@
       "cost": 90,
       "range": 1.0,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 0,
       "attack": "economy",
       "income": 14,
@@ -1129,7 +1129,7 @@
       "cost": 115,
       "range": 2.0,
       "damage": 0,
-      "damageType": "bio",
+      "damageType": "acid",
       "cooldownTicks": 0,
       "attack": "support",
       "buff": {
@@ -1237,7 +1237,7 @@
       "race": "lumenari",
       "name": "Lance",
       "role": "heavy",
-      "description": "A long floating spear of light. Slow, piercing strikes that go through plating.",
+      "description": "A long floating spear of light. Slow, piercing strikes that ignore armour.",
       "cost": 120,
       "range": 3.0,
       "damage": 60,
@@ -1464,7 +1464,7 @@
       "race": "lumenari",
       "name": "Solar collector",
       "role": "economy",
-      "description": "A dish of petals. Pays out light at the end of every wave; the Lumenari were never gatherers.",
+      "description": "A dish of petals. Pays out lumen at the end of every wave; the Lumenari were never gatherers.",
       "cost": 110,
       "range": 1.0,
       "damage": 0,

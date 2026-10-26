@@ -1,12 +1,12 @@
-// Extra Terram — src/ui/Menu.tsx v0.11.0 — race details panel (style, matchups, every tower and its trait); confirm-build setting
+// Extra Terram — src/ui/Menu.tsx v0.12.0 — plain-English race picker (who they are, upsides, downsides, strong/weak), a clear Race details button, matchup hints per level, How to play
 import { useState } from 'react';
-import { CONTENT_VERSION, content, levels, raceById, towersForRace, type LevelEntry } from '../content';
-import { ENGINE_VERSION, type ArmorType, type RaceDef } from '../engine';
+import { CONTENT_VERSION, content, levels, matchupsFor, raceById, towersForRace, type LevelEntry } from '../content';
+import { ENGINE_VERSION } from '../engine';
 import { confirmBuildOn, randomSeed, type Settings } from '../app/settings';
 import { online } from '../net';
 import { AccountBar } from './AccountBar';
 import { Leaderboard } from './Leaderboard';
-import { LogoLockup, Reveal, TitleColumn } from './Title';
+import { LogoLockup, OnRevealed, Reveal, TitleColumn } from './Title';
 import { RaceDetails } from './RaceDetails';
 import { TowerIcon } from './TowerIcon';
 
@@ -17,6 +17,9 @@ interface Props {
   onSettings(next: Settings): void;
   onPlay(level: LevelEntry, raceId: string, seed: string): void;
   onMultiplayer(raceId: string, levelId: string): void;
+  onHowTo(): void;
+  /** Open the how-to by itself once the title intro has given way (guests and new players). */
+  autoHowTo?: boolean;
 }
 
 const WORLD_NAMES: Record<string, string> = {
@@ -28,7 +31,7 @@ const WORLD_NAMES: Record<string, string> = {
 
 type Panel = 'none' | 'code' | 'scores' | 'settings';
 
-export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultiplayer }: Props) {
+export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultiplayer, onHowTo, autoHowTo = false }: Props) {
   const [raceId, setRaceId] = useState(() => settings.lastRace ?? 'rootkin');
   const [levelId, setLevelId] = useState(() => settings.lastLevel ?? levels[0].id);
   const [panel, setPanel] = useState<Panel>('none');
@@ -37,6 +40,7 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
   const level = levels.find((l) => l.id === levelId) ?? levels[0];
   const race = raceById(raceId);
   const roster = towersForRace(raceId);
+  const matchups = matchupsFor(raceId);
 
   const toggle = (p: Panel) => setPanel((cur) => (cur === p ? 'none' : p));
 
@@ -49,6 +53,7 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
 
   return (
     <TitleColumn>
+      {autoHowTo && <OnRevealed run={onHowTo} delayMs={700} />}
       <LogoLockup />
       <Reveal>
         <AccountBar />
@@ -78,13 +83,43 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-grove-300">{race.tagline}</p>
-        <p className="mt-1 text-xs text-grove-300/80">
-          <span className="font-semibold text-sap">{race.passive.name}.</span> {race.passive.description}
+        <p className="mt-2 text-sm text-grove-300">{race.blurb}</p>
+        <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+          <ul className="flex flex-col gap-1 rounded-md bg-grove-950/50 px-2 py-1.5" aria-label="Strengths">
+            {race.pros.map((p) => (
+              <li key={p} className="flex gap-1.5 text-grove-300">
+                <span className="text-grove-300" aria-hidden>
+                  +
+                </span>
+                {p}
+              </li>
+            ))}
+          </ul>
+          <ul className="flex flex-col gap-1 rounded-md bg-grove-950/50 px-2 py-1.5" aria-label="Drawbacks">
+            {race.cons.map((c) => (
+              <li key={c} className="flex gap-1.5 text-amber-200/90">
+                <span className="text-rust" aria-hidden>
+                  −
+                </span>
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="mt-2 text-xs text-grove-300/90">
+          Strong against <span className="font-semibold text-grove-300">{matchups.strongAgainst.map((r) => r.name).join(', ') || 'no one'}</span>
+          <span className="mx-1.5 text-grove-300/40">·</span>
+          Weak against <span className="font-semibold text-rust">{matchups.weakAgainst.map((r) => r.name).join(', ') || 'no one'}</span>
         </p>
-        <p className="mt-1 text-xs text-grove-300/70">{matchupLine(race)}</p>
-        <button onClick={() => setDetails((v) => !v)} className="mt-1.5 text-xs text-sap underline-offset-2 hover:underline" aria-expanded={details}>
-          {details ? 'Hide race details' : `Race details: play style and all ${roster.length} towers`}
+        <button
+          onClick={() => setDetails((v) => !v)}
+          aria-expanded={details}
+          className="mt-2 flex w-full items-center justify-between gap-2 rounded-lg border border-sap/60 bg-grove-800/80 px-3 py-2 text-left text-sm font-semibold text-sap hover:bg-grove-700"
+        >
+          <span className="underline decoration-sap/60 underline-offset-4">{details ? 'Hide race details' : `Race details: special ability, numbers and all ${roster.length} towers`}</span>
+          <span aria-hidden className={`shrink-0 transition-transform ${details ? 'rotate-180' : ''}`}>
+            ▾
+          </span>
         </button>
         {details && <RaceDetails race={race} />}
       </section>
@@ -95,6 +130,7 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
           {levels.map((l) => {
             const active = l.id === level.id;
             const enemy = raceById(l.enemyRace);
+            const edge = matchups.multiplier[enemy.id];
             return (
               <button
                 key={l.id}
@@ -106,8 +142,10 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
                 <span className="min-w-0">
                   <span className="block truncate font-semibold">{l.map.name}</span>
                   <span className="block truncate text-xs text-grove-300/70">
-                    {WORLD_NAMES[l.map.world] ?? l.map.world} · {l.waves.waves.length} waves · {l.waves.lives} lives · vs {enemy.name} ({enemy.creepArmor})
+                    {WORLD_NAMES[l.map.world] ?? l.map.world} · {l.waves.waves.length} waves · vs {enemy.name}
                   </span>
+                  {edge > 1.05 && <span className="block text-[11px] font-semibold text-grove-300">▲ {race.name} are strong against them</span>}
+                  {edge < 0.95 && <span className="block text-[11px] font-semibold text-rust">▼ {race.name} are weak against them</span>}
                 </span>
                 <span className={`shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase ${l.map.difficulty === 'hard' ? 'bg-rust/30 text-rust' : l.map.difficulty === 'normal' ? 'bg-sap/20 text-sap' : 'bg-grove-500/30 text-grove-300'}`}>
                   {l.map.difficulty}
@@ -175,25 +213,15 @@ export function Menu({ settings, inviteCount = 0, onSettings, onPlay, onMultipla
         )}
       </section>
 
-      <p className="mt-3 text-center text-[11px] text-grove-300/40">
+      <button onClick={onHowTo} className="mx-auto mt-3 block rounded-lg border border-grove-700 bg-grove-900/85 px-4 py-2 text-sm font-semibold text-grove-300 underline decoration-grove-300/50 underline-offset-4 backdrop-blur-sm hover:bg-grove-800">
+        How to play
+      </button>
+      <p className="mt-2 text-center text-[11px] text-grove-300/40">
         engine {ENGINE_VERSION} · content {CONTENT_VERSION}
       </p>
       </Reveal>
     </TitleColumn>
   );
-}
-
-/** "kinetic & bio · strong vs shielded, weak vs plated" from the damage matrix, so the counters are visible before a run. */
-function matchupLine(race: RaceDef): string {
-  const m = content.damage.multipliers;
-  const armours: ArmorType[] = ['organic', 'plated', 'shielded'];
-  const best = (armour: ArmorType) => Math.max(...race.damageTypes.map((t) => m[t][armour]));
-  const strong = armours.filter((a) => best(a) >= 1.2);
-  const weak = armours.filter((a) => best(a) <= 0.9);
-  const parts = [race.damageTypes.join(' & ')];
-  if (strong.length) parts.push(`strong vs ${strong.join(' and ')}`);
-  if (weak.length) parts.push(`weak vs ${weak.join(' and ')}`);
-  return parts.join(' · ');
 }
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange(v: boolean): void }) {

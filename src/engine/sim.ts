@@ -1,4 +1,4 @@
-// Extra Terram — src/engine/sim.ts v0.7.0 — seats (wallets, owners, co-op wave scaling) and creep sends; race passives, splash, beams, economy, support, crits
+// Extra Terram — src/engine/sim.ts v0.8.0 — armour-piercing ignores every resistance; bleeds keep their type and credit their tower; seats, sends, passives
 // The deterministic simulation: 20 Hz fixed tick, plain-JSON state, no wall clock, no Math.random.
 // Everything here runs identically in the browser, in Node (scripts/sim-smoke.ts) and, later,
 // on the server for replay verification. Keep it that way.
@@ -312,10 +312,10 @@ export function buffFor(state: SimState, ctx: SimContext, tower: Tower): Buff {
   return best;
 }
 
-/** Damage multiplier from the matrix; armor-piercing never does worse than 1.0 against Plated. */
+/** Damage multiplier from the matrix; armour-piercing never does worse than 1.0 against anything. */
 export function damageMultiplier(ctx: SimContext, type: DamageType, armor: CreepDef['armor'], pierce: boolean): number {
   const m = ctx.content.damage.multipliers[type][armor];
-  return pierce && armor === 'plated' ? Math.max(1, m) : m;
+  return pierce ? Math.max(1, m) : m;
 }
 
 // ---------------------------------------------------------------- stepping
@@ -430,6 +430,8 @@ function spawnCreep(state: SimState, ctx: SimContext, defId: string, sentBy = -1
     bleedPerSecond: 0,
     bleedTicks: 0,
     bleedStacks: 0,
+    bleedType: def.armor === 'carapace' ? 'acid' : 'thorn',
+    bleedOwner: -1,
     sentBy,
     alive: true,
   };
@@ -689,6 +691,8 @@ function updateProjectiles(state: SimState, ctx: SimContext, byId: Map<number, C
             v.bleedStacks = stacks;
             v.bleedPerSecond = Math.max(v.bleedPerSecond, p.bleedPerSecond * stacks);
             v.bleedTicks = Math.max(v.bleedTicks, p.bleedTicks);
+            v.bleedType = p.damageType;
+            v.bleedOwner = p.owner;
           }
           if (p.slowOnHit > 0) applySlow(v, p.slowOnHit, p.slowTicks);
         }
@@ -712,7 +716,8 @@ function updateCreeps(state: SimState, ctx: SimContext): void {
     if (c.bleedTicks > 0) {
       c.bleedTicks--;
       if (c.bleedTicks === 0) c.bleedStacks = 0;
-      applyDamage(state, ctx, c, c.bleedPerSecond * TICK_SEC, 'bio', false, undefined);
+      const source = c.bleedOwner >= 0 ? state.towers.find((t) => t.id === c.bleedOwner) : undefined;
+      applyDamage(state, ctx, c, c.bleedPerSecond * TICK_SEC, c.bleedType, false, source);
       if (!c.alive) continue;
     }
 

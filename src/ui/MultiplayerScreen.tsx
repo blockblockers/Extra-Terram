@@ -30,7 +30,7 @@ interface Props {
 
 const MODES: Array<{ id: MatchMode; name: string; blurb: string; available: boolean }> = [
   { id: 'parallel', name: 'Parallel race', blurb: 'Same level, same waves, your own board. Live standings; the best score among those left standing wins.', available: true },
-  { id: 'mirror', name: 'Mirror', blurb: 'Parallel boards, and the sap you bank can send extra creeps into a rival’s lane. Every send pays you income on later waves.', available: true },
+  { id: 'mirror', name: 'Mirror', blurb: 'Parallel boards, and the money you bank can send extra creeps into a rival’s lane. Every send pays you income on later waves.', available: true },
   { id: 'coop', name: 'Co-op', blurb: 'One board, one maze, a shared life pool. Each player owns their towers and wallet; the waves grow with the party.', available: true },
   { id: 'lanes', name: 'Lanes', blurb: 'One board with a lane per player; sends land in a random rival’s lane. 2v2 shares a team pool.', available: false },
   { id: 'king', name: 'King of the Maze', blurb: 'Teams defend bases on one board; the team that loses its base loses.', available: false },

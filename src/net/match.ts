@@ -111,7 +111,7 @@ export type MatchEvent =
   | { type: 'start'; seed: string; startAt: number; levelId: string; seats: number; party: number } // host: wall-clock ms for the shared countdown; wallets to make and players present
   | { type: 'input'; seat: number; seq: number; input: SimInput } // client -> host (shared board)
   | { type: 'frame'; tick: number; inputs: LoggedInput[]; speed: number } // host -> all, every 5 ticks (shared board): the inputs that applied at that tick
-  | { type: 'reject'; seat: number; seq: number; reason: string } // host -> the client whose input failed on the host
+  | { type: 'reject'; seat: number; seq: number; reason: string; need?: number } // host -> the client whose input failed on the host (need = the price it could not pay)
   | { type: 'hash'; tick: number; hash: string } // client -> host, every 20 ticks (shared board)
   | { type: 'board'; seat: number; tick: number; lives: number; wave: number; score: number; income: number } // mirrored boards
   | { type: 'send'; from: number; to: number; creep: string; count: number } // mirrored boards

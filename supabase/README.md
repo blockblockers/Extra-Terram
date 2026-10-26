@@ -94,7 +94,7 @@ player who opened the email in a different browser than the installed app can st
 typing it. Suggested body:
 
 ```html
-<h2>Sign in to Extra Terram</h2>
+<h2>Sign in to Extra-Terram</h2>
 <p><a href="{{ .ConfirmationURL }}">Tap here to sign in</a> on the device you started from.</p>
 <p>Or enter this code in the game: <strong style="font-size:1.4em;letter-spacing:.2em">{{ .Token }}</strong></p>
 <p>The link and code expire in one hour. If you did not request this, ignore this email.</p>
@@ -117,7 +117,7 @@ unset. When you want Google back:
    - Authorized JavaScript origins: `https://extra-terram.netlify.app`, `http://localhost:5173`
    - Authorized redirect URI: `https://<project-ref>.supabase.co/auth/v1/callback`
      (shown verbatim on the Supabase Google provider page as "Callback URL (for OAuth)").
-   - Configure the OAuth consent screen (app name "Extra Terram", support email). While it is in
+   - Configure the OAuth consent screen (app name "Extra-Terram", support email). While it is in
      "Testing" only listed test users can sign in; publish it before launch.
 2. Supabase → **Authentication → Sign In / Providers → Google**: enable, paste Client ID and Client
    Secret, save.

@@ -1,4 +1,4 @@
-// Extra Terram — src/content/index.ts v0.4.0 — four races, four maps
+// Extra Terram — src/content/index.ts v0.5.0 — matchups (strong/weak against which race) and race currencies
 // Assembles the typed ContentPack from the JSON files. The engine never imports JSON itself;
 // it is handed a pack, so the same engine runs on the server with content loaded another way.
 import type { ContentPack, CreepDef, DamageMatrix, MapDef, RaceDef, TowerDef, WaveScript } from '../engine/types';
@@ -54,4 +54,37 @@ export function raceById(id: string): RaceDef {
 const ROLE_ORDER = ['starter', 'heavy', 'control', 'splash', 'range', 'economy', 'support', 'trap'];
 export function towersForRace(raceId: string): TowerDef[] {
   return content.towers.filter((t) => t.race === raceId).sort((a, b) => ROLE_ORDER.indexOf(a.role) - ROLE_ORDER.indexOf(b.role));
+}
+
+/** How a race's damage fares against each other race's creeps, from the damage matrix. */
+export interface Matchups {
+  /** Races whose creeps take extra damage from this race's towers. */
+  strongAgainst: RaceDef[];
+  /** Races whose creeps shrug off part of this race's damage. */
+  weakAgainst: RaceDef[];
+  /** The multiplier against every race, by race id (the best of the race's damage types). */
+  multiplier: Record<string, number>;
+}
+
+export function matchupsFor(raceId: string): Matchups {
+  const race = raceById(raceId);
+  const m = content.damage.multipliers;
+  const multiplier: Record<string, number> = {};
+  for (const other of content.races) multiplier[other.id] = Math.max(...race.damageTypes.map((t) => m[t][other.creepArmor]));
+  const others = content.races.filter((r) => r.id !== raceId);
+  return {
+    strongAgainst: others.filter((r) => multiplier[r.id] > 1.05),
+    weakAgainst: others.filter((r) => multiplier[r.id] < 0.95),
+    multiplier,
+  };
+}
+
+/** A race's money, lower case ("scrap"); `currencyLabel` gives the capitalised form ("Scrap"). */
+export function currencyOf(raceId: string): string {
+  return raceById(raceId).currency;
+}
+
+export function currencyLabel(raceId: string): string {
+  const c = currencyOf(raceId);
+  return c.charAt(0).toUpperCase() + c.slice(1);
 }

@@ -1,4 +1,4 @@
-// Extra Terram — src/render/effects.ts v0.4.0 — beams, splash rings, income motes
+// Extra Terram — src/render/effects.ts v0.5.0 — colours for the four race damage types; chitin carapace deaths; beams, splash rings, income motes
 // One pool, one shared texture, one container: the whole layer is a single draw batch. Nothing here
 // touches the simulation, and when the pool is full new bursts are dropped rather than allocated.
 import { Container, Graphics, Sprite, Texture, type Renderer as PixiRendererType } from 'pixi.js';
@@ -25,7 +25,7 @@ interface Particle {
   length: number; // beams only
 }
 
-const DAMAGE_COLOR: Record<DamageType, number> = { kinetic: 0xf6f0c8, bio: 0x9fe84a, energy: 0x4fd8e8 };
+const DAMAGE_COLOR: Record<DamageType, number> = { thorn: 0xd9c25a, kinetic: 0xf6f0c8, acid: 0x9fe84a, energy: 0x4fd8e8 };
 
 export class Effects {
   readonly container = new Container();
@@ -158,7 +158,7 @@ export class Effects {
     for (let i = 0; i < n; i++) {
       const a = this.rand() * Math.PI * 2;
       const sp = 1.5 + this.rand() * 2.5;
-      this.spawn(type === 'bio' ? 'dot' : 'spark', x, y, { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, size: type === 'bio' ? 3 : 4, endSize: 0.5, maxLife: 8, color, alpha: 0.95, drag: 0.85 });
+      this.spawn(type === 'acid' ? 'dot' : 'spark', x, y, { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, size: type === 'acid' ? 3 : 4, endSize: 0.5, maxLife: 8, color, alpha: 0.95, drag: 0.85 });
     }
     this.spawn('ring', x, y, { size: 6, endSize: 16, maxLife: 5, color, alpha: 0.6 });
   }
@@ -182,6 +182,14 @@ export class Effects {
         const a = this.rand() * Math.PI * 2;
         const sp = 2 + this.rand() * 3;
         this.spawn('shard', x, y, { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, size: 6, endSize: 2, maxLife: 14, color: 0x9ff0ff, alpha: 1, spin: 0.2 });
+      }
+    } else if (armor === 'carapace') {
+      // cracked chitin and a splash of green ichor
+      for (let i = 0; i < this.count(9); i++) {
+        const a = this.rand() * Math.PI * 2;
+        const sp = 1.5 + this.rand() * 3;
+        const shell = this.rand() < 0.5;
+        this.spawn(shell ? 'shard' : 'dot', x, y, { vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, size: shell ? 5 : 3.5, endSize: 1, maxLife: 14, color: shell ? 0x8a5cc0 : 0x9fe84a, alpha: 1, spin: shell ? 0.25 : 0, drag: 0.9, gravity: 0.1 });
       }
     } else {
       for (let i = 0; i < this.count(10); i++) {

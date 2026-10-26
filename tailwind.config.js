@@ -28,6 +28,8 @@ export default {
       },
       fontFamily: {
         ui: ['system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ['Oxanium', 'system-ui', 'sans-serif'],
+        tech: ['Rajdhani', 'system-ui', 'sans-serif'],
       },
     },
   },

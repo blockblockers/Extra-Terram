@@ -28,9 +28,10 @@
     },
     "damageType": {
       "enum": [
+        "thorn",
         "kinetic",
-        "energy",
-        "bio"
+        "acid",
+        "energy"
       ]
     },
     "tier": {

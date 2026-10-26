@@ -1,4 +1,4 @@
-// Extra Terram — scripts/calibrate.ts v0.1.0 — scan difficulty factors per level with the smoke builder
+// Extra Terram — scripts/calibrate.ts v0.2.0 — optional --level <id> and --d 0.5,0.6 to scan just one level / a few factors
 // Usage: npm run calibrate   (edit `factors` or `scalingFor` below, then copy the chosen numbers into the wave script)
 // A single factor d drives all five scaling knobs; the table shows lives left per race at each d.
 import { levels } from '../src/content';
@@ -7,7 +7,12 @@ process.env.SIM_LIB = '1'; // the smoke script must not run its own main when im
 const { runLevel } = await import('./sim-smoke');
 
 const RACES = ['rootkin', 'assembly', 'chitin', 'lumenari'];
-const factors = [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+const arg = (name: string) => {
+  const i = process.argv.indexOf(name);
+  return i !== -1 ? process.argv[i + 1] : undefined;
+};
+const factors = arg('--d')?.split(',').map(Number) ?? [0, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+const onlyLevel = arg('--level');
 
 export function scalingFor(d: number) {
   return {
@@ -19,7 +24,7 @@ export function scalingFor(d: number) {
   };
 }
 
-for (const level of levels) {
+for (const level of levels.filter((l) => !onlyLevel || l.id === onlyLevel)) {
   console.log(`\n${level.id} (lives ${level.waves.lives})`);
   console.log('  d     ' + RACES.map((r) => r.padStart(9)).join(''));
   for (const d of factors) {

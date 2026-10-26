@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Overlays.tsx v0.7.0 — race standings on the result screen
+// Extra Terram — src/ui/Overlays.tsx v0.8.0 — How to play from the pause screen
 // Inline overlays over the board. Never window.confirm/alert: iOS standalone PWAs block them silently.
 import { useState } from 'react';
 import type { SaveStatus } from '../app/App';
@@ -6,11 +6,11 @@ import { raceById } from '../content';
 import type { SimView } from '../engine';
 import { online, type Standing } from '../net';
 
-export function PauseOverlay({ onResume, onExit }: { onResume(): void; onExit(): void }) {
+export function PauseOverlay({ onResume, onExit, onHowTo }: { onResume(): void; onExit(): void; onHowTo?(): void }) {
   return (
     <Scrim>
       <h2 className="text-2xl font-bold">Paused</h2>
-      <p className="text-sm text-grove-300/80">The grove holds its breath.</p>
+      <p className="text-sm text-grove-300/80">The maze holds its breath.</p>
       <div className="mt-4 flex gap-2">
         <button onClick={onResume} className="rounded-lg bg-grove-500 px-4 py-2 font-semibold text-grove-950 hover:bg-grove-300">
           Resume
@@ -19,6 +19,11 @@ export function PauseOverlay({ onResume, onExit }: { onResume(): void; onExit():
           Menu
         </button>
       </div>
+      {onHowTo && (
+        <button onClick={onHowTo} className="mt-3 text-sm text-grove-300 underline decoration-grove-300/50 underline-offset-4 hover:text-white">
+          How to play
+        </button>
+      )}
     </Scrim>
   );
 }

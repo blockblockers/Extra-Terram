@@ -1,11 +1,12 @@
-// Extra Terram — src/app/App.tsx v0.8.0 — lobby invites: a toast on the menu, a count on the Multiplayer button, one tap to join
+// Extra Terram — src/app/App.tsx v0.9.0 — How to play: from the menu, and once by itself for guests and new players
 // Splash -> Login (unless guest, signed in, or an offline build) -> Menu <-> Game, or Menu -> Multiplayer -> Game.
 // The game shell is remounted for every run so the canvas, renderer and sim start clean.
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { CONTENT_VERSION, levels, type LevelEntry } from '../content';
 import { ENGINE_VERSION, type LoggedInput, type SimResult, type SimView } from '../engine';
 import { invalidateLeaderboard, recordRun, useAuth, useInvites, type ActiveMatch, type SaveOutcome } from '../net';
 import { LoginScreen, NewPasswordScreen } from '../ui/LoginScreen';
+import { HowToPlay, markHowToSeen, shouldAutoOpenHowTo } from '../ui/HowToPlay';
 import { Menu } from '../ui/Menu';
 import { MultiplayerScreen, type MatchRun } from '../ui/MultiplayerScreen';
 import { Splash } from '../ui/Title';
@@ -29,6 +30,17 @@ export function App() {
   const [saveStatus, setSaveStatus] = useState<SaveStatus>(null);
   const [lobby, setLobby] = useState<{ raceId: string; levelId: string; joinCode?: string } | null>(null);
   const invites = useInvites();
+  const [howTo, setHowTo] = useState(false);
+  const [howToShown, setHowToShown] = useState(false); // once opened this session it never opens by itself again
+  const autoHowTo = useMemo(() => shouldAutoOpenHowTo(auth.status, auth.user?.created_at), [auth.status, auth.user]);
+  const openHowTo = useCallback(() => {
+    setHowToShown(true);
+    setHowTo(true);
+  }, []);
+  const closeHowTo = useCallback(() => {
+    markHowToSeen();
+    setHowTo(false);
+  }, []);
 
   // Invite toasts fade on their own; a toast that arrives mid-run waits on the menu as a count.
   useEffect(() => {
@@ -127,10 +139,13 @@ export function App() {
       <Menu
         settings={settings}
         inviteCount={invites.invites.length}
+        autoHowTo={autoHowTo && !howToShown}
         onSettings={updateSettings}
         onPlay={(level, raceId, seed) => startRun({ level, raceId, seed, nonce: 0 })}
         onMultiplayer={(raceId, levelId) => setLobby({ raceId, levelId })}
+        onHowTo={openHowTo}
       />
+      {howTo && <HowToPlay raceId={settings.lastRace} onClose={closeHowTo} />}
       {nudge && (
         <div role="status" className="fixed inset-x-3 top-[calc(var(--safe-top)+0.5rem)] z-40 mx-auto max-w-md rounded-xl border border-sap/70 bg-grove-900/95 p-3 text-sm shadow-lg backdrop-blur">
           <p className="truncate">

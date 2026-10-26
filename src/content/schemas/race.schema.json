@@ -21,6 +21,10 @@
         "required": [
           "id",
           "name",
+          "blurb",
+          "pros",
+          "cons",
+          "currency",
           "description",
           "tagline",
           "damageTypes",
@@ -47,16 +51,18 @@
             "uniqueItems": true,
             "items": {
               "enum": [
+                "thorn",
                 "kinetic",
-                "energy",
-                "bio"
+                "acid",
+                "energy"
               ]
             }
           },
           "creepArmor": {
             "enum": [
-              "organic",
+              "bark",
               "plated",
+              "carapace",
               "shielded"
             ]
           },
@@ -180,6 +186,32 @@
                 "minimum": 0
               }
             }
+          },
+          "blurb": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pros": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "cons": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[a-z]+$"
           }
         }
       }

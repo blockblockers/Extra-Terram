@@ -1,15 +1,24 @@
 {
-  "content_version": "0.5.0",
+  "content_version": "0.6.0",
   "races": [
     {
       "id": "rootkin",
       "name": "Rootkin",
-      "description": "Tree-aliens. Bio and kinetic weapons: seeds, thorns, strangling vines. Every tower is rooted \u2014 it starts at 85% strength and gains damage and range for each wave it stands through (for up to six waves), so a Rootkin line that holds early becomes the strongest in the game. Strong against the Assembly's plating, weak against their own kind.",
-      "damageTypes": [
-        "kinetic",
-        "bio"
+      "blurb": "Living trees from a forest moon. They put down roots and grow stronger the longer a fight goes on.",
+      "pros": [
+        "Towers get stronger every wave they survive",
+        "Thorns and poison keep hurting after the hit"
       ],
-      "creepArmor": "organic",
+      "cons": [
+        "Slow, weak start",
+        "Moving a tower throws away its growth"
+      ],
+      "currency": "sap",
+      "description": "Tree-aliens armed with thorns, seed pods and strangling vines; every attack deals thorn damage. Every tower is rooted: it starts at 85% strength and gains +5% damage and +2.5% range for each wave it stands through (up to six waves), so a Rootkin line that holds early becomes the strongest in the game.",
+      "damageTypes": [
+        "thorn"
+      ],
+      "creepArmor": "bark",
       "palette": {
         "primary": "#3f8f3a",
         "secondary": "#6b4a2b"
@@ -28,10 +37,19 @@
     {
       "id": "assembly",
       "name": "The Assembly",
-      "description": "A machine collective. Kinetic ordnance: nailguns, pile drivers, mortars, a railgun. Guns spin up \u2014 every shot within a second of the last makes the next one faster, up to 30% \u2014 and kills pay 10% more scrap. The price: upgrades cost 20% more. Strong against Lumenari shields, weak against plating of their own make.",
+      "blurb": "A machine collective that strips worlds for scrap. Rapid-fire guns, heavy shells and long-range artillery.",
+      "pros": [
+        "Guns fire faster the longer they keep shooting",
+        "Kills pay extra scrap"
+      ],
+      "cons": [
+        "Upgrades cost more",
+        "Guns cool down when the shooting stops"
+      ],
+      "currency": "scrap",
+      "description": "A machine collective with kinetic ordnance: nailguns, pile drivers, mortars, a railgun. Guns spin up \u2014 every shot within a second of the last makes the next one 6% faster, up to 30% \u2014 and kills pay 10% more scrap. The price: upgrades cost 20% more.",
       "damageTypes": [
-        "kinetic",
-        "energy"
+        "kinetic"
       ],
       "creepArmor": "plated",
       "palette": {
@@ -53,11 +71,21 @@
     {
       "id": "chitin",
       "name": "Chitin Swarm",
-      "description": "Insectoid hive. Bio weapons: acid, darts, webs. Towers are cheap and the hive links them \u2014 each other tower within 1.5 tiles makes a tower fire 10% faster (up to three) \u2014 and acid stacks three deep instead of refreshing. The price: a sold tower refunds only half. Strong against plating, weak against organic foes.",
-      "damageTypes": [
-        "bio"
+      "blurb": "An insect hive that overruns planets by sheer numbers. Cheap acid-spitting towers that are strongest packed together.",
+      "pros": [
+        "Cheapest towers in the game",
+        "Acid builds up on every target"
       ],
-      "creepArmor": "organic",
+      "cons": [
+        "Short reach",
+        "Selling a tower returns only half"
+      ],
+      "currency": "resin",
+      "description": "Insectoid hive with acid weapons: spitters, jaws, webs, acid sacs. Towers are cheap and the hive links them \u2014 each other tower within 1.5 tiles makes a tower fire 10% faster (up to three) \u2014 and acid stacks three deep instead of refreshing. The price: a sold tower refunds only half.",
+      "damageTypes": [
+        "acid"
+      ],
+      "creepArmor": "carapace",
       "palette": {
         "primary": "#8a4fc9",
         "secondary": "#9fe84a"
@@ -77,7 +105,17 @@
     {
       "id": "lumenari",
       "name": "Lumenari",
-      "description": "Energy beings. Beams, pulses and time fields. Beams pierce through up to two creeps behind the target, and any tower that has waited 2 s opens with an overcharged shot at 2.5\u00d7 damage. The price: everything fires 8% slower. Strong against organic foes, weak against shields of their own kind.",
+      "blurb": "Beings of living light. Few towers, but each is precise, sees far and can hit several enemies at once.",
+      "pros": [
+        "Beams go through enemies to hit the ones behind",
+        "The first shot after a pause hits very hard"
+      ],
+      "cons": [
+        "Towers fire more slowly",
+        "Pricier towers"
+      ],
+      "currency": "lumen",
+      "description": "Energy beings: beams, pulses and time fields. Beams pierce through up to two creeps behind the target at half damage, and any tower that has waited 2 s opens with an overcharged shot at 2.5\u00d7 damage. The price: everything fires 8% slower.",
       "damageTypes": [
         "energy"
       ],

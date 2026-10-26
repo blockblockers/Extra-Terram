@@ -1,5 +1,5 @@
-// Extra Terram — src/ui/TeamBar.tsx v0.1.0 — Co-op: everyone on the shared board, their colour, sap and towers
-import { raceById } from '../content';
+// Extra Terram — src/ui/TeamBar.tsx v0.2.0 — Co-op: everyone on the shared board, their colour, money (in their race's currency) and towers
+import { currencyOf, raceById } from '../content';
 import type { SeatPresence } from '../net';
 import { seatColor } from '../render/seats';
 
@@ -23,7 +23,9 @@ export function TeamBar({ players, wallets, towersBySeat, mySeat, waiting }: Pro
             <span className="h-2.5 w-2.5 shrink-0 rounded-full border border-black/40" style={{ background: seatColor(p.seat) }} />
             <span className="max-w-[7rem] truncate font-semibold">{p.name}</span>
             <span className="truncate text-grove-300/70">{race.name}</span>
-            <span className="tabular-nums text-sap">{wallets[p.seat] ?? 0}</span>
+            <span className="tabular-nums text-sap">
+              {wallets[p.seat] ?? 0} {currencyOf(p.raceId)}
+            </span>
             <span className="tabular-nums text-grove-300/80">{towersBySeat[p.seat] ?? 0}⌂</span>
             {p.seat === 0 && <span className="text-grove-300/60">host</span>}
           </div>

@@ -7,11 +7,11 @@
   "buildTicks": 300,
   "waveBonus": 20,
   "scaling": {
-    "hpMult": 1.2625,
-    "speedMult": 1.075,
-    "countMult": 1.1125,
-    "hpPerWave": 0.0375,
-    "speedPerWave": 0.0112
+    "hpMult": 1.21,
+    "speedMult": 1.06,
+    "countMult": 1.09,
+    "hpPerWave": 0.03,
+    "speedPerWave": 0.009
   },
   "waves": [
     {
@@ -375,5 +375,5 @@
       ]
     }
   ],
-  "content_version": "0.5.0"
+  "content_version": "0.6.0"
 }

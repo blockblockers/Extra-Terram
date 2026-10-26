@@ -1,4 +1,4 @@
-// Extra Terram — vite.config.ts v0.8.0 — new game-wide icons (versioned URLs), favicon.ico precached
+// Extra Terram — vite.config.ts v0.9.0 — the app is named Extra-Terram
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.png', 'art/*.jpg', 'sprites/**/*.png', 'sprites/manifest.json'],
       manifest: {
-        name: 'Extra Terram: The Alien Race Tower Defense',
-        short_name: 'Extra Terram',
+        name: 'Extra-Terram: The Alien Race Tower Defense',
+        short_name: 'Extra-Terram',
         description: 'Pick a race, defend your maze.',
         theme_color: '#07131a',
         background_color: '#07131a',

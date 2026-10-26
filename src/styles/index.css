@@ -1,4 +1,4 @@
-/* Extra Terram — src/styles/index.css v0.3.0 — teal-navy chrome */
+/* Extra Terram — src/styles/index.css v0.4.0 — the title lockup: gold beveled Oxanium over a cyan-glow Rajdhani subtitle */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,3 +36,68 @@ button {
 }
 
 /* The HUD is static by design: no transitions, no animations, the canvas is the only moving surface. */
+
+/*
+ * The title lockup. The name is one line that fills the column on any phone (Oxanium 800 runs
+ * 8.07 x its size for "EXTRA-TERRAM"); gold gradient lettering with a dark outline, a hard drop
+ * like a bevel, and a warm glow with a hint of crystal blue, after the game's painted gold and glass.
+ */
+.et-title {
+  font-family: 'Oxanium', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: min(3.1rem, calc((min(100vw, 28rem) - 2.25rem) / 8.2));
+  line-height: 1;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fffbe0 0%, #ffe07a 30%, #f2b235 55%, #c7741a 80%, #8f4a0c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1.2px #3b2104;
+  filter: drop-shadow(0 3px 0 #2a1603) drop-shadow(0 0 10px rgba(255, 190, 80, 0.55)) drop-shadow(0 0 22px rgba(80, 180, 255, 0.25));
+}
+
+.et-subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: min(13px, calc((min(100vw, 28rem) - 7rem) / 22.8));
+  line-height: 1.2;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #c9f6ff;
+  text-shadow: 0 0 8px rgba(70, 190, 255, 0.8), 0 1px 0 rgba(0, 0, 0, 0.7);
+}
+
+/* letter-spacing also trails the last letter: pad the front so the line stays centred */
+.et-subtitle > span {
+  padding-left: 0.34em;
+}
+
+.et-subtitle::before,
+.et-subtitle::after {
+  content: '';
+  flex: none;
+  width: 1.6rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #7fe3ff);
+  box-shadow: 0 0 6px #4fd8ff;
+}
+
+.et-subtitle::after {
+  transform: scaleX(-1);
+}
+
+@media (forced-colors: active) {
+  .et-title {
+    background: none;
+    color: CanvasText;
+    -webkit-text-stroke: 0;
+    filter: none;
+  }
+}

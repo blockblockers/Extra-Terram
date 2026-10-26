@@ -1,11 +1,12 @@
-// Extra Terram — src/engine/inputs.ts v0.4.0 — seats: each input spends its seat's wallet; owners alone upgrade or sell; sends and receives
+// Extra Terram — src/engine/inputs.ts v0.5.0 — 'not enough money' is a coded result (the UI names the race's currency); seats, owners, sends
 // Player inputs: validate, apply, and log with the tick they applied on.
 // The log is the replay, the lockstep payload (shared boards) and the verification record in one.
 import { cellIndex } from './map';
 import { beginWave, createSim, passiveFor, sendCost, sendIncomeFor, stepSim, towerCost, wallet } from './sim';
 import { SELL_REFUND, SEND_INTERVAL_TICKS, SEND_MAX_COUNT, TICK_RATE, TILE, type LoggedInput, type SimContext, type SimInput, type SimOptions, type SimState, type Tower } from './types';
 
-export type InputResult = { ok: true } | { ok: false; reason: string };
+/** On a refusal for money, `need` is the price: the UI says it in the player's currency ("Needs 60 scrap."). */
+export type InputResult = { ok: true } | { ok: false; reason: string; need?: number };
 
 /** Sell value of a tower right now (the race's refund rate, 70% by default). */
 export function sellValue(ctx: SimContext, tower: Tower): number {
@@ -24,7 +25,7 @@ export function upgradeCost(ctx: SimContext, tower: Tower): number | null {
 export function validateInput(state: SimState, ctx: SimContext, input: SimInput, seat = 0): InputResult {
   if (state.phase === 'won' || state.phase === 'lost') return { ok: false, reason: 'The run is over.' };
   if (seat < 0 || seat >= state.seats) return { ok: false, reason: 'No such seat on this board.' };
-  const sap = wallet(state, seat);
+  const sap = wallet(state, seat); // whatever this seat's race calls its money
   switch (input.type) {
     case 'place': {
       const def = ctx.towerIndex[input.tower];
@@ -34,7 +35,7 @@ export function validateInput(state: SimState, ctx: SimContext, input: SimInput,
       if (state.grid[i] !== TILE.pad) return { ok: false, reason: 'Towers only grow on build pads.' };
       if (state.occupied[i] !== -1) return { ok: false, reason: 'That pad is taken.' };
       const cost = towerCost(ctx, def);
-      if (sap < cost) return { ok: false, reason: `Needs ${cost} sap.` };
+      if (sap < cost) return { ok: false, reason: `Needs ${cost}.`, need: cost };
       return { ok: true };
     }
     case 'upgrade': {
@@ -44,7 +45,7 @@ export function validateInput(state: SimState, ctx: SimContext, input: SimInput,
       const cost = upgradeCost(ctx, tower);
       if (cost === null) return { ok: false, reason: 'Already at the top tier.' };
       if (tower.tier === 2 && input.branch !== 'a' && input.branch !== 'b') return { ok: false, reason: 'Tier 3 needs a branch choice.' };
-      if (sap < cost) return { ok: false, reason: `Needs ${cost} sap.` };
+      if (sap < cost) return { ok: false, reason: `Needs ${cost}.`, need: cost };
       return { ok: true };
     }
     case 'sell': {
@@ -62,7 +63,7 @@ export function validateInput(state: SimState, ctx: SimContext, input: SimInput,
       if (!def) return { ok: false, reason: `Unknown creep ${input.creep}.` };
       if (!Number.isInteger(input.count) || input.count < 1 || input.count > SEND_MAX_COUNT) return { ok: false, reason: `Send 1 to ${SEND_MAX_COUNT} at a time.` };
       const cost = sendCost(def) * input.count;
-      if (sap < cost) return { ok: false, reason: `Needs ${cost} sap.` };
+      if (sap < cost) return { ok: false, reason: `Needs ${cost}.`, need: cost };
       return { ok: true };
     }
     case 'receive': {

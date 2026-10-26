@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/TowerPanel.tsx v0.7.0 — every upgrade button spells out what changes (damage, range, rate, extras)
+// Extra Terram — src/ui/TowerPanel.tsx v0.8.0 — income in the race's currency; 'ignores armour' wording; upgrade buttons spell out what changes
 // Replaces the build bar while a tower is selected: stats, the next upgrade (a branch choice at tier 2), sell.
 import { TICK_RATE, towerStats, type PassiveMods, type RacePassive, type TowerDef, type TowerStats } from '../engine';
 import { TowerIcon } from './TowerIcon';
@@ -72,20 +72,22 @@ export function upgradeChanges(def: TowerDef, fromTier: 1 | 2 | 3, fromBranch: '
   if (b.chain > a.chain) out.push(`+ chains ${b.chain}`);
   if (b.critChance > a.critChance) out.push(`+ ${Math.round(b.critChance * 100)}% crits ×2`);
   if (b.slowOnHit > a.slowOnHit) out.push(`+ hits slow ${Math.round(b.slowOnHit * 100)}%`);
-  if (b.armorPierce && !a.armorPierce) out.push('+ pierces plating');
+  if (b.armorPierce && !a.armorPierce) out.push('+ ignores armour');
   if (b.bleedPerSecond > a.bleedPerSecond) out.push(`+ bleeds ${num(b.bleedPerSecond)}/s for ${num(b.bleedTicks / TICK_RATE)} s`);
   return out;
 }
 
 interface Props {
   tower: SelectedTower;
+  /** The player's currency, lower case. */
+  currency: string;
   resources: number;
   onUpgrade(branch?: 'a' | 'b'): void;
   onSell(): void;
   onClose(): void;
 }
 
-export function TowerPanel({ tower, resources, onUpgrade, onSell, onClose }: Props) {
+export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onClose }: Props) {
   const { def, stats } = tower;
   const canAfford = tower.upgradeCost !== null && resources >= tower.upgradeCost;
   const dps = def.attack === 'aura' ? stats.dotPerSecond : (stats.damage * TICK_RATE) / stats.cooldownTicks;
@@ -129,10 +131,14 @@ export function TowerPanel({ tower, resources, onUpgrade, onSell, onClose }: Pro
                 {stats.chain > 0 && <span>chains +{stats.chain}</span>}
                 {stats.critChance > 0 && <span>crit {Math.round(stats.critChance * 100)}%</span>}
                 {stats.slowOnHit > 0 && <span>slows {Math.round(stats.slowOnHit * 100)}%</span>}
-                {stats.armorPierce && <span>pierces plating</span>}
+                {stats.armorPierce && <span>ignores armour</span>}
               </>
             )}
-            {def.attack === 'economy' && <span className="text-sap">+{stats.income} sap per wave</span>}
+            {def.attack === 'economy' && (
+              <span className="text-sap">
+                +{stats.income} {currency} per wave
+              </span>
+            )}
             {def.attack === 'support' && stats.buff && (
               <>
                 <span>+{Math.round((stats.buff.damageMult - 1) * 100)}% damage</span>

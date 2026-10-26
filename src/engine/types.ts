@@ -1,9 +1,9 @@
-// Extra Terram — src/engine/types.ts v0.8.0 — base weapon effects per tower (`effects`), seats, sends
+// Extra Terram — src/engine/types.ts v0.9.0 — one damage type and one armour per race (the matchup cycle), race currency and plain-English copy
 // Content types (mirroring src/content/schemas) and simulation state.
 // Everything in SimState is plain JSON so a snapshot is just JSON.stringify(state).
 import type { RngState } from './rng';
 
-export const ENGINE_VERSION = '0.4.0';
+export const ENGINE_VERSION = '0.5.0';
 export const TICK_RATE = 20; // sim ticks per second
 export const TICK_SEC = 1 / TICK_RATE; // seconds per tick
 export const SELL_REFUND = 0.7;
@@ -27,8 +27,13 @@ export const COOP_COUNT_PER_PLAYER = 0.25;
 
 // ---------------------------------------------------------------- content
 
-export type DamageType = 'kinetic' | 'energy' | 'bio';
-export type ArmorType = 'organic' | 'plated' | 'shielded';
+/**
+ * Every race deals its own damage type and its creeps wear their own armour. The damage matrix makes a
+ * cycle — Rootkin beat the Assembly, the Assembly beat the Lumenari, the Lumenari beat the Chitin, the
+ * Chitin beat the Rootkin — so every race has one race it is strong against and one it is weak against.
+ */
+export type DamageType = 'thorn' | 'kinetic' | 'acid' | 'energy';
+export type ArmorType = 'bark' | 'plated' | 'carapace' | 'shielded';
 export type TowerRole = 'starter' | 'heavy' | 'control' | 'splash' | 'range' | 'economy' | 'trap' | 'support';
 export type CreepArchetype = 'rusher' | 'workhorse' | 'tank' | 'tower-attacker' | 'flyer' | 'path-skipper' | 'buffer' | 'boss';
 
@@ -69,9 +74,17 @@ export interface RacePassive {
 export interface RaceDef {
   id: string;
   name: string;
+  /** The precise version, for Race details: weapons, the passive in numbers, the price. */
   description: string;
-  /** One line for the race picker: how it plays. */
+  /** One line: how it plays. */
   tagline: string;
+  /** Plain English for the race picker: what kind of aliens, how they fight. */
+  blurb: string;
+  /** Two or three short plain-English upsides and downsides. */
+  pros: string[];
+  cons: string[];
+  /** What this race's money is called (lower case): sap, scrap, resin, lumen. */
+  currency: string;
   damageTypes: DamageType[];
   creepArmor: ArmorType;
   palette: { primary: string; secondary: string };
@@ -283,6 +296,8 @@ export interface Creep {
   bleedPerSecond: number;
   bleedTicks: number;
   bleedStacks: number; // hive acid stacks (1 = a single application)
+  bleedType: DamageType; // the damage type of whatever made it bleed
+  bleedOwner: number; // tower id that made it bleed (its owner gets the bounty), -1 none
   sentBy: number; // seat that sent this creep (Mirror), -1 for the level's own waves
   alive: boolean;
 }

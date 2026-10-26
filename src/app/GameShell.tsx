@@ -1,10 +1,10 @@
-// Extra Terram — src/app/GameShell.tsx v0.11.0 — confirm-before-building on touch, pad-first building, upgrade badges; three online modes
+// Extra Terram — src/app/GameShell.tsx v0.12.0 — each race's own currency in the HUD, shop, panel, confirm bar and messages
 // Owns one run: sim state (in a holder, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 // On a shared board the sim is driven by the Lockstep: inputs are submitted, not applied, and a
 // client only steps while it holds the host's next frame.
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { content, towersForRace, type LevelEntry } from '../content';
+import { content, currencyLabel, currencyOf, towersForRace, type LevelEntry } from '../content';
 import {
   applyInput,
   createContext,
@@ -37,6 +37,7 @@ import { PixiRenderer } from '../render/PixiRenderer';
 import type { Cell, RenderOverlay } from '../render/renderer';
 import { BuildBar } from '../ui/BuildBar';
 import { Hud } from '../ui/Hud';
+import { HowToPlay } from '../ui/HowToPlay';
 import { PauseOverlay, ResultOverlay } from '../ui/Overlays';
 import { RivalsBar } from '../ui/RivalsBar';
 import { SendBar } from '../ui/SendBar';
@@ -73,6 +74,7 @@ const SNAPSHOT_MS = 100; // 10 Hz: the HUD updates at human speed
 
 export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn, match, onResult, onExit, onReplay, onNewSeed }: Props) {
   const roster = useRef(towersForRace(raceId)).current;
+  const currency = currencyOf(raceId);
   const reported = useRef(false);
   const shared = match?.mode === 'coop'; // one board for everyone, in lockstep
   const mirrored = match?.mode === 'mirror'; // own boards, with sends
@@ -97,6 +99,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
   const [footer, setFooter] = useState<'build' | 'send'>('build');
   const [waiting, setWaiting] = useState(false);
   const [hostGone, setHostGone] = useState(false);
+  const [howTo, setHowTo] = useState(false);
   const [towersBySeat, setTowersBySeat] = useState<Record<number, number>>({});
   const toastTimer = useRef<number | null>(null);
 
@@ -109,6 +112,9 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     if (toastTimer.current) window.clearTimeout(toastTimer.current);
     toastTimer.current = window.setTimeout(() => setToast(null), 1600);
   }, []);
+
+  /** A refused input, in words: money refusals name this race's currency. */
+  const refusal = useCallback((res: { reason: string; need?: number }) => (res.need !== undefined ? `Needs ${res.need} ${currency}.` : res.reason), [currency]);
 
   // ---------------------------------------------------------------- lifecycle
   useEffect(() => {
@@ -123,7 +129,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     };
     const renderer = new PixiRenderer();
     const hashes = new Map<number, string>();
-    const lock = shared && match ? new Lockstep(sim, match.channel, { seat: match.me.seat, userId: match.me.userId }, match.host, { onReject: showToast, onResync: () => showToast('Board resynced with the host.') }) : null;
+    const lock = shared && match ? new Lockstep(sim, match.channel, { seat: match.me.seat, userId: match.me.userId }, match.host, { onReject: (reason, need) => showToast(need !== undefined ? `Needs ${need} ${currency}.` : reason), onResync: () => showToast('Board resynced with the host.') }) : null;
     const loop = new GameLoop({
       step: () => {
         if (lock) {
@@ -227,12 +233,12 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       const g = game.current;
       if (!g) return false;
       const res = g.lock ? g.lock.submit(input) : applyInput(g.state, g.ctx, input, 0);
-      if (!res.ok) showToast(res.reason);
+      if (!res.ok) showToast(refusal(res));
       g.loop.dirty = true;
       if (!g.lock) setView(simView(g.state, g.ctx, 0));
       return res.ok;
     },
-    [showToast],
+    [showToast, refusal],
   );
 
   const select = useCallback(
@@ -292,14 +298,14 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
         setPadPickCell(null);
         if (confirmBuild) {
           const check = g ? validateInput(g.state, g.ctx, { type: 'place', tower: next, col: cell.col, row: cell.row }, mySeat) : null;
-          if (check && !check.ok) showToast(check.reason);
+          if (check && !check.ok) showToast(refusal(check));
           else setPendingCell(cell);
         } else {
           build(next, cell);
         }
       }
     },
-    [placing, select, padPick, confirmBuild, mySeat, build, setPendingCell, setPadPickCell, showToast],
+    [placing, select, padPick, confirmBuild, mySeat, build, setPendingCell, setPadPickCell, showToast, refusal],
   );
 
   const hostControls = !shared || !!match?.host; // on a shared board only the host pauses or changes speed
@@ -360,7 +366,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       }
       const check = validateInput(g.state, g.ctx, { type: 'place', tower: placing, col: cell.col, row: cell.row }, mySeat);
       if (!check.ok) {
-        showToast(check.reason);
+        showToast(refusal(check));
         return;
       }
       setPendingCell(cell);
@@ -487,7 +493,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       const target = rivals[Math.floor(Math.random() * rivals.length)];
       const res = applyInput(g.state, g.ctx, { type: 'send', creep: creepId, count }, 0);
       if (!res.ok) {
-        showToast(res.reason);
+        showToast(refusal(res));
         return;
       }
       match.channel.send({ type: 'send', from: match.me.seat, to: target.seat, creep: creepId, count });
@@ -495,7 +501,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       const def = g.ctx.creepIndex[creepId];
       showToast(`Sent ${count} ${def.name}${count > 1 ? 's' : ''} to ${target.name}.`);
     },
-    [match, showToast],
+    [match, showToast, refusal],
   );
 
   // Everyone has reported: submit the final placement (the first submit on finish was provisional).
@@ -535,7 +541,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
 
   return (
     <div className="flex h-dvh w-full flex-col bg-grove-950 font-ui">
-      <Hud view={view} speed={speed} paused={paused} canControl={hostControls} onSpeed={changeSpeed} onPause={togglePause} onCallWave={() => send({ type: 'start-wave' })} onExit={onExit} />
+      <Hud view={view} currency={currencyLabel(raceId)} speed={speed} paused={paused} canControl={hostControls} onSpeed={changeSpeed} onPause={togglePause} onCallWave={() => send({ type: 'start-wave' })} onExit={onExit} />
 
       {/* The canvas host is full-bleed: backgrounds are never inset. */}
       <div ref={hostRef} className="relative min-h-0 flex-1 overflow-hidden">
@@ -546,7 +552,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
         {pending && placing && !result && (
           <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-xl border border-grove-500/70 bg-grove-900/95 px-3 py-2 text-sm shadow-lg backdrop-blur" role="group" aria-label="Confirm build">
             <span className="min-w-0 flex-1 truncate">
-              Plant <span className="font-semibold">{ctx.towerIndex[placing]?.name ?? placing}</span> here · <span className="text-sap">{costs[placing] ?? 0}</span> sap
+              Build <span className="font-semibold">{ctx.towerIndex[placing]?.name ?? placing}</span> here · <span className="text-sap">{costs[placing] ?? 0}</span> {currency}
             </span>
             <button onClick={() => build(placing, pending)} className="rounded-md bg-grove-500 px-3 py-1.5 font-semibold text-grove-950 hover:bg-grove-300">
               Build
@@ -556,7 +562,8 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
             </button>
           </div>
         )}
-        {paused && !result && hostControls && <PauseOverlay onResume={togglePause} onExit={onExit} />}
+        {paused && !result && hostControls && !howTo && <PauseOverlay onResume={togglePause} onExit={onExit} onHowTo={() => setHowTo(true)} />}
+        {howTo && <HowToPlay raceId={raceId} onClose={() => setHowTo(false)} />}
         {hostGone && !result && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 p-6" role="alertdialog" aria-label="Host left">
             <div className="w-full max-w-xs rounded-xl border border-grove-700 bg-grove-900 p-4 text-center">
@@ -585,6 +592,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
         )}
         {selected ? (
           <TowerPanel
+            currency={currency}
             tower={selected}
             resources={view?.resources ?? 0}
             onUpgrade={(branch) => send({ type: 'upgrade', towerId: selected.id, branch })}
@@ -594,7 +602,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
             onClose={() => select(null)}
           />
         ) : mirrored && footer === 'send' ? (
-          <SendBar creeps={sendRoster} resources={view?.resources ?? 0} income={view?.sendIncome ?? 0} rivals={rivalNames} onSend={sendCreeps} />
+          <SendBar creeps={sendRoster} currency={currency} resources={view?.resources ?? 0} income={view?.sendIncome ?? 0} rivals={rivalNames} onSend={sendCreeps} />
         ) : (
           <BuildBar
             towers={roster}

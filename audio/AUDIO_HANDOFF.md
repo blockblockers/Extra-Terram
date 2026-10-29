@@ -16,21 +16,32 @@ Worlds are the home planets: `rootkin` (forest moon: Mossbank Hollow, Twin Hollo
 plains: Slag Trench, Foundry Crown), `chitin` (hive tunnels: Brood Gallery, Four Warrens), `lumenari` (crystal
 fields: Prism Span, Three Rivers of Light, Crystal Throne). A run's music is the map's world, whichever race plays.
 
-## Music (11 pieces)
+## Music (11 pieces) — the direction, revised 2026-10-28
+
+**Trip-hop.** Percussive, not synth-led: slow, heavy, swung drums with ghost notes and off-time accents (the
+snare displaced, pickups on the e and a, a 7/8 where it fits), dusty breaks, a deep sub bass with space
+between the notes, sparse Rhodes / vibes / plucked guitar rather than pads, dub delays and long reverbs, vinyl
+grain. Think Massive Attack, Portishead, DJ Shadow, Bonobo's early records: the groove carries the piece, the
+melody is a few notes that sit back. Synth pads only as a low bed under the drums, never the lead voice.
+
+The game ships with a set written in this language (`audio/compose/`, generated from code: the table in its
+README has each piece's tempo, meter, key and palette). A composed replacement should keep the same ids,
+lengths, tempos and stem structure so it drops in, and beat the set on feel: real-sounding drums and
+percussion, played grooves, better sounds.
 
 | Id | Character | Tempo, key | Length |
 | --- | --- | --- | --- |
-| `menu` | the game's theme: wide, hopeful, a little strange; orchestral-electronic; one memorable melody | 96–108, D major / modal | 120–180 s loop |
-| `world-rootkin` | living wood and sap: low woodwinds, bowed strings, hand drums, wood mallets; warm, patient | 84–96, D or G Dorian | 90–150 s loop |
-| `world-rootkin-battle` | the same with drums forward and a low-string ostinato; never metal | same | = calm |
-| `world-assembly` | machines at rest: metallic percussion, pistons, an idling synth bass, steam | 112–124, A minor / Phrygian | 90–150 s |
-| `world-assembly-battle` | the engine opens up: industrial drums, distorted bass, anvils on the beat | same | = calm |
-| `world-chitin` | wet and dark: deep drones, clicks and chitters as percussion, sub pulses, a hive breathing | 100–112, F# minor; 7/8 or 5/4 welcome | 90–150 s |
-| `world-chitin-battle` | skittering percussion in full, the drone rising, swarm rhythms | same | = calm |
-| `world-lumenari` | light as sound: glassy pads, bells, crystal arpeggios, long reverbs; the most melodic | 96–108, E major / Lydian | 90–150 s |
-| `world-lumenari-battle` | arpeggios at double speed, a bright pulse, shimmering percussion | same | = calm |
-| `result-win` | a short triumphant resolve in the theme's language; no loop | free | 4–8 s |
-| `result-lose` | a short fall, heavy and final, not cruel | free | 4–8 s |
+| `menu` | the theme: a head-nod break under a vibes melody, Rhodes, a muted funk guitar chucking on the off-16ths, strings in the second half; wide and a little strange | 80–86, D Mixolydian / modal | 120–180 s loop |
+| `world-rootkin` | woody: rim instead of snare, congas, woodblock, shaker, a log drum; Rhodes off the beat; a flute line far back | 84–90, D Dorian | 90–150 s loop |
+| `world-rootkin-battle` | the full kit comes in over it — snare with ghosts, 16th hats, toms on the fills — with tribal congas and a low string swell; never metal | same, same length | = calm |
+| `world-assembly` | half-time and heavy: kick on 1, snare on 3, swung hard; pipe hits and metal as percussion; a distorted sub; dark Rhodes stabs | 90–96, A Phrygian | 90–150 s |
+| `world-assembly-battle` | the industrial break: double kicks, snare and clap, an anvil on 3, pipe hits on the 16ths, tom rolls; the bass driven; a low cluster of strings | same | = calm |
+| `world-chitin` | in 7/8 (2+2+3): clicks and chitters as the hats, a sub pulse, a drone that breathes; wet and dark | quarter 88–96, F# minor, 7/8 | 90–150 s |
+| `world-chitin-battle` | skittering: chitters on every 16th, double kicks, the snare answering across the 3, the drone rising, dissonant strings | same | = calm |
+| `world-lumenari` | bells in a dotted-eighth cross-rhythm over a crisp, light break; glassy pad; a vibes motif; the most melodic | 86–92, E Lydian | 90–150 s |
+| `world-lumenari-battle` | bells at double speed, a ride, snare ghosts, strings high and bright | same | = calm |
+| `result-win` | a drum fill into a crash and a rising vibes line over a major Rhodes chord; no loop | free | 4–8 s |
+| `result-lose` | a long low kick, toms falling, the bass stepping down to a minor chord, not cruel | free | 4–8 s |
 
 ## Loop and stem rules
 
@@ -97,9 +108,11 @@ src/audio/types.ts); deliver effects peak-normalised. Stings duck music −7 dB;
 
 ## Status — delivery 1 (2026-10-28, game v0.20.0)
 
-Every id arrived in one drop (eleven music pieces, sixty-one effect files) and is in the game: review in the repo
-at `audio/review/2026-10-28-first-masters/README.md`. Matches the brief by the numbers (tempos, keys, 7/8 for
-Chitin, lengths, stem pairs sample-matched, levels, variation counts). Two things to send back:
+Every id arrived in one drop (eleven music pieces, sixty-one effect files): review in the repo at
+`audio/review/2026-10-28-first-masters/README.md`. **The effects are in the game.** The music matched the brief by
+the numbers but not by ear (synth-led, not percussive); the direction above replaces the old music section, and
+the game now plays a trip-hop set generated in the repo (`audio/compose/`) until a composed one beats it. Two
+things to send back with the new direction:
 
 1. **Loop tails** — the last beat of every loop decays into a 5–9 dB dip (the seam join itself is click-free), so
    each restart breathes. Fold the last bar's releases and reverb into the first bar before cutting, or keep a

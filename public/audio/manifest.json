@@ -9,9 +9,9 @@
       ],
       "loop": [
         0.0,
-        147.692313
+        140.487813
       ],
-      "duration": 147.692
+      "duration": 140.488
     },
     "result-lose": {
       "file": "music/result-lose",
@@ -19,7 +19,7 @@
         "ogg",
         "m4a"
       ],
-      "duration": 6.5
+      "duration": 7.916
     },
     "result-win": {
       "file": "music/result-win",
@@ -27,7 +27,7 @@
         "ogg",
         "m4a"
       ],
-      "duration": 6.25
+      "duration": 7.054
     },
     "world-assembly-battle": {
       "file": "music/world-assembly-battle",
@@ -37,9 +37,9 @@
       ],
       "loop": [
         0.0,
-        112.0
+        125.217396
       ],
-      "duration": 112.0
+      "duration": 125.217
     },
     "world-assembly": {
       "file": "music/world-assembly",
@@ -49,9 +49,9 @@
       ],
       "loop": [
         0.0,
-        112.0
+        125.217396
       ],
-      "duration": 112.0
+      "duration": 125.217
     },
     "world-chitin-battle": {
       "file": "music/world-chitin-battle",
@@ -61,9 +61,9 @@
       ],
       "loop": [
         0.0,
-        128.0
+        127.826083
       ],
-      "duration": 128.0
+      "duration": 127.826
     },
     "world-chitin": {
       "file": "music/world-chitin",
@@ -73,9 +73,9 @@
       ],
       "loop": [
         0.0,
-        128.0
+        127.826083
       ],
-      "duration": 128.0
+      "duration": 127.826
     },
     "world-lumenari-battle": {
       "file": "music/world-lumenari-battle",
@@ -85,9 +85,9 @@
       ],
       "loop": [
         0.0,
-        110.769229
+        130.909083
       ],
-      "duration": 110.769
+      "duration": 130.909
     },
     "world-lumenari": {
       "file": "music/world-lumenari",
@@ -97,9 +97,9 @@
       ],
       "loop": [
         0.0,
-        110.769229
+        130.909083
       ],
-      "duration": 110.769
+      "duration": 130.909
     },
     "world-rootkin-battle": {
       "file": "music/world-rootkin-battle",
@@ -109,9 +109,9 @@
       ],
       "loop": [
         0.0,
-        128.0
+        133.953479
       ],
-      "duration": 128.0
+      "duration": 133.953
     },
     "world-rootkin": {
       "file": "music/world-rootkin",
@@ -121,9 +121,9 @@
       ],
       "loop": [
         0.0,
-        128.0
+        133.953479
       ],
-      "duration": 128.0
+      "duration": 133.953
     }
   },
   "sfx": {

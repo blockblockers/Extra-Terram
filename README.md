@@ -33,6 +33,7 @@ Other scripts:
 | `npm run art-drop` | After copying a checked drop into `public/`: tidies cut stills, refits footprints (never a head-less body or a still with strips), brings strips back onto their still, reduces strips to 256 colours, rewrites `public/sprites/manifest.json` and `mounts.json` |
 | `npm run check-art` | Measures the art against the specs in the art review: tower tiers, branches and contours; creep sizes, contours and the step across their outline on every painted trail; map trail and ground values; whether strips really move. `-- towers|creeps|maps|strips --drop <delivery>` checks a delivery before it goes in |
 | `npm run audio` | Writes `public/audio/manifest.json` from the sound files in `public/audio/` and the loop points in `audio/loops.json`; an id with no file plays its placeholder |
+| `npm run compose-music` | Regenerates the music from `audio/compose/` (a trip-hop set written as code: drums, bass, keys, swing, dub effects, seamless loops), masters it to the brief's loudness targets and writes the encodes and the manifest (needs numpy, scipy, ffmpeg) |
 | `npm run check-audio -- <folder>` | Checks a sound delivery against the audio handoff (ids, encodings, 48 kHz, lengths, loudness or peak, head silence, loop seams; needs ffmpeg for the measurements) |
 | `npm run art-preview` | Dev server page with the real sim and renderer: towers and creeps chosen by URL (`?level=…&towers=mortar:t3a,…&creeps=mega-dozer,…&speed=1`) to look at new art in motion; versus maps open with every seat filled (`&all=1` builds the towers on every seat's pads); `&flat=1` looks straight down, `&unlit=1` shows the painting without the ground lighting |
 
@@ -55,8 +56,8 @@ public/maps/   painted backgrounds, one per map, and thumbs/ (a strip of each fo
 public/audio/  music/ and sfx/ as the audio handoff names them, and manifest.json (written by scripts/audio-manifest.py)
 public/sprites/ towers, turrets, creeps, effects and their strips; manifest.json and mounts.json are written by scripts/sprites.py
                (stills and effects are in the offline download; animation strips load on first use and are cached then)
-audio/         the audio handoff (AUDIO_HANDOFF.md), loops.json (loop points, trims, tempo per piece) and review/ (what came of
-               each sound delivery: 2026-10-28-first-masters) (not shipped)
+audio/         the audio handoff (AUDIO_HANDOFF.md), loops.json (loop points, trims, tempo per piece), compose/ (the music as
+               code: engine, pieces, mastering) and review/ (what came of each sound delivery) (not shipped)
 art/           concept sheets, key-art originals, round notes and layout guides (not shipped); art/mounts.json: turret
                pivots off the default and emitter points, kept by hand from the art drops' READMEs; art/review/: the
                art review's notes and the check-art baseline, and what came of each later delivery (2026-10-27-rework,
@@ -88,4 +89,4 @@ Tap a tower in the build bar, then tap a build pad: while a tower is picked, eve
 
 The board is seen from a tilted camera (a stronger angle in landscape, a milder one on phones) and the painted map is lit as relief — the trail a sunken channel, the pads raised — with the shots, hits, kills and leaks lighting the ground around them. Both are settings — *Map view* (Tilted / Straight down) and *Ground lighting* — in the menu's Settings and on the pause screen, so they change mid-run; straight down and unlit, the board is the painting as before.
 
-Sound: background music (the menu theme; a world's calm loop with its battle stem during waves) and game sounds (shots, hits, deaths, leaks, building, the wave cues, interface taps), each with an on/off switch and a volume, plus Mute everything — in the menu's Settings and on the pause screen. Sound plays only while the game is on screen: it stops when the phone locks or the app is put away and carries on when the game shows again.
+Sound: background music (a trip-hop set — the menu theme; a world's calm loop with its battle stem during waves) and game sounds (shots, hits, deaths, leaks, building, the wave cues, interface taps), each with an on/off switch and a volume, plus Mute everything — in the menu's Settings and on the pause screen. Sound plays only while the game is on screen: it stops when the phone locks or the app is put away and carries on when the game shows again.

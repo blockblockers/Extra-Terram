@@ -1,8 +1,8 @@
 {
   "name": "extra-terram",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "private": true,
-  "description": "Extra Terram: The Alien Race Tower Defense — Phase 1–3: vertical slice, four races, accounts",
+  "description": "Extra Terram: The Alien Race Tower Defense \u2014 Phase 1\u20133: vertical slice, four races, accounts",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -32,7 +32,8 @@
     "calibrate:endless": "tsx scripts/calibrate-endless.ts",
     "calibrate:versus": "tsx scripts/calibrate-versus.ts",
     "calibrate:versus-d": "tsx scripts/calibrate-versus-d.ts",
-    "check-versus": "tsx scripts/check-versus.ts"
+    "check-versus": "tsx scripts/check-versus.ts",
+    "compose-music": "python3 audio/compose/compose.py && python3 audio/compose/master.py && python3 scripts/audio-manifest.py"
   },
   "dependencies": {
     "@fontsource/oxanium": "^5.3.0",

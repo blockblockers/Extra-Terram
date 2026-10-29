@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/check-audio.py v0.1.0 — check a sound delivery against the audio handoff before it goes in
+"""Extra Terram — scripts/check-audio.py v0.2.0 — the seam check compares the seam with the music's own transitions
 
   python scripts/check-audio.py <drop-folder>        a folder laid out like public/audio (music/, sfx/)
   python scripts/check-audio.py public/audio          the game's own files
@@ -7,7 +7,8 @@
 For every file: the id is one the game asks for; the encodings the handoff asks for are both there (ogg
 and m4a); with ffprobe/ffmpeg installed: sample rate 48 kHz, channel count, duration inside the id's
 range, integrated loudness and true peak (EBU R128) inside the id's window, no silence at the head of
-an effect, and for loops a seam check (the last 100 ms about as loud as the first). Prints OK / WARN /
+an effect, and for loops a seam check: the step in level across the loop point is no bigger than the
+music's own steps between beats, and the end does not fade below the piece's level. Prints OK / WARN /
 FAIL per id and a count. Needs only the standard library; the measurements need ffmpeg.
 """
 import json
@@ -118,6 +119,48 @@ def pcm_window(path: Path, start: float | None, length: float) -> list[float] | 
         return None
 
 
+def seam_report(path: Path, duration: float) -> list[str]:
+    """Loop seam: the level step from the file's end to its start, against the piece's own steps between 20 ms
+    windows (a downbeat at the start is a step the music makes every bar); and the last second against the
+    piece's typical second (a fade-out would be heard as a breath at every restart)."""
+    if not shutil.which("ffmpeg"):
+        return []
+    args = ["ffmpeg", "-v", "error", "-i", str(path), "-ac", "1", "-ar", "12000", "-f", "f32le", "-"]
+    try:
+        out = subprocess.run(args, capture_output=True, timeout=120).stdout
+    except subprocess.SubprocessError:
+        return []
+    import array
+
+    a = array.array("f")
+    a.frombytes(out[: len(out) // 4 * 4])
+    if len(a) < 12000 * 4:
+        return []
+    w = 240  # 20 ms at 12 kHz
+    levels = []
+    for i in range(0, len(a) - w, w):
+        seg = a[i : i + w]
+        levels.append(math.sqrt(sum(x * x for x in seg) / w))
+    floor = max(1e-6, max(levels) * 1e-3)
+    db = [20 * math.log10(max(v, floor)) for v in levels]
+    steps1 = sorted(abs(db[i + 1] - db[i]) for i in range(len(db) - 1))
+    steps2 = sorted(abs(db[i + 2] - db[i]) for i in range(len(db) - 2))
+    typical = max(steps1[int(len(steps1) * 0.98)], steps2[int(len(steps2) * 0.98)]) if steps2 else 0.0
+    seam = abs(db[0] - db[-1])
+    msgs = []
+    if seam > max(6.0, typical + 2.0):
+        msgs.append(f"the loop's end is {seam:.1f} dB off its start, more than the music's own steps ({typical:.1f} dB); the seam will be heard")
+    sec = 50  # windows per second
+    seconds = [sum(levels[i : i + sec]) / sec for i in range(0, len(levels) - sec, sec)]
+    if len(seconds) > 4:
+        med = sorted(seconds)[len(seconds) // 2]
+        last = seconds[-1]
+        if last > 0 and med / last > 2.0:
+            msgs.append(f"the last second is {20 * math.log10(med / last):.1f} dB under the piece's typical level: it fades out, so every restart breathes")
+    _ = duration
+    return msgs
+
+
 def rms(samples: list[float]) -> float:
     return (sum(s * s for s in samples) / max(1, len(samples))) ** 0.5
 
@@ -190,12 +233,8 @@ def main() -> None:
                     if head and rms(head) < 1e-4 and info["duration"] > 0.05:
                         msgs.append(f"WARN {stem}: starts with silence; trim the head so the sound lands on the event")
                 elif not sid.startswith("result-"):
-                    a = pcm_window(ref, 0.0, 0.1)
-                    b = pcm_window(ref, None, 0.1)
-                    if a and b:
-                        ra, rb = rms(a), rms(b)
-                        if ra > 0 and rb > 0 and max(ra, rb) / min(ra, rb) > 2.0:
-                            msgs.append(f"WARN {stem}: the loop's end is {20 * math.log10(max(ra, rb) / min(ra, rb)):.1f} dB off its start; a seam will be heard unless loop points are given")
+                    for m in seam_report(ref, info["duration"]):
+                        msgs.append(f"WARN {stem}: {m}")
             if any(m.startswith("FAIL") for m in msgs):
                 level = "FAIL"
                 fail += 1

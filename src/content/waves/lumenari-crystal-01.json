@@ -16,10 +16,10 @@
   },
   "waves": [
     {
-      "name": "Seedlings",
+      "name": "Survey crew",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 10,
           "intervalTicks": 20,
           "delayTicks": 0
@@ -27,10 +27,10 @@
       ]
     },
     {
-      "name": "Sprouting",
+      "name": "Second shift",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 15,
           "intervalTicks": 16,
           "delayTicks": 0
@@ -38,16 +38,16 @@
       ]
     },
     {
-      "name": "Thornbeasts",
+      "name": "Haulers",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 10,
           "intervalTicks": 16,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 4,
           "intervalTicks": 36,
           "delayTicks": 100
@@ -55,10 +55,10 @@
       ]
     },
     {
-      "name": "Thicket",
+      "name": "Convoy",
       "groups": [
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 8,
           "intervalTicks": 30,
           "delayTicks": 0
@@ -66,16 +66,16 @@
       ]
     },
     {
-      "name": "Overgrowth",
+      "name": "Overtime",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 18,
           "intervalTicks": 12,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 5,
           "intervalTicks": 36,
           "delayTicks": 80
@@ -83,16 +83,16 @@
       ]
     },
     {
-      "name": "Rootwalker",
+      "name": "Dozer",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 4,
           "intervalTicks": 70,
           "delayTicks": 20
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 18,
           "intervalTicks": 12,
           "delayTicks": 100
@@ -100,16 +100,16 @@
       ]
     },
     {
-      "name": "Canopy",
+      "name": "Heavy plant",
       "groups": [
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 12,
           "intervalTicks": 22,
           "delayTicks": 0
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 18,
           "intervalTicks": 10,
           "delayTicks": 60
@@ -134,16 +134,16 @@
       ]
     },
     {
-      "name": "Deep roots",
+      "name": "Clearance order",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 8,
           "intervalTicks": 50,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 10,
           "intervalTicks": 24,
           "delayTicks": 120
@@ -151,16 +151,16 @@
       ]
     },
     {
-      "name": "Seed storm",
+      "name": "Rush hour",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 35,
           "intervalTicks": 8,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 15,
           "intervalTicks": 18,
           "delayTicks": 100
@@ -168,22 +168,22 @@
       ]
     },
     {
-      "name": "Machine raid",
+      "name": "Root raid",
       "groups": [
         {
-          "creep": "compactor",
+          "creep": "seedling",
           "count": 20,
           "intervalTicks": 9,
           "delayTicks": 0
         },
         {
-          "creep": "dump-hauler",
+          "creep": "thornbeast",
           "count": 8,
           "intervalTicks": 24,
           "delayTicks": 100
         },
         {
-          "creep": "dozer",
+          "creep": "rootwalker",
           "count": 2,
           "intervalTicks": 80,
           "delayTicks": 300
@@ -194,7 +194,7 @@
       "name": "Pincer",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 6,
           "intervalTicks": 45,
           "delayTicks": 0
@@ -206,7 +206,7 @@
           "delayTicks": 0
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 24,
           "intervalTicks": 8,
           "delayTicks": 150
@@ -214,10 +214,10 @@
       ]
     },
     {
-      "name": "Thicket II",
+      "name": "Convoy II",
       "groups": [
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 22,
           "intervalTicks": 14,
           "delayTicks": 0
@@ -231,22 +231,22 @@
       ]
     },
     {
-      "name": "Worldroot stirs",
+      "name": "The Foundry stirs",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 11,
           "intervalTicks": 40,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 18,
           "intervalTicks": 18,
           "delayTicks": 80
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 30,
           "intervalTicks": 8,
           "delayTicks": 200
@@ -263,19 +263,19 @@
           "delayTicks": 0
         },
         {
-          "creep": "compactor",
+          "creep": "seedling",
           "count": 24,
           "intervalTicks": 8,
           "delayTicks": 60
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 24,
           "intervalTicks": 8,
           "delayTicks": 120
         },
         {
-          "creep": "dump-hauler",
+          "creep": "thornbeast",
           "count": 8,
           "intervalTicks": 24,
           "delayTicks": 300
@@ -286,7 +286,7 @@
       "name": "Siege",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 8,
           "intervalTicks": 36,
           "delayTicks": 0
@@ -298,13 +298,13 @@
           "delayTicks": 60
         },
         {
-          "creep": "dozer",
+          "creep": "rootwalker",
           "count": 5,
           "intervalTicks": 50,
           "delayTicks": 120
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 14,
           "intervalTicks": 16,
           "delayTicks": 240
@@ -315,13 +315,13 @@
       "name": "The long night",
       "groups": [
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 44,
           "intervalTicks": 6,
           "delayTicks": 0
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 20,
           "intervalTicks": 12,
           "delayTicks": 120
@@ -333,7 +333,7 @@
           "delayTicks": 240
         },
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 6,
           "intervalTicks": 40,
           "delayTicks": 400
@@ -341,16 +341,16 @@
       ]
     },
     {
-      "name": "Worldroot wakes",
+      "name": "The Foundry wakes",
       "groups": [
         {
-          "creep": "rootwalker",
+          "creep": "dozer",
           "count": 12,
           "intervalTicks": 30,
           "delayTicks": 0
         },
         {
-          "creep": "dozer",
+          "creep": "rootwalker",
           "count": 6,
           "intervalTicks": 45,
           "delayTicks": 100
@@ -362,13 +362,13 @@
           "delayTicks": 200
         },
         {
-          "creep": "thornbeast",
+          "creep": "dump-hauler",
           "count": 20,
           "intervalTicks": 12,
           "delayTicks": 300
         },
         {
-          "creep": "seedling",
+          "creep": "compactor",
           "count": 36,
           "intervalTicks": 6,
           "delayTicks": 500
@@ -376,7 +376,7 @@
       ]
     }
   ],
-  "content_version": "0.10.0",
+  "content_version": "0.11.0",
   "difficulty": {
     "hard": 0.05,
     "brutal": 0.1

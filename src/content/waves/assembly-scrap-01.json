@@ -16,10 +16,10 @@
   },
   "waves": [
     {
-      "name": "Skitter probe",
+      "name": "Seedling probe",
       "groups": [
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 9,
           "intervalTicks": 20,
           "delayTicks": 0
@@ -27,10 +27,10 @@
       ]
     },
     {
-      "name": "Brood front",
+      "name": "Root front",
       "groups": [
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 13,
           "intervalTicks": 16,
           "delayTicks": 0
@@ -38,16 +38,16 @@
       ]
     },
     {
-      "name": "Beetles",
+      "name": "Thornbeasts",
       "groups": [
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 9,
           "intervalTicks": 16,
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 3,
           "intervalTicks": 36,
           "delayTicks": 100
@@ -55,10 +55,10 @@
       ]
     },
     {
-      "name": "Carapace column",
+      "name": "Bark column",
       "groups": [
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 7,
           "intervalTicks": 30,
           "delayTicks": 0
@@ -66,16 +66,16 @@
       ]
     },
     {
-      "name": "Swarm",
+      "name": "Overgrowth",
       "groups": [
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 15,
           "intervalTicks": 12,
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 4,
           "intervalTicks": 36,
           "delayTicks": 80
@@ -83,16 +83,16 @@
       ]
     },
     {
-      "name": "Siege arrives",
+      "name": "Rootwalker arrives",
       "groups": [
         {
-          "creep": "siege-beetle",
+          "creep": "rootwalker",
           "count": 3,
           "intervalTicks": 70,
           "delayTicks": 20
         },
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 15,
           "intervalTicks": 12,
           "delayTicks": 100
@@ -100,16 +100,16 @@
       ]
     },
     {
-      "name": "Hive tide",
+      "name": "Green tide",
       "groups": [
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 11,
           "intervalTicks": 22,
           "delayTicks": 0
         },
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 15,
           "intervalTicks": 10,
           "delayTicks": 60
@@ -134,16 +134,16 @@
       ]
     },
     {
-      "name": "Siege line",
+      "name": "Rootwalker line",
       "groups": [
         {
-          "creep": "siege-beetle",
+          "creep": "rootwalker",
           "count": 7,
           "intervalTicks": 50,
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 9,
           "intervalTicks": 24,
           "delayTicks": 120
@@ -151,16 +151,16 @@
       ]
     },
     {
-      "name": "Skitter storm",
+      "name": "Seed storm",
       "groups": [
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 31,
           "intervalTicks": 8,
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 13,
           "intervalTicks": 18,
           "delayTicks": 100
@@ -177,13 +177,13 @@
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 10,
           "intervalTicks": 20,
           "delayTicks": 40
         },
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 20,
           "intervalTicks": 8,
           "delayTicks": 200
@@ -206,7 +206,7 @@
           "delayTicks": 60
         },
         {
-          "creep": "siege-beetle",
+          "creep": "rootwalker",
           "count": 4,
           "intervalTicks": 60,
           "delayTicks": 300
@@ -214,22 +214,22 @@
       ]
     },
     {
-      "name": "Hive tide II",
+      "name": "Green tide II",
       "groups": [
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 18,
           "intervalTicks": 16,
           "delayTicks": 0
         },
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 30,
           "intervalTicks": 7,
           "delayTicks": 80
         },
         {
-          "creep": "siege-beetle",
+          "creep": "rootwalker",
           "count": 5,
           "intervalTicks": 50,
           "delayTicks": 200
@@ -237,22 +237,22 @@
       ]
     },
     {
-      "name": "The Queen's order",
+      "name": "The Worldroot's order",
       "groups": [
         {
-          "creep": "siege-beetle",
+          "creep": "rootwalker",
           "count": 12,
           "intervalTicks": 36,
           "delayTicks": 0
         },
         {
-          "creep": "carapace-beetle",
+          "creep": "thornbeast",
           "count": 18,
           "intervalTicks": 16,
           "delayTicks": 80
         },
         {
-          "creep": "skitterling",
+          "creep": "seedling",
           "count": 34,
           "intervalTicks": 7,
           "delayTicks": 200
@@ -266,7 +266,7 @@
       ]
     }
   ],
-  "content_version": "0.10.0",
+  "content_version": "0.11.0",
   "difficulty": {
     "hard": 0.3,
     "brutal": 0.6

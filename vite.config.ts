@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       // stills, effects and icons are precached through globPatterns below; strips are not (see runtimeCaching)
-      includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.jpg', 'art/*.jpg', 'ui/*.png', 'sprites/manifest.json', 'sprites/mounts.json', 'audio/manifest.json', 'audio/sfx/*.{ogg,m4a,mp3}'],
+      includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.jpg', 'art/*.jpg', 'art/worlds/*.webp', 'ui/*.png', 'sprites/manifest.json', 'sprites/mounts.json', 'audio/manifest.json', 'audio/sfx/*.{ogg,m4a,mp3}'],
       manifest: {
         name: 'Extra-Terram: The Alien Race Tower Defense',
         short_name: 'Extra-Terram',

@@ -1,4 +1,4 @@
-// Extra Terram — src/app/GameShell.tsx v0.18.0 — the pause screen carries the sound and view settings
+// Extra Terram — src/app/GameShell.tsx v0.19.0 — the world intro holds the loop before a solo level begins
 // Owns one run: sim state (in a holder, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 // On a shared board the sim is driven by the Lockstep: inputs are submitted, not applied, and a
@@ -55,6 +55,7 @@ import { Lockstep, type SimHolder } from './lockstep';
 import { GameLoop } from './loop';
 import { describeRules, isCustomRun, simRules } from './rules';
 import { confirmBuildOn, type Settings } from './settings';
+import { WorldIntro } from '../ui/WorldIntro';
 
 interface Props {
   level: LevelEntry;
@@ -112,6 +113,9 @@ export function GameShell({ level, raceId, seed, rules, settings, onSettings, sa
   const [pending, setPending] = useState<Cell | null>(null); // a pad waiting for Build (confirm step)
   const [padPick, setPadPick] = useState<Cell | null>(null); // a pad tapped before a tower was chosen
   const [paused, setPaused] = useState(false);
+  // Solo runs open on the world from orbit; the loop waits under it (a shared board runs on the host's clock, so no intro there).
+  const [intro, setIntro] = useState(() => !match);
+  const introRef = useRef(!match); // read by the mount, which may finish after the player tapped through
   const [speed, setSpeed] = useState(1);
   const [toast, setToast] = useState<string | null>(null);
   const [footer, setFooter] = useState<'build' | 'send'>('build');
@@ -235,6 +239,7 @@ export function GameShell({ level, raceId, seed, rules, settings, onSettings, sa
         renderer.setEffectsScale(settings.batterySaver ? 0.5 : 1);
         renderer.setCamera({ tilt: settings.camera !== 'flat', lighting: settings.lighting !== false });
         loop.start();
+        if (introRef.current) loop.paused = true; // the intro holds the loop until it is dismissed
         setView(simView(sim.state, ctx, mySeat));
       })
       .catch((err: unknown) => {
@@ -393,6 +398,12 @@ export function GameShell({ level, raceId, seed, rules, settings, onSettings, sa
   );
 
   const hostControls = !shared || !!match?.host; // on a shared board only the host pauses or changes speed
+  const beginRun = useCallback(() => {
+    introRef.current = false;
+    setIntro(false);
+    const g = game.current;
+    if (g && !paused) g.loop.paused = false;
+  }, [paused]);
 
   const togglePause = useCallback(() => {
     const g = game.current;
@@ -737,6 +748,7 @@ export function GameShell({ level, raceId, seed, rules, settings, onSettings, sa
         )}
         {paused && !result && hostControls && !howTo && <PauseOverlay settings={settings} onSettings={onSettings} onResume={togglePause} onExit={onExit} onHowTo={() => setHowTo(true)} />}
         {howTo && <HowToPlay raceId={raceId} onClose={() => setHowTo(false)} />}
+        {intro && !result && <WorldIntro level={level} raceId={raceId} ready={!!view} onBegin={beginRun} />}
         {hostGone && !result && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 p-6" role="alertdialog" aria-label="Host left">
             <div className="w-full max-w-xs rounded-xl border border-grove-700 bg-grove-900 p-4 text-center">

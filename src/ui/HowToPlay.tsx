@@ -1,8 +1,9 @@
-// Extra Terram — src/ui/HowToPlay.tsx v0.3.3 — the sound settings
+// Extra Terram — src/ui/HowToPlay.tsx v0.4.0 — the premise: four worlds, each invaded by the race it cannot fight alone
 // Opens by itself the first time a guest or a new player reaches the menu (see `shouldAutoOpenHowTo`),
 // and any time from "How to play" at the bottom of the menu or from the pause screen.
 import { useEffect, useRef } from 'react';
 import { content, currencyLabel, matchupsFor, raceById, towersForRace } from '../content';
+import { PREMISE, WORLD_LORE } from '../content/lore';
 import { BOSS_SEND_FROM_ROUND, DIFFICULTIES, MAX_REINFORCE, MAX_ROUNDS, REINFORCE_STEP, type RaceDef } from '../engine';
 import { TowerIcon } from './TowerIcon';
 
@@ -120,7 +121,17 @@ export function HowToPlay({ raceId, onClose }: { raceId?: string; onClose(): voi
 
         <div className="overflow-y-auto px-4 pb-4">
           <Section n={1} title="Hold the maze">
-            Aliens of another race march along the path toward your base. Every one that slips through costs you lives — big ones cost more. Survive every wave to win; lose all your lives and the maze falls.
+            {PREMISE} Each world's invaders march along the trail toward the thing they came for; every one that slips through costs you lives — big ones cost more. Survive every wave to win; lose all your lives and the maze falls.
+            <span className="mt-1.5 block text-xs text-grove-300/80">
+              {content.races.map((r) => {
+                const l = WORLD_LORE[r.id];
+                return l ? (
+                  <span key={r.id} className="block">
+                    <b className="text-grove-300">{l.world}</b> ({r.name}): {l.line.replace(/\.$/, '')} — {raceById(l.invader).name}.
+                  </span>
+                ) : null;
+              })}
+            </span>
           </Section>
 
           <Section n={2} title="Build towers">

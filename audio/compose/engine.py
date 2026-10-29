@@ -107,7 +107,7 @@ def rng(seed: int) -> np.random.Generator:
 
 
 # ----------------------------------------------------------------------------- drums
-def kick(vel: float = 1.0, decay: float = 0.32, f0: float = 50.0, sweep: float = 110.0, click: float = 0.5, seed: int = 0) -> np.ndarray:
+def kick(vel: float = 1.0, decay: float = 0.26, f0: float = 50.0, sweep: float = 120.0, click: float = 0.85, seed: int = 0) -> np.ndarray:
     n = int(SR * (decay * 4 + 0.05))
     t = t_axis(n)
     f = f0 + sweep * np.exp(-t / 0.045)
@@ -122,15 +122,16 @@ def kick(vel: float = 1.0, decay: float = 0.32, f0: float = 50.0, sweep: float =
     return out * vel * 0.45
 
 
-def snare(vel: float = 1.0, decay: float = 0.17, tone: float = 188.0, snap: float = 1.0, body: float = 0.55, seed: int = 1) -> np.ndarray:
+def snare(vel: float = 1.0, decay: float = 0.13, tone: float = 188.0, snap: float = 1.0, body: float = 0.55, seed: int = 1) -> np.ndarray:
     n = int(SR * (decay * 5 + 0.05))
     t = t_axis(n)
     g = rng(seed)
     noise = g.standard_normal(n)
-    nz = bp(noise, 1200, 7500) * exp_env(n, decay) * snap
-    nz += bp(noise, 300, 1500) * exp_env(n, decay * 0.5) * 0.4 * snap
+    nz = bp(noise, 1200, 7500) * exp_env(n, decay * 0.8) * snap
+    nz += bp(noise, 300, 1500) * exp_env(n, decay * 0.45) * 0.4 * snap
+    crack = hp(noise, 3000) * exp_env(n, 0.004) * 0.9 * snap
     tonal = (np.sin(TWO_PI * tone * t) + 0.5 * np.sin(TWO_PI * tone * 1.74 * t)) * exp_env(n, decay * 0.55) * body
-    out = (nz * 0.8 + tonal) * attack(n, 0.2)
+    out = (nz * 0.8 + crack + tonal) * attack(n, 0.2)
     return saturate(out * 1.1, 1.4) * vel * 0.8
 
 
@@ -233,7 +234,7 @@ def ride(vel: float = 1.0, seed: int = 11) -> np.ndarray:
     return out * attack(n, 0.1) * vel * 0.22
 
 
-def tom(vel: float = 1.0, f: float = 110.0, decay: float = 0.28, seed: int = 12) -> np.ndarray:
+def tom(vel: float = 1.0, f: float = 110.0, decay: float = 0.22, seed: int = 12) -> np.ndarray:
     n = int(SR * (decay * 4 + 0.03))
     t = t_axis(n)
     fr = f * (1 + 0.7 * np.exp(-t / 0.03))
@@ -409,6 +410,13 @@ def flute(f: float, dur: float, vel: float = 1.0, seed: int = 50) -> np.ndarray:
 
 # ----------------------------------------------------------------------------- sequencer
 VEL = {"X": 1.0, "x": 0.78, "o": 0.42, "g": 0.26, ".": 0.0}
+# One knob for the kit's tightness: explicit kick / snare / tom decays in the pieces are scaled by this.
+TIGHTEN = 0.78
+# One knob for the room: every track's reverb and delay send is scaled by these.
+REVERB_SCALE = 0.55
+DELAY_SCALE = 0.75
+# The drum bus sits this much under the rest (the patterns carry the groove; the bass and keys carry the tune).
+DRUMS_TRIM = 0.78
 
 
 @dataclass
@@ -450,6 +458,10 @@ class Song:
         return self.steps_per_beat * self.beats_per_bar
 
     def track(self, name: str, bus: str, **kw) -> Track:
+        if "reverb_send" in kw:
+            kw["reverb_send"] *= REVERB_SCALE
+        if "delay_send" in kw:
+            kw["delay_send"] *= DELAY_SCALE
         tr = Track(name, bus, **kw)
         tr.buf = np.zeros((self.n, 2))
         self.tracks[name] = tr
@@ -489,6 +501,8 @@ class Song:
     # -- pattern helpers
     def drums(self, track: Track, synth, patterns: list[str], bars: range, vel_scale: float = 1.0, swing: bool = True, vel_jitter: float = 0.08, **synth_kw) -> None:
         """`patterns` cycle bar by bar; chars X x o g . per step."""
+        if "decay" in synth_kw and synth in (kick, snare, tom):
+            synth_kw = {**synth_kw, "decay": synth_kw["decay"] * TIGHTEN}
         for i, bar in enumerate(bars):
             pat = patterns[i % len(patterns)]
             for step, ch in enumerate(pat):
@@ -519,7 +533,9 @@ class Song:
         self.place(track, t, aud)
 
     # -- render
-    def render(self, bus_gain: dict[str, float] | None = None, drums_lp: float = 10500.0, drums_drive: float = 1.5, sidechain: float = 0.45, delay_steps: float = 3.0, delay_fb: float = 0.42, reverb_rt: float = 1.6, reverb_lp: float = 4200.0, crackle: float = 0.08, width: float = 1.0) -> np.ndarray:
+    def render(self, bus_gain: dict[str, float] | None = None, drums_lp: float = 10500.0, drums_drive: float = 1.5, sidechain: float = 0.45, delay_steps: float = 3.0, delay_fb: float = 0.32, reverb_rt: float = 1.2, reverb_lp: float = 3600.0, crackle: float = 0.08, width: float = 1.0) -> np.ndarray:
+        reverb_rt = min(reverb_rt, 1.5)
+        delay_fb = min(delay_fb, 0.34)
         bg = {"drums": 1.0, "perc": 0.8, "bass": 0.9, "keys": 0.75, "pad": 0.6, "lead": 0.7, "fx": 0.7}
         if bus_gain:
             bg.update(bus_gain)
@@ -555,9 +571,12 @@ class Song:
         for name, b in buses.items():
             if name == "drums":
                 b = saturate(b * drums_drive, 1.4) / drums_drive
-                b = lp(b, drums_lp)
+                b = lp(b, max(drums_lp, 11000))
                 b = peak_eq(b, 90, 2.0, 0.9)
                 b = peak_eq(b, 2800, 1.5, 1.2)
+                b = peak_eq(b, 5200, 1.8, 1.4)  # the snap
+                b = peak_eq(b, 300, -1.5, 1.0)  # less mud under the kick
+                b = bus_comp(b, threshold_db=-16, ratio=3.0, attack_ms=14, release_ms=90, makeup_db=2.5) * DRUMS_TRIM
             elif name == "perc":
                 b = lp(saturate(b * 1.2, 1.3) / 1.2, 12000)
             elif name == "bass":
@@ -647,6 +666,23 @@ class Song:
             y = signal.fftconvolve(x[:, c], ir[:, c])[: self.n]
             out[:, c] = y
         return out
+
+
+# ----------------------------------------------------------------------------- bus dynamics
+def bus_comp(x: np.ndarray, threshold_db: float = -16.0, ratio: float = 3.0, attack_ms: float = 14.0, release_ms: float = 90.0, makeup_db: float = 2.0) -> np.ndarray:
+    """A feed-forward compressor on the bus: the envelope follows the peak with the attack time (a slow attack lets
+    each hit's transient through), lets go with the release; gain above the threshold is reduced by the ratio."""
+    peak = np.max(np.abs(x), axis=1)
+    att = math.exp(-1 / (SR * attack_ms / 1000))
+    rel = math.exp(-1 / (SR * release_ms / 1000))
+    # attack-smoothed envelope (rising edges slowed), then a release hold (falling edges slowed)
+    env_a = signal.lfilter([1 - att], [1, -att], peak)
+    env_r = signal.lfilter([1 - rel], [1, -rel], peak)
+    env = np.maximum(env_a, np.minimum(env_r, peak))
+    thr = 10 ** (threshold_db / 20)
+    over = np.maximum(env / thr, 1.0)
+    gain = over ** (1 / ratio - 1)
+    return x * gain[:, None] * 10 ** (makeup_db / 20)
 
 
 # ----------------------------------------------------------------------------- master

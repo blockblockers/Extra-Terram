@@ -29,3 +29,13 @@ Every world's battle stem adds the full kit (snare with ghosts, 16th hats, toms 
 percussion layer (tribal congas / anvil and pipes / skittering chitters / ride and double-time bells), a
 driven octave bass and a low string swell. The calm loops each have a four-bar break at bar 32 where the drums
 drop out, and fills at the end of every eight bars.
+
+## Knobs
+
+Four constants at the top of the sequencer section of `engine.py` set the feel of the whole set without touching a
+pattern: `TIGHTEN` scales every explicit kick, snare and tom decay (0.78: short tails, the hits stay); `REVERB_SCALE`
+and `DELAY_SCALE` scale every track's sends (0.55 and 0.75: a small, dry room); `DRUMS_TRIM` sits the drum bus under
+the rest (0.78). The drum bus also runs a slow-attack compressor (`bus_comp`: -16 dB, 3:1, 14 ms / 90 ms) so each
+hit's transient passes and the tails are held, a presence bump at 5.2 kHz and a cut at 300 Hz; reverb times are
+capped at 1.5 s and delay feedback at 0.34. The first take (v0.21.0) had none of these; v0.23.1 added them after a
+listen: the drums were overpowering and the room too wet.

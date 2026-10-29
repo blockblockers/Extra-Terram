@@ -266,7 +266,7 @@
       ]
     }
   ],
-  "content_version": "0.10.0",
+  "content_version": "0.11.0",
   "difficulty": {
     "hard": 0.3,
     "brutal": 0.6

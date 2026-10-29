@@ -1,4 +1,4 @@
-// Extra Terram — src/ui/Title.tsx v0.9.0 — two lettering-free paintings: the one for the screen's orientation is preloaded; the stage layout for the menu
+// Extra Terram — src/ui/Title.tsx v0.10.0 — a `screen` layout for the phone menu: the height of the viewport, nothing to scroll
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 /**
@@ -78,12 +78,13 @@ export function LogoLockup({ stage = false }: { stage?: boolean }) {
 
 /**
  * Every title-backed page: the backdrop, then either the phone-width column (padded past the safe
- * areas) or, for the menu in landscape, a `stage` the size of the viewport whose children place
- * themselves on the painting. On the first
+ * areas), a `screen` (the same column held to the viewport's height, for the phone menu: its middle
+ * centres whatever is open and scrolls inside itself), or, for the menu in landscape, a `stage` the
+ * size of the viewport whose children place themselves on the painting. On the first
  * title screen of a page load it runs the intro: the painting alone until it has loaded plus a short
  * hold (or a tap), then the panels wrapped in <Reveal> slide in.
  */
-export function TitleColumn({ children, layout = 'column' }: { children: ReactNode; layout?: 'column' | 'stage' }) {
+export function TitleColumn({ children, layout = 'column' }: { children: ReactNode; layout?: 'column' | 'stage' | 'screen' }) {
   const [revealed, setRevealed] = useState(introDone);
 
   useEffect(() => {
@@ -133,6 +134,8 @@ export function TitleColumn({ children, layout = 'column' }: { children: ReactNo
         <TitleBackdrop />
         {layout === 'stage' ? (
           <div className="et-stage">{children}</div>
+        ) : layout === 'screen' ? (
+          <div className="et-screen px-[calc(var(--safe-left)+1rem)] pb-[calc(var(--safe-bottom)+0.75rem)] pr-[calc(var(--safe-right)+1rem)] pt-[calc(var(--safe-top)+1.5rem)]">{children}</div>
         ) : (
           <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-md flex-col px-[calc(var(--safe-left)+1rem)] pb-[calc(var(--safe-bottom)+1rem)] pr-[calc(var(--safe-right)+1rem)] pt-[calc(var(--safe-top)+1.5rem)]">
             {children}

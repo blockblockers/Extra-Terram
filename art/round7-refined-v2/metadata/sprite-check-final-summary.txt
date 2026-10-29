@@ -1,0 +1,3 @@
+Sprite Kit v1 checker against Extra Terram v0.13.0 project: 333 files, 333 OK, 0 WARN, 0 FAIL.
+Full npm build NOT run: project dependencies are not installed (npm run validate fails on missing ajv module).
+Checker verifies mechanics and exact pixels, not artistic approval or in-game rendering.

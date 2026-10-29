@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/clean-stills.py v0.1.0 — tidy cut-out tower stills from an art drop
+"""Extra Terram — scripts/clean-stills.py v0.2.0 — tidy cut-out tower stills from an art drop; stills with strips are left alone
 
 Generated sprite sheets get cropped by other tools with the usual leftovers: label text under the
 unit ("T3A"), a sliver of the neighbouring cell, the sheet's grid lines along the crop edge. This pass
@@ -19,6 +19,8 @@ Rules (opaque = alpha > 40; components are 8-connected):
   3. labels: a component under 100 px sitting in the bottom 20 px of the unit → removed (the "T3A"
      under a sheet cell lands there); specks under 20 px anywhere → removed
   4. detached parts (floating seeds, shards) are kept: anything else off the edge stays
+A still with strips beside it (<state>-idle.png, <state>-fire.png) is reported but never changed: its strips'
+frame 0 must stay equal to it, and cleaning the still alone would make the tower jump when a strip starts.
 After cleaning, a unit whose own bounding box touches the canvas edge is reported as CLIPPED: the
 drop must re-crop it with margin; the game shows it as delivered meanwhile.
 """
@@ -112,7 +114,11 @@ def main() -> None:
         img = Image.open(png)
         if img.size[0] != img.size[1]:
             continue  # a strip
-        removed, clipped = clean(png, dry)
+        has_strips = any((png.parent / f"{png.stem}-{a}.png").exists() for a in ("idle", "fire"))
+        removed, clipped = clean(png, dry or has_strips)
+        if removed and has_strips:
+            print(f"{rel:44s} kept (it has strips): {'; '.join(removed)}")
+            removed = []
         if removed:
             cleaned += 1
             print(f"{rel:44s} {'would remove' if dry else 'removed'}: {'; '.join(removed)}")

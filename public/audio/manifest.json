@@ -1,0 +1,445 @@
+{
+  "version": 1,
+  "music": {
+    "menu": {
+      "file": "music/menu",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        147.692313
+      ],
+      "duration": 147.692
+    },
+    "result-lose": {
+      "file": "music/result-lose",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "duration": 6.5
+    },
+    "result-win": {
+      "file": "music/result-win",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "duration": 6.25
+    },
+    "world-assembly-battle": {
+      "file": "music/world-assembly-battle",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        112.0
+      ],
+      "duration": 112.0
+    },
+    "world-assembly": {
+      "file": "music/world-assembly",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        112.0
+      ],
+      "duration": 112.0
+    },
+    "world-chitin-battle": {
+      "file": "music/world-chitin-battle",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        128.0
+      ],
+      "duration": 128.0
+    },
+    "world-chitin": {
+      "file": "music/world-chitin",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        128.0
+      ],
+      "duration": 128.0
+    },
+    "world-lumenari-battle": {
+      "file": "music/world-lumenari-battle",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        110.769229
+      ],
+      "duration": 110.769
+    },
+    "world-lumenari": {
+      "file": "music/world-lumenari",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        110.769229
+      ],
+      "duration": 110.769
+    },
+    "world-rootkin-battle": {
+      "file": "music/world-rootkin-battle",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        128.0
+      ],
+      "duration": 128.0
+    },
+    "world-rootkin": {
+      "file": "music/world-rootkin",
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "loop": [
+        0.0,
+        128.0
+      ],
+      "duration": 128.0
+    }
+  },
+  "sfx": {
+    "boss-appear": {
+      "files": [
+        "sfx/boss-appear-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "gain": 1.41
+    },
+    "death-bark": {
+      "files": [
+        "sfx/death-bark-1",
+        "sfx/death-bark-2",
+        "sfx/death-bark-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "death-carapace": {
+      "files": [
+        "sfx/death-carapace-1",
+        "sfx/death-carapace-2",
+        "sfx/death-carapace-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "gain": 1.41
+    },
+    "death-plated": {
+      "files": [
+        "sfx/death-plated-1",
+        "sfx/death-plated-2",
+        "sfx/death-plated-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "death-shielded": {
+      "files": [
+        "sfx/death-shielded-1",
+        "sfx/death-shielded-2",
+        "sfx/death-shielded-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-acid": {
+      "files": [
+        "sfx/fire-acid-1",
+        "sfx/fire-acid-2",
+        "sfx/fire-acid-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-beam": {
+      "files": [
+        "sfx/fire-beam-1",
+        "sfx/fire-beam-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-energy": {
+      "files": [
+        "sfx/fire-energy-1",
+        "sfx/fire-energy-2",
+        "sfx/fire-energy-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-kinetic": {
+      "files": [
+        "sfx/fire-kinetic-1",
+        "sfx/fire-kinetic-2",
+        "sfx/fire-kinetic-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-splash": {
+      "files": [
+        "sfx/fire-splash-1",
+        "sfx/fire-splash-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "fire-thorn": {
+      "files": [
+        "sfx/fire-thorn-1",
+        "sfx/fire-thorn-2",
+        "sfx/fire-thorn-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "hit-acid": {
+      "files": [
+        "sfx/hit-acid-1",
+        "sfx/hit-acid-2",
+        "sfx/hit-acid-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "gain": 1.41
+    },
+    "hit-energy": {
+      "files": [
+        "sfx/hit-energy-1",
+        "sfx/hit-energy-2",
+        "sfx/hit-energy-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "hit-kinetic": {
+      "files": [
+        "sfx/hit-kinetic-1",
+        "sfx/hit-kinetic-2",
+        "sfx/hit-kinetic-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "hit-splash": {
+      "files": [
+        "sfx/hit-splash-1",
+        "sfx/hit-splash-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "gain": 1.41
+    },
+    "hit-thorn": {
+      "files": [
+        "sfx/hit-thorn-1",
+        "sfx/hit-thorn-2",
+        "sfx/hit-thorn-3"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ],
+      "gain": 1.41
+    },
+    "income": {
+      "files": [
+        "sfx/income-1",
+        "sfx/income-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "incoming": {
+      "files": [
+        "sfx/incoming-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "leak": {
+      "files": [
+        "sfx/leak-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "leak-boss": {
+      "files": [
+        "sfx/leak-boss-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "lives-low": {
+      "files": [
+        "sfx/lives-low-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "place": {
+      "files": [
+        "sfx/place-1",
+        "sfx/place-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "reinforce": {
+      "files": [
+        "sfx/reinforce-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "sell": {
+      "files": [
+        "sfx/sell-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "send": {
+      "files": [
+        "sfx/send-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "ui-error": {
+      "files": [
+        "sfx/ui-error-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "ui-tap": {
+      "files": [
+        "sfx/ui-tap-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "upgrade": {
+      "files": [
+        "sfx/upgrade-1",
+        "sfx/upgrade-2"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "wave-boss": {
+      "files": [
+        "sfx/wave-boss-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "wave-clear": {
+      "files": [
+        "sfx/wave-clear-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    },
+    "wave-start": {
+      "files": [
+        "sfx/wave-start-1"
+      ],
+      "formats": [
+        "ogg",
+        "m4a"
+      ]
+    }
+  }
+}

@@ -1,9 +1,10 @@
-// Extra Terram — src/app/GameShell.tsx v0.12.0 — each race's own currency in the HUD, shop, panel, confirm bar and messages
+// Extra Terram — src/app/GameShell.tsx v0.18.0 — the pause screen carries the sound and view settings
 // Owns one run: sim state (in a holder, never React state), the Pixi renderer, the loop, and the
 // pointer handling on the canvas. React only sees a 10 Hz snapshot for the HUD.
 // On a shared board the sim is driven by the Lockstep: inputs are submitted, not applied, and a
 // client only steps while it holds the host's next frame.
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { audio } from '../audio';
 import { content, currencyLabel, currencyOf, towersForRace, type LevelEntry } from '../content';
 import {
   applyInput,
@@ -13,6 +14,7 @@ import {
   hashState,
   isAnimating,
   passiveFor,
+  reinforceCost,
   sellValue,
   sendableCreeps,
   simView,
@@ -25,6 +27,7 @@ import {
   validateInput,
   type CreepDef,
   type LoggedInput,
+  type RunRules,
   type SimContext,
   type SimInput,
   type SimResult,
@@ -32,27 +35,36 @@ import {
   type SimView,
   type Tower,
 } from '../engine';
-import { rankStandings, type ActiveMatch, type MatchEvent, type Standing } from '../net';
+import { rankStandings, type ActiveMatch, type MatchEvent, type MatchRow, type Standing } from '../net';
+import { CONTENT_VERSION } from '../content';
 import { PixiRenderer } from '../render/PixiRenderer';
 import type { Cell, RenderOverlay } from '../render/renderer';
 import { BuildBar } from '../ui/BuildBar';
+import { CoachCard, hintSeen, markHintSeen } from '../ui/CoachCard';
 import { Hud } from '../ui/Hud';
 import { HowToPlay } from '../ui/HowToPlay';
-import { PauseOverlay, ResultOverlay } from '../ui/Overlays';
+import { PauseOverlay, ResultOverlay, VersusResult } from '../ui/Overlays';
 import { RivalsBar } from '../ui/RivalsBar';
-import { SendBar } from '../ui/SendBar';
+import { SendBar, type SendRival } from '../ui/SendBar';
+import { SidesBar, sideName } from '../ui/SidesBar';
 import { TeamBar } from '../ui/TeamBar';
 import { TowerPanel, type SelectedTower } from '../ui/TowerPanel';
+import { WavePreviewBar } from '../ui/WavePreviewBar';
 import type { SaveStatus } from './App';
 import { Lockstep, type SimHolder } from './lockstep';
 import { GameLoop } from './loop';
+import { describeRules, isCustomRun, simRules } from './rules';
 import { confirmBuildOn, type Settings } from './settings';
 
 interface Props {
   level: LevelEntry;
   raceId: string;
   seed: string;
+  /** Rounds, mini-bosses and difficulty for this run (the host's, in a match). */
+  rules: RunRules;
   settings: Settings;
+  /** Lets the pause screen change the sound and view settings mid-run. */
+  onSettings?(next: Settings): void;
   saveStatus: SaveStatus;
   signedIn: boolean;
   /** Present during an online match: the live channel, the seats and the mode. */
@@ -62,7 +74,11 @@ interface Props {
   onExit(): void;
   onReplay(): void;
   onNewSeed(): void;
+  /** After a match: go to the rematch lobby, as its host (with the lobby already made) or by its code. */
+  onRematch(target: RematchTarget): void;
 }
+
+export type RematchTarget = { host: true; match: MatchRow; seat: number } | { host: false; code: string };
 
 interface Game extends SimHolder {
   renderer: PixiRenderer;
@@ -72,12 +88,14 @@ interface Game extends SimHolder {
 
 const SNAPSHOT_MS = 100; // 10 Hz: the HUD updates at human speed
 
-export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn, match, onResult, onExit, onReplay, onNewSeed }: Props) {
+export function GameShell({ level, raceId, seed, rules, settings, onSettings, saveStatus, signedIn, match, onResult, onExit, onReplay, onNewSeed, onRematch }: Props) {
   const roster = useRef(towersForRace(raceId)).current;
   const currency = currencyOf(raceId);
   const reported = useRef(false);
-  const shared = match?.mode === 'coop'; // one board for everyone, in lockstep
+  const versus = match?.mode === 'lanes' || match?.mode === 'king' ? match.mode : null; // one board, rivals
+  const shared = match?.mode === 'coop' || !!versus; // one board for everyone, in lockstep
   const mirrored = match?.mode === 'mirror'; // own boards, with sends
+  const sends = mirrored || !!versus;
   const mySeat = shared && match ? match.me.seat : 0;
   const [standings, setStandings] = useState<Standing[]>(() => (match && !shared ? initialStandings(match) : []));
   const standingsRef = useRef(standings);
@@ -101,16 +119,20 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
   const [hostGone, setHostGone] = useState(false);
   const [howTo, setHowTo] = useState(false);
   const [towersBySeat, setTowersBySeat] = useState<Record<number, number>>({});
+  const [coach, setCoach] = useState(() => !hintSeen(raceId)); // the first-play hint, until dismissed or the first wave
+  // rematch: the host opens a new lobby with the same settings and tells everyone its code; the others join it
+  const [rematch, setRematch] = useState<{ code: string } | null>(null);
+  const [rematchBusy, setRematchBusy] = useState(false);
   const toastTimer = useRef<number | null>(null);
 
   const ctx = useRef<SimContext>(createContext(content, level.map, level.waves)).current;
   const costs = useRef<Record<string, number>>(Object.fromEntries(roster.map((t) => [t.id, towerCost(ctx, t)]))).current;
-  const sendRoster = useRef<CreepDef[]>(mirrored ? sendableCreeps(ctx, raceId) : []).current;
+  const sendRoster = useRef<CreepDef[]>(sends ? sendableCreeps(ctx, raceId) : []).current;
 
-  const showToast = useCallback((text: string) => {
+  const showToast = useCallback((text: string, ms = 1600) => {
     setToast(text);
     if (toastTimer.current) window.clearTimeout(toastTimer.current);
-    toastTimer.current = window.setTimeout(() => setToast(null), 1600);
+    toastTimer.current = window.setTimeout(() => setToast(null), ms);
   }, []);
 
   /** A refused input, in words: money refusals name this race's currency. */
@@ -124,8 +146,54 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     let cancelled = false;
 
     const sim: SimHolder = {
-      state: createSim(ctx, seed, shared && match ? { seats: match.seats, party: match.party, coop: true } : {}),
+      state: createSim(ctx, seed, {
+        ...simRules(rules),
+        ...(shared && match ? { seats: match.seats, party: match.party, coop: match.mode === 'coop' } : {}),
+        ...(versus && match ? { versus, teams: !!match.teams, present: match.present } : {}),
+      }),
       ctx,
+    };
+    let bossAnnounced = 0; // the round whose mini-boss was last announced (a wave called early starts outside a step)
+    const notes: string[] = []; // versus news from the sim (sends, eliminations), shown by the HUD snapshot
+    const names = (seats: number[]) => (match ? sideName(match.players, seats) : 'A rival');
+    /** Hand this tick's events to the renderer and the news, then clear them (inputs add events between steps too). */
+    const consume = () => {
+      const evs = sim.state.events;
+      if (!evs.length) return;
+      renderer.pushEvents(evs, ctx, sim.state);
+      audio.pushEvents(evs, ctx, sim.state, mySeat);
+      if (versus) {
+        const st = sim.state;
+        const mySide = st.seatSide[mySeat] ?? -1;
+        for (const e of evs) {
+          if (e.kind === 'send' && e.side !== undefined) {
+            const def = ctx.creepIndex[e.creep];
+            const what = `${e.count} ${def?.name ?? e.creep}${e.count > 1 ? 's' : ''}`;
+            const target = st.sides[e.side];
+            if (!target) continue;
+            // Lanes: whose lane it landed in (a side's seats and lanes pair up); King: the side's base
+            const laneOwner = versus === 'lanes' && e.slot !== undefined ? target.seats[target.slots.indexOf(e.slot)] : undefined;
+            if (e.side === mySide) {
+              const where = versus === 'king' ? 'at your base' : laneOwner === undefined || laneOwner === mySeat ? 'into your lane' : `into ${names([laneOwner])}’s lane`;
+              notes.push(`${names([e.seat])} sent ${what} ${where}!`);
+            } else if (e.seat === mySeat) {
+              notes.push(laneOwner !== undefined ? `Your ${what} went into ${names([laneOwner])}’s lane.` : `Your ${what} went to ${names(target.seats)}.`);
+            }
+          } else if (e.kind === 'out') {
+            const fallen = st.sides[e.side];
+            if (!fallen) continue;
+            if (e.side === mySide) {
+              const team = fallen.seats.length > 1;
+              const what = versus === 'lanes' ? (team ? 'Your team’s lanes fell' : 'Your lane fell') : team ? 'Your team’s base fell' : 'Your base fell';
+              // the last elimination ends the match: the result says the rest
+              notes.push(st.sides.filter((sd) => !sd.out).length >= 2 ? `${what}. You are out; the others play on.` : `${what}.`);
+            } else {
+              notes.push(`${names(fallen.seats)} ${fallen.seats.length > 1 ? 'are' : 'is'} out!`);
+            }
+          }
+        }
+      }
+      evs.length = 0;
     };
     const renderer = new PixiRenderer();
     const hashes = new Map<number, string>();
@@ -137,8 +205,9 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
           if (!lock.canStep(performance.now())) return false;
           lock.beforeStep();
         }
+        consume(); // events from inputs applied since the last step (placing, upgrading, sends)
         stepSim(sim.state, ctx);
-        if (sim.state.events.length) renderer.pushEvents(sim.state.events, ctx, sim.state);
+        consume();
         if (lock && sim.state.tick % 20 === 0) {
           // shared board: remember recent hashes so a test (or a bug report) can compare two boards at the same tick
           hashes.set(sim.state.tick, hashState(sim.state));
@@ -164,6 +233,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
         // the holder and the game record are one object, so a resync that swaps `sim.state` reaches the loop and the HUD
         game.current = Object.assign(sim, { renderer, loop, lock }) as Game;
         renderer.setEffectsScale(settings.batterySaver ? 0.5 : 1);
+        renderer.setCamera({ tilt: settings.camera !== 'flat', lighting: settings.lighting !== false });
         loop.start();
         setView(simView(sim.state, ctx, mySeat));
       })
@@ -179,8 +249,13 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     resize.observe(host);
 
     // A read-only handle for headless tests (two tabs comparing boards): never used by the game.
-    const dbg = window as unknown as { __et?: { tick(): number; hash(): string; hashes(): Record<number, string>; towers(): number; wallets(): number[]; creeps(): number } };
+    const dbg = window as unknown as { __et?: { tick(): number; hash(): string; hashes(): Record<number, string>; towers(): number; wallets(): number[]; creeps(): number; audio(): { playing: string | null; running: boolean; active: boolean; played: number; dropped: number; stolen: number; ticks: number }; cellPoint(col: number, row: number): [number, number] } };
     dbg.__et = {
+      audio: () => ({ playing: audio.playing, running: audio.running, active: audio.screenActive, ...audio.stats }),
+      cellPoint: (col, row) => {
+        const p = renderer.cellToScreen(col, row);
+        return [p.x, p.y];
+      },
       hashes: () => Object.fromEntries(hashes),
       tick: () => sim.state.tick,
       hash: () => hashState(sim.state),
@@ -192,7 +267,16 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     const snapshot = window.setInterval(() => {
       const g = game.current;
       if (!g) return;
-      setView(simView(g.state, g.ctx, mySeat));
+      const v = simView(g.state, g.ctx, mySeat);
+      setView(v);
+      if (notes.length) showToast(notes.splice(0, notes.length).join(' '), 3200);
+      if (v.phase === 'wave' && v.waveBoss && bossAnnounced !== v.wave) {
+        bossAnnounced = v.wave;
+        const isBoss = (id: string) => g.ctx.creepIndex[id]?.archetype === 'boss';
+        const id = g.state.spawnQueue.find((q) => isBoss(q.creep))?.creep ?? g.state.creeps.find((c) => isBoss(c.def))?.def;
+        const def = id ? g.ctx.creepIndex[id] : undefined;
+        if (def) showToast(`Mini-boss this round: ${def.name}. Big payout if it falls, ${def.leakCost} lives if it gets through.`, 3500);
+      }
       if (g.lock) {
         setWaiting(g.lock.stalled(performance.now()));
         if (!g.lock.host) setSpeed(g.lock.hostSpeed);
@@ -223,8 +307,8 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
       game.current = null;
       delete dbg.__et;
     };
-    // The shell is keyed by level+seed in App, so a new run always remounts; settings apply at mount.
-  }, [ctx, seed, settings.batterySaver, showToast, shared, match, mySeat]);
+    // The shell is keyed by level+seed in App, so a new run always remounts; settings and rules apply at mount.
+  }, [ctx, seed, rules, settings.batterySaver, showToast, shared, match, mySeat]);
 
   // ---------------------------------------------------------------- input helpers
   /** Our seat's input: applied at once on our own board, or handed to the lockstep on a shared one. */
@@ -446,6 +530,36 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     };
   }, [match, shared, showToast]);
 
+  // A rival's rematch lobby: remember its code; the result overlay offers to join it.
+  useEffect(() => {
+    if (!match) return;
+    return match.channel.on((ev) => {
+      if (ev.type === 'rematch') setRematch({ code: ev.code });
+    });
+  }, [match]);
+
+  /** Host: open a lobby shaped like this match and announce it; clients: join the announced one. */
+  const startRematch = useCallback(async () => {
+    if (!match) return;
+    if (!match.host) {
+      if (rematch) onRematch({ host: false, code: rematch.code });
+      return;
+    }
+    setRematchBusy(true);
+    try {
+      const made = await match.service.create({ mode: match.mode, maxPlayers: match.maxPlayers, teamMode: !!match.teams, levelId: match.levelId, raceId, contentVersion: CONTENT_VERSION });
+      match.channel.send({ type: 'rematch', code: made.match.code, matchId: made.match.id });
+      // give the broadcast a moment to leave before the old channel closes
+      await new Promise((r) => window.setTimeout(r, 300));
+      onRematch({ host: true, match: made.match, seat: made.seat });
+    } catch (err) {
+      showToast(err instanceof Error ? err.message : 'Could not open a rematch lobby.', 3000);
+      setRematchBusy(false);
+    }
+  }, [match, rematch, onRematch, raceId, showToast]);
+  const rematchLabel = !match ? null : match.host ? (rematchBusy ? 'Opening the lobby…' : 'Rematch') : rematch ? 'Join the rematch' : null;
+  const rematchNote = match && !match.host && !rematch ? 'If the host opens a rematch, a button appears here.' : null;
+
   // Presence: a rival gone for a while is scored as having left (own boards); a shared board without its host stops.
   useEffect(() => {
     if (!match) return;
@@ -480,28 +594,32 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     };
   }, [match, shared]);
 
-  /** Mirror: pay for a send on our board and drop it on one rival still playing (random when there are several). */
+  /** Mirror: pay for a send on our board and drop it on the chosen rival (or one still playing, at random). Versus: the board queues it on the chosen side (or one it picks). */
   const sendCreeps = useCallback(
-    (creepId: string, count: number) => {
+    (creepId: string, count: number, target: number | null) => {
       const g = game.current;
       if (!g || !match) return;
+      if (versus) {
+        send(target === null ? { type: 'send', creep: creepId, count } : { type: 'send', creep: creepId, count, target }); // the host applies it; the toast says where it went
+        return;
+      }
       const rivals = standingsRef.current.filter((s) => !s.me && !s.finished);
       if (rivals.length === 0) {
         showToast('No rival can receive a send right now.');
         return;
       }
-      const target = rivals[Math.floor(Math.random() * rivals.length)];
+      const picked = target === null ? rivals[Math.floor(Math.random() * rivals.length)] : (rivals.find((r) => r.seat === target) ?? rivals[0]);
       const res = applyInput(g.state, g.ctx, { type: 'send', creep: creepId, count }, 0);
       if (!res.ok) {
         showToast(refusal(res));
         return;
       }
-      match.channel.send({ type: 'send', from: match.me.seat, to: target.seat, creep: creepId, count });
+      match.channel.send({ type: 'send', from: match.me.seat, to: picked.seat, creep: creepId, count });
       setView(simView(g.state, g.ctx, 0));
       const def = g.ctx.creepIndex[creepId];
-      showToast(`Sent ${count} ${def.name}${count > 1 ? 's' : ''} to ${target.name}.`);
+      showToast(`Sent ${count} ${def.name}${count > 1 ? 's' : ''} to ${picked.name}.`);
     },
-    [match, showToast, refusal],
+    [match, showToast, refusal, versus, send],
   );
 
   // Everyone has reported: submit the final placement (the first submit on finish was provisional).
@@ -515,14 +633,49 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     void match.service.submitResult(match.matchId, me.result, mine + 1, me.score, me.lives).catch(() => undefined);
   }, [match, shared, allFinished]);
 
-  // ---------------------------------------------------------------- result
+  // the camera follows the settings, from the menu or the pause screen
+  useEffect(() => {
+    game.current?.renderer.setCamera({ tilt: settings.camera !== 'flat', lighting: settings.lighting !== false });
+  }, [settings.camera, settings.lighting]);
+
+  // ---------------------------------------------------------------- sound
   const result = view?.result ?? null;
+  const phase = view?.phase ?? null;
+  const lives = view?.lives ?? null;
+  const prevPhase = useRef(phase);
+  const prevLives = useRef(lives);
+  useEffect(() => {
+    audio.setIntensity(phase === 'wave' ? 1 : 0);
+    if (prevPhase.current === 'wave' && phase === 'build') audio.play('wave-clear');
+    prevPhase.current = phase;
+  }, [phase]);
+  useEffect(() => {
+    if (lives !== null && prevLives.current !== null && lives < prevLives.current && lives > 0 && lives <= 3) audio.play('lives-low');
+    prevLives.current = lives;
+  }, [lives]);
+  useEffect(() => {
+    audio.setPaused(paused);
+    return () => audio.setPaused(false);
+  }, [paused]);
+  const outcome = result?.outcome ?? null;
+  useEffect(() => {
+    if (outcome) audio.sting(outcome === 'won' ? 'result-win' : 'result-lose');
+  }, [outcome]);
+
+  // ---------------------------------------------------------------- result
   useEffect(() => {
     const g = game.current;
     if (!result || !view || !g || reported.current) return;
     reported.current = true;
     onResult(result, view, g.state.inputLog);
     if (!match) return;
+    if (versus) {
+      // one board, rivals: every client knows every placement; each reports its own
+      const side = view.versus?.side ?? -1;
+      const placement = side >= 0 ? (view.versus?.placements?.[side] ?? 0) : 0;
+      void match.service.submitResult(match.matchId, placement === 1 ? 'won' : 'lost', Math.max(1, placement), result.score, view.lives).catch(() => undefined);
+      return;
+    }
     if (shared) {
       // one board, one result: everyone places first together
       void match.service.submitResult(match.matchId, result.outcome, 1, result.score, view.lives).catch(() => undefined);
@@ -533,22 +686,42 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
     const ranked = rankStandings(standingsRef.current.map((r) => (r.me ? { ...r, finished: true, result: result.outcome, score: result.score, lives: view.lives, wave: view.wave } : r)));
     const placement = ranked.findIndex((s) => s.me) + 1;
     void match.service.submitResult(match.matchId, result.outcome, placement, result.score, view.lives).catch(() => undefined);
-  }, [result, view, onResult, match, shared]);
+  }, [result, view, onResult, match, shared, versus]);
   const ranked = match && !shared ? rankStandings(standings) : [];
-  const rivalNames = ranked.filter((s) => !s.me && !s.finished).map((s) => s.name);
+  // versus: the rivals still standing, by side (a send names one, or lets the board pick); Mirror: by seat
+  const sendRivals: SendRival[] = view?.versus && match
+    ? view.versus.sides.map((sd, i) => ({ id: i, name: sideName(match.players, sd.seats), lives: sd.lives, out: sd.out })).filter((r, i) => !r.out && i !== view.versus!.side)
+    : ranked.filter((s) => !s.me && !s.finished).map((s) => ({ id: s.seat, name: s.name, lives: s.lives }));
+  const iAmOut = !!view?.versus && view.versus.out && !result;
+  // rows of the player bar over the board's top left (standings, team; versus sides sit in a strip above it): toasts go just below
+  const barRows = !match ? 0 : !shared ? ranked.length : (versus ? 0 : match.players.length) + (waiting ? 1 : 0);
+  const showCoach = coach && !!view && view.wave === 0 && view.phase === 'build' && !result && !pending && !paused;
+  const dismissCoach = () => {
+    markHintSeen(raceId);
+    setCoach(false);
+  };
+  const previewRows = barRows + (toast ? 1 : 0);
 
   // ---------------------------------------------------------------- render
 
   return (
     <div className="flex h-dvh w-full flex-col bg-grove-950 font-ui">
-      <Hud view={view} currency={currencyLabel(raceId)} speed={speed} paused={paused} canControl={hostControls} onSpeed={changeSpeed} onPause={togglePause} onCallWave={() => send({ type: 'start-wave' })} onExit={onExit} />
+      <Hud view={view} currency={currencyLabel(raceId)} speed={speed} paused={paused} canControl={hostControls} canCall={!versus} onSpeed={changeSpeed} onPause={togglePause} onCallWave={() => send({ type: 'start-wave' })} onExit={onExit} />
+      {match && versus && view?.versus && <SidesBar versus={view.versus} players={match.players} mySeat={mySeat} />}
 
       {/* The canvas host is full-bleed: backgrounds are never inset. */}
       <div ref={hostRef} className="relative min-h-0 flex-1 overflow-hidden">
         <canvas ref={canvasRef} className="h-full w-full" onPointerMove={onPointerMove} onPointerLeave={onPointerLeave} onPointerDown={onPointerDown} />
         {match && !shared && <RivalsBar standings={ranked} />}
-        {match && shared && <TeamBar players={match.players} wallets={view?.wallets ?? []} towersBySeat={towersBySeat} mySeat={mySeat} waiting={waiting} />}
-        {toast && <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-md bg-black/70 px-3 py-1.5 text-sm text-amber-200">{toast}</div>}
+        {match && shared && !versus && <TeamBar players={match.players} wallets={view?.wallets ?? []} towersBySeat={towersBySeat} mySeat={mySeat} waiting={waiting} />}
+        {match && versus && waiting && <div className="pointer-events-none absolute left-2 top-2 rounded-md bg-black/60 px-2 py-1 text-[11px] text-amber-200 backdrop-blur-sm">Waiting for the host…</div>}
+        {toast && (
+          <div className="pointer-events-none absolute left-1/2 w-max max-w-[92%] -translate-x-1/2 rounded-md bg-black/70 px-3 py-1.5 text-center text-sm text-amber-200" style={{ top: 12 + barRows * 29 }}>
+            {toast}
+          </div>
+        )}
+        {view?.nextWave && !result && <WavePreviewBar preview={view.nextWave} offsetRows={previewRows} />}
+        {showCoach && <CoachCard raceId={raceId} onClose={dismissCoach} />}
         {pending && placing && !result && (
           <div className="absolute inset-x-3 bottom-3 flex items-center gap-2 rounded-xl border border-grove-500/70 bg-grove-900/95 px-3 py-2 text-sm shadow-lg backdrop-blur" role="group" aria-label="Confirm build">
             <span className="min-w-0 flex-1 truncate">
@@ -562,7 +735,7 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
             </button>
           </div>
         )}
-        {paused && !result && hostControls && !howTo && <PauseOverlay onResume={togglePause} onExit={onExit} onHowTo={() => setHowTo(true)} />}
+        {paused && !result && hostControls && !howTo && <PauseOverlay settings={settings} onSettings={onSettings} onResume={togglePause} onExit={onExit} onHowTo={() => setHowTo(true)} />}
         {howTo && <HowToPlay raceId={raceId} onClose={() => setHowTo(false)} />}
         {hostGone && !result && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/60 p-6" role="alertdialog" aria-label="Host left">
@@ -575,12 +748,13 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
             </div>
           </div>
         )}
-        {result && view && <ResultOverlay view={view} seed={seed} saveStatus={saveStatus} signedIn={signedIn} standings={match && !shared ? ranked : null} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} />}
+        {result && view && match && versus && view.versus && <VersusResult view={view} versus={view.versus} mode={versus} players={match.players} mySeat={mySeat} rulesLine={isCustomRun(rules, level) ? describeRules(rules, level) : null} onExit={onExit} rematchLabel={rematchLabel} rematchNote={rematchNote} onRematch={() => void startRematch()} />}
+        {result && view && !versus && <ResultOverlay view={view} seed={seed} rulesLine={describeRules(rules, level)} custom={isCustomRun(rules, level)} bosses={rules.bossEvery > 0} saveStatus={saveStatus} signedIn={signedIn} standings={match && !shared ? ranked : null} onReplay={onReplay} onNewSeed={onNewSeed} onExit={onExit} rematchLabel={match ? rematchLabel : null} rematchNote={match ? rematchNote : null} onRematch={() => void startRematch()} />}
       </div>
 
       {/* Fixed-height footer slot: the build bar, the send bar and the tower panel swap inside it without resizing the board. */}
-      <div className="shrink-0 overflow-y-auto bg-grove-900" style={{ height: 'calc(9rem + var(--safe-bottom))' }}>
-        {mirrored && !selected && (
+      <div className="shrink-0 overflow-y-auto bg-grove-900" style={{ height: 'calc(10rem + var(--safe-bottom))' }}>
+        {sends && !selected && !iAmOut && (
           <div className="flex gap-1 px-3 pt-1.5 text-xs" role="tablist" aria-label="Footer">
             <button role="tab" aria-selected={footer === 'build'} onClick={() => setFooter('build')} className={`rounded-md px-2 py-0.5 ${footer === 'build' ? 'bg-grove-700 text-white' : 'text-grove-300 hover:bg-grove-800'}`}>
               Build
@@ -590,24 +764,39 @@ export function GameShell({ level, raceId, seed, settings, saveStatus, signedIn,
             </button>
           </div>
         )}
-        {selected ? (
+        {iAmOut && !selected ? (
+          <div className="px-4 pb-[calc(var(--safe-bottom)+0.5rem)] pt-4 text-sm" role="status">
+            <p className="font-semibold text-amber-200">
+              {versus === 'lanes' ? (match?.teams ? 'Your team’s lanes fell' : 'Your lane fell') : match?.teams ? 'Your team’s base fell' : 'Your base fell'}: you are out of this match.
+            </p>
+            <p className="mt-1 text-grove-300/80">
+              {match?.host ? 'Please stay: the match runs on your game, so the others need it until the end. ' : ''}
+              Watch the others play on; your placement is on the bar at the top.
+            </p>
+            <button onClick={onExit} className="mt-2 rounded-lg border border-grove-700 px-3 py-1.5 text-grove-300 hover:bg-grove-800">
+              Leave to the menu
+            </button>
+          </div>
+        ) : selected ? (
           <TowerPanel
             currency={currency}
             tower={selected}
             resources={view?.resources ?? 0}
             onUpgrade={(branch) => send({ type: 'upgrade', towerId: selected.id, branch })}
+            onReinforce={() => send({ type: 'reinforce', towerId: selected.id })}
             onSell={() => {
               if (send({ type: 'sell', towerId: selected.id })) select(null);
             }}
             onClose={() => select(null)}
           />
-        ) : mirrored && footer === 'send' ? (
-          <SendBar creeps={sendRoster} currency={currency} resources={view?.resources ?? 0} income={view?.sendIncome ?? 0} rivals={rivalNames} onSend={sendCreeps} />
+        ) : sends && footer === 'send' ? (
+          <SendBar creeps={sendRoster} currency={currency} resources={view?.resources ?? 0} income={view?.sendIncome ?? 0} rivals={sendRivals} wave={view?.wave ?? 0} inWave={view?.phase === 'wave'} sent={view?.stats.sent ?? 0} received={view?.stats.received ?? 0} onSend={sendCreeps} />
         ) : (
           <BuildBar
             towers={roster}
             costs={costs}
             resources={view?.resources ?? 0}
+            currency={currency}
             placing={placing}
             hint={
               padPick
@@ -644,6 +833,8 @@ function describeTower(ctx: SimContext, state: SimState, tower: Tower, mySeat: n
     kills: tower.kills,
     damageDealt: Math.round(tower.damageDealt),
     upgradeCost: upgradeCost(ctx, tower),
+    boost: tower.boost ?? 0,
+    reinforceCost: reinforceCost(ctx, tower),
     sellValue: sellValue(ctx, tower),
     ownerName: mine ? null : (match?.players.find((p) => p.seat === tower.owner)?.name ?? `Seat ${tower.owner + 1}`),
   };

@@ -1,0 +1,20 @@
+
+Creeps (visible area by class, contour, stray pixels, the step across the outline on every painted trail): 16 of 16 meet the spec
+  ok   assembly/compactor           rusher    area 0.34 tiles^2 (24% opaque)  contour L* 5  outline step 38-52
+  ok   assembly/dump-hauler         workhorse area 0.59 tiles^2 (26% opaque)  contour L* 5  outline step 35-43
+  ok   assembly/dozer               tank      area 0.77 tiles^2 (27% opaque)  contour L* 5  outline step 30-34
+  ok   rootkin/seedling             rusher    area 0.32 tiles^2 (23% opaque)  contour L* 6  outline step 34-46
+  ok   rootkin/thornbeast           workhorse area 0.60 tiles^2 (27% opaque)  contour L* 6  outline step 32-41
+  ok   rootkin/rootwalker           tank      area 0.85 tiles^2 (29% opaque)  contour L* 6  outline step 31-40
+  ok   chitin/skitterling           rusher    area 0.31 tiles^2 (27% opaque)  contour L* 3  outline step 41-51
+  ok   chitin/carapace-beetle       workhorse area 0.60 tiles^2 (27% opaque)  contour L* 3  outline step 33-44
+  ok   chitin/siege-beetle          tank      area 0.87 tiles^2 (30% opaque)  contour L* 3  outline step 32-38
+  ok   lumenari/wisp                rusher    area 0.32 tiles^2 (27% opaque)  contour L* 4  outline step 38-49
+  ok   lumenari/sentinel            workhorse area 0.59 tiles^2 (26% opaque)  contour L* 4  outline step 29-35
+  ok   lumenari/bastion             tank      area 0.90 tiles^2 (31% opaque)  contour L* 4  outline step 31-35
+  ok   rootkin/elder-rootwalker     boss      area 1.70 tiles^2 (32% opaque)  contour L* 6
+  ok   assembly/mega-dozer          boss      area 1.64 tiles^2 (31% opaque)  contour L* 5
+  ok   chitin/brood-queen           boss      area 1.59 tiles^2 (30% opaque)  contour L* 3
+  ok   lumenari/prism-colossus      boss      area 1.63 tiles^2 (31% opaque)  contour L* 4
+
+Summary: Creeps 16/16

@@ -1,4 +1,4 @@
-// Extra Terram — src/app/settings.ts v0.5.0 — confirm-before-building (on by default for touch)
+// Extra Terram — src/app/settings.ts v0.8.0 — music and game sounds switched apart from their volumes
 // Player settings, persisted per device. Every storage access is wrapped: standalone PWAs and
 // private windows can refuse localStorage, and the game must still run without it.
 
@@ -11,6 +11,20 @@ export interface Settings {
   confirmBuild?: boolean;
   lastRace?: string;
   lastLevel?: string;
+  /** Run rules last picked (menu or lobby): rounds 0 = the level's own, bossEvery 0 = no mini-bosses. */
+  rounds?: number;
+  bossEvery?: number;
+  /** Co-op difficulty last picked by a host (index into DIFFICULTIES). */
+  coopDifficulty?: number;
+  /** Background music and game sounds: each on/off (unset = on) with its volume 0–1 (unset = the defaults in src/audio); mute silences both. */
+  musicOn?: boolean;
+  sfxOn?: boolean;
+  music?: number;
+  sfx?: number;
+  muted?: boolean;
+  /** The board seen from an angle (default) or straight down; the ground lit by a normal map and the shots (default) or as painted. */
+  camera?: 'tilt' | 'flat';
+  lighting?: boolean;
 }
 
 const KEY = 'extra-terram.settings.v1';

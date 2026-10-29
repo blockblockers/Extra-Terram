@@ -1,5 +1,5 @@
 {
-  "content_version": "0.6.0",
+  "content_version": "0.10.0",
   "creeps": [
     {
       "id": "compactor",
@@ -156,6 +156,62 @@
       "leakCost": 3,
       "radius": 0.38,
       "color": "#1b2a6b"
+    },
+    {
+      "id": "elder-rootwalker",
+      "race": "rootkin",
+      "name": "Elder Rootwalker",
+      "archetype": "boss",
+      "hp": 2000,
+      "speed": 0.7,
+      "armor": "bark",
+      "bounty": 100,
+      "leakCost": 5,
+      "radius": 0.46,
+      "color": "#4a3320",
+      "art": "rootwalker"
+    },
+    {
+      "id": "mega-dozer",
+      "race": "assembly",
+      "name": "Mega Dozer",
+      "archetype": "boss",
+      "hp": 1950,
+      "speed": 0.75,
+      "armor": "plated",
+      "bounty": 100,
+      "leakCost": 5,
+      "radius": 0.46,
+      "color": "#a8641a",
+      "art": "dozer"
+    },
+    {
+      "id": "brood-queen",
+      "race": "chitin",
+      "name": "Brood Queen",
+      "archetype": "boss",
+      "hp": 2150,
+      "speed": 0.68,
+      "armor": "carapace",
+      "bounty": 100,
+      "leakCost": 5,
+      "radius": 0.47,
+      "color": "#3a1f66",
+      "art": "siege-beetle"
+    },
+    {
+      "id": "prism-colossus",
+      "race": "lumenari",
+      "name": "Prism Colossus",
+      "archetype": "boss",
+      "hp": 2050,
+      "speed": 0.72,
+      "armor": "shielded",
+      "bounty": 100,
+      "leakCost": 5,
+      "radius": 0.47,
+      "color": "#2a3f9b",
+      "art": "bastion"
     }
   ]
 }

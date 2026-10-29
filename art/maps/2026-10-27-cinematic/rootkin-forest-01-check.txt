@@ -1,0 +1,5 @@
+rootkin-forest-01: trail contrast median 69.2 (good); 0 of 60 cells weak (under 18.0)
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 62.7 (threshold 10.0); 0 of 30 pads without a visible socket
+  verdict: ALIGNED (by the numbers; confirm in the check image)
+  wrote /mnt/data/extra-terram-cinematic-layered-v2/qa/rootkin-forest-01-check.png and /mnt/data/extra-terram-cinematic-layered-v2/qa/rootkin-forest-01-pads.png

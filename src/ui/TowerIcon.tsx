@@ -1,7 +1,9 @@
-// Extra Terram — src/ui/TowerIcon.tsx v0.4.0 — sprite image, or a role glyph in the tower's colour
+// Extra Terram — src/ui/TowerIcon.tsx v0.5.0 — a tower that aims is shown whole: its turret composed on the body's pivot; role glyph until art exists
 import { useState } from 'react';
 import type { TowerDef } from '../engine';
-import { spriteUrl } from '../render/sprites';
+import { turretToBody } from '../render/spriteIndex';
+import { hasTurret, spriteUrl } from '../render/sprites';
+import { useSpriteIndex } from './useSpriteIndex';
 
 interface Props {
   tower: TowerDef;
@@ -9,20 +11,45 @@ interface Props {
   state?: 't1' | 't2' | 't3a' | 't3b';
 }
 
+/** The icon's turret points up and to the right, so the barrel's length reads. */
+const ICON_AIM_DEG = -40;
+const FRAME = { transform: 'scale(1.3) translateY(6%)' } as const;
+
 export function TowerIcon({ tower, size = 32, state = 't1' }: Props) {
+  const index = useSpriteIndex();
   const [missing, setMissing] = useState(false);
-  if (missing) return <RoleGlyph role={tower.role} color={tower.color} size={size} />;
+  const known = index ? index.has(`${tower.race}/${tower.id}/${state}.png`) : true;
+  if (missing || !known) return <RoleGlyph role={tower.role} color={tower.color} size={size} />;
+  const body = spriteUrl(tower.race, tower.id, state);
+  const turret = index !== null && hasTurret(tower) && index.hasTurretArt(tower, state);
+  if (!turret) {
+    return (
+      <img
+        src={body}
+        alt=""
+        width={size}
+        height={size}
+        draggable={false}
+        onError={() => setMissing(true)}
+        className="shrink-0 object-contain"
+        style={{ width: size, height: size, ...FRAME }}
+      />
+    );
+  }
+  // the turret on the body's pivot, at the game's own proportions (its 128 canvas against the body's 256)
+  const [px, py] = index.pivotOnCanvas(tower, state);
+  const t = turretToBody(state) * size;
   return (
-    <img
-      src={spriteUrl(tower.race, tower.id, state)}
-      alt=""
-      width={size}
-      height={size}
-      draggable={false}
-      onError={() => setMissing(true)}
-      className="shrink-0 object-contain"
-      style={{ width: size, height: size, transform: 'scale(1.3) translateY(6%)' }}
-    />
+    <span className="relative inline-block shrink-0" style={{ width: size, height: size, ...FRAME }} aria-hidden="true">
+      <img src={body} alt="" draggable={false} onError={() => setMissing(true)} className="absolute inset-0 object-contain" style={{ width: size, height: size }} />
+      <img
+        src={`/sprites/${tower.race}/${tower.id}/turret-${state}.png`}
+        alt=""
+        draggable={false}
+        className="absolute"
+        style={{ width: t, height: t, left: (px / 256) * size - t / 2, top: (py / 256) * size - t / 2, transform: `rotate(${ICON_AIM_DEG}deg)` }}
+      />
+    </span>
   );
 }
 

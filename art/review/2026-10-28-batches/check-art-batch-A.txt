@@ -1,0 +1,276 @@
+
+Towers (outline growth by tier, branches, families, head-less tops, contour): 14 of 28 meet the spec
+  ok   rootkin/needlespire          T2/T3A/T3B 1.34/1.64/1.98  branches 0.71  closest 0.70  contour L* 19
+  ok   rootkin/ironbark             T2/T3A/T3B 1.22/1.50/1.51  branches 0.73  closest 0.70  contour L* 21
+  FAIL rootkin/weepvine             T2/T3A/T3B 1.08/1.56/1.67  branches 0.82  closest 0.72  contour L* 18  <- T2 grows 1.08x (>= 1.15); T3A/T3B overlap 0.82 (<= 0.75); alike sapwell at T1 (0.72); 7 stray pixels
+  FAIL rootkin/whirlseed            T2/T3A/T3B 1.26/1.42/1.58  branches 0.81  closest 0.52  top 47px  contour L* 13  <- T3A/T3B overlap 0.81 (<= 0.75)
+  ok   rootkin/spirebirch           T2/T3A/T3B 1.17/2.17/2.07  branches 0.68  closest 0.48  contour L* 11
+  FAIL rootkin/sapwell              T2/T3A/T3B 1.15/1.22/1.21  branches 0.81  closest 0.72  contour L* 15  <- T3 grows 1.21x (>= 1.35); T3A/T3B overlap 0.81 (<= 0.75); alike weepvine at T1 (0.72)
+  FAIL rootkin/elderwood            T2/T3A/T3B 1.23/1.79/1.75  branches 0.84  closest 0.72  contour L* 13  <- T3A/T3B overlap 0.84 (<= 0.75); alike weepvine at T1 (0.72)
+  ok   assembly/nailgun             T2/T3A/T3B 1.34/1.43/1.70  branches 0.71  closest 0.63  contour L* 17
+  FAIL assembly/pile-driver         T2/T3A/T3B 1.45/1.68/2.01  branches 0.81  closest 0.91  top 37px  contour L* 16  <- T3A/T3B overlap 0.81 (<= 0.75); alike mortar at T1 (0.91)
+  FAIL assembly/tar-sprayer         T2/T3A/T3B 1.22/1.65/1.31  branches 0.75  closest 0.65  contour L* 13  <- T3 grows 1.31x (>= 1.35)
+  FAIL assembly/mortar              T2/T3A/T3B 1.46/1.72/1.93  branches 0.86  closest 0.91  top 47px  contour L* 17  <- T3A/T3B overlap 0.86 (<= 0.75); alike pile-driver at T1 (0.91)
+  FAIL assembly/railgun             T2/T3A/T3B 1.24/2.04/1.91  branches 0.76  closest 0.55  contour L* 14  <- T3A/T3B overlap 0.76 (<= 0.75)
+  FAIL assembly/salvage-rig         T2/T3A/T3B 1.13/2.27/2.46  branches 0.81  closest 0.65  contour L* 14  <- T2 grows 1.13x (>= 1.15); T3A/T3B overlap 0.81 (<= 0.75)
+  ok   assembly/relay-mast          T2/T3A/T3B 1.42/2.07/2.52  branches 0.62  closest 0.63  contour L* 16
+  ok   chitin/spitter               T2/T3A/T3B 1.17/1.42/1.56  branches 0.73  closest 0.65  contour L* 17
+  ok   chitin/mandible              T2/T3A/T3B 1.26/1.55/1.53  branches 0.74  closest 0.65  contour L* 14
+  FAIL chitin/web-spinner           T2/T3A/T3B 1.64/2.92/2.47  branches 0.70  closest 0.78  contour L* 14  <- alike resin-nest at T1 (0.78)
+  FAIL chitin/acid-bloat            T2/T3A/T3B 1.39/1.34/1.93  branches 0.68  closest 0.76  top 47px  contour L* 15  <- T3 grows 1.34x (>= 1.35); alike resin-nest at T1 (0.76)
+  ok   chitin/stalker-eye           T2/T3A/T3B 1.96/3.05/2.91  branches 0.68  closest 0.55  contour L* 8
+  FAIL chitin/resin-nest            T2/T3A/T3B 2.52/3.58/3.27  branches 0.77  closest 0.78  contour L* 15  <- T3A/T3B overlap 0.77 (<= 0.75); alike web-spinner at T1 (0.78)
+  FAIL chitin/pheromone-node        T2/T3A/T3B 1.56/2.74/3.01  branches 0.71  closest 0.74  contour L* 14  <- alike resin-nest at T1 (0.74)
+  ok   lumenari/prism               T2/T3A/T3B 1.21/1.57/1.45  branches 0.63  closest 0.59  contour L* 20
+  ok   lumenari/lance               T2/T3A/T3B 1.17/1.68/1.54  branches 0.66  closest 0.59  contour L* 20
+  ok   lumenari/chrono-field        T2/T3A/T3B 2.20/2.76/3.20  branches 0.56  closest 0.51  contour L* 10
+  ok   lumenari/nova                T2/T3A/T3B 1.42/1.74/2.18  branches 0.66  closest 0.51  top 34px  contour L* 11
+  ok   lumenari/pulsar              T2/T3A/T3B 1.25/1.81/2.13  branches 0.63  closest 0.56  contour L* 9
+  FAIL lumenari/solar-collector     T2/T3A/T3B 1.16/1.35/1.34  branches 0.74  closest 0.52  contour L* 14  <- T3 grows 1.34x (>= 1.35)
+  ok   lumenari/resonator           T2/T3A/T3B 1.22/1.72/1.75  branches 0.68  closest 0.56  contour L* 9
+
+Creeps (visible area by class, contour, stray pixels, the step across the outline on every painted trail): 16 of 16 meet the spec
+  ok   assembly/compactor           rusher    area 0.34 tiles^2 (24% opaque)  contour L* 5  outline step 39-51
+  ok   assembly/dump-hauler         workhorse area 0.59 tiles^2 (26% opaque)  contour L* 5  outline step 34-43
+  ok   assembly/dozer               tank      area 0.77 tiles^2 (27% opaque)  contour L* 5  outline step 30-34
+  ok   rootkin/seedling             rusher    area 0.32 tiles^2 (23% opaque)  contour L* 6  outline step 34-46
+  ok   rootkin/thornbeast           workhorse area 0.60 tiles^2 (27% opaque)  contour L* 6  outline step 32-41
+  ok   rootkin/rootwalker           tank      area 0.85 tiles^2 (29% opaque)  contour L* 6  outline step 31-40
+  ok   chitin/skitterling           rusher    area 0.31 tiles^2 (27% opaque)  contour L* 3  outline step 41-51
+  ok   chitin/carapace-beetle       workhorse area 0.60 tiles^2 (27% opaque)  contour L* 3  outline step 33-44
+  ok   chitin/siege-beetle          tank      area 0.87 tiles^2 (30% opaque)  contour L* 3  outline step 31-38
+  ok   lumenari/wisp                rusher    area 0.32 tiles^2 (27% opaque)  contour L* 4  outline step 38-49
+  ok   lumenari/sentinel            workhorse area 0.59 tiles^2 (26% opaque)  contour L* 4  outline step 29-35
+  ok   lumenari/bastion             tank      area 0.90 tiles^2 (31% opaque)  contour L* 4  outline step 31-35
+  ok   rootkin/elder-rootwalker     boss      area 1.70 tiles^2 (32% opaque)  contour L* 6
+  ok   assembly/mega-dozer          boss      area 1.64 tiles^2 (31% opaque)  contour L* 5
+  ok   chitin/brood-queen           boss      area 1.59 tiles^2 (30% opaque)  contour L* 3
+  ok   lumenari/prism-colossus      boss      area 1.63 tiles^2 (31% opaque)  contour L* 4
+
+Maps (trail L* 45-65, C* 8-30; ground within a tile of the trail L* 25-38, C* 20-35): 10 of 10 meet the spec
+  ok   rootkin-forest-01            trail L* 54.7 C* 20.0 | ground L* 33.4 C* 31.3
+  ok   assembly-scrap-01            trail L* 59.5 C* 12.6 | ground L* 28.3 C* 27.6
+  ok   chitin-hive-01               trail L* 53.1 C* 22.3 | ground L* 31.9 C* 31.6
+  ok   lumenari-crystal-01          trail L* 56.9 C* 17.3 | ground L* 30.7 C* 31.6
+  ok   lanes-2-hollows              trail L* 54.8 C* 20.3 | ground L* 33.0 C* 31.4
+  ok   lanes-3-prism                trail L* 56.8 C* 17.7 | ground L* 29.8 C* 32.1
+  ok   lanes-4-warrens              trail L* 53.0 C* 22.3 | ground L* 31.7 C* 31.6
+  ok   king-2-foundry               trail L* 54.5 C* 20.9 | ground L* 29.6 C* 30.8
+  ok   king-3-elderfork             trail L* 47.7 C* 26.9 | ground L* 30.3 C* 30.8
+  ok   king-4-throne                trail L* 58.2 C* 17.0 | ground L* 31.8 C* 32.7
+
+Strips (real motion, closed loops, fire strips that start and end on the still, deaths that end empty): 212 of 212 meet the spec
+  ok   assembly/creeps/compactor-die.png 5f  lowest overlap 0.00  seam/step 2.3
+  ok   assembly/creeps/compactor-walk.png 6f  lowest overlap 0.81  seam/step 0.8
+  ok   assembly/creeps/dozer-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   assembly/creeps/dozer-walk.png 6f  lowest overlap 0.76  seam/step 0.8
+  ok   assembly/creeps/dump-hauler-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   assembly/creeps/dump-hauler-walk.png 6f  lowest overlap 0.77  seam/step 0.7
+  ok   assembly/creeps/mega-dozer-die.png 5f  lowest overlap 0.00  seam/step 2.3
+  ok   assembly/creeps/mega-dozer-walk.png 6f  lowest overlap 0.76  seam/step 0.8
+  ok   assembly/mortar/t1-idle.png  6f  lowest overlap 0.94  seam/step 0.8
+  ok   assembly/mortar/t2-idle.png  6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/mortar/t3a-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/mortar/t3b-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/mortar/turret-t1-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   assembly/mortar/turret-t2-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   assembly/mortar/turret-t3a-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   assembly/mortar/turret-t3b-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   assembly/nailgun/t1-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   assembly/nailgun/t1-idle.png 6f  lowest overlap 0.88  seam/step 0.8
+  ok   assembly/nailgun/t2-fire.png 4f  lowest overlap 0.93  seam/step 0.0
+  ok   assembly/nailgun/t2-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   assembly/nailgun/t3a-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   assembly/nailgun/t3a-idle.png 6f  lowest overlap 0.90  seam/step 0.8
+  ok   assembly/nailgun/t3b-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/nailgun/t3b-idle.png 6f  lowest overlap 0.93  seam/step 0.8
+  ok   assembly/pile-driver/t1-idle.png 6f  lowest overlap 0.94  seam/step 0.8
+  ok   assembly/pile-driver/t2-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/pile-driver/t3a-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/pile-driver/t3b-idle.png 6f  lowest overlap 0.94  seam/step 0.8
+  ok   assembly/pile-driver/turret-t1-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/pile-driver/turret-t2-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/pile-driver/turret-t3a-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/pile-driver/turret-t3b-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/railgun/t1-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/railgun/t1-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   assembly/railgun/t2-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   assembly/railgun/t2-idle.png 6f  lowest overlap 0.91  seam/step 0.8
+  ok   assembly/railgun/t3a-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   assembly/railgun/t3a-idle.png 6f  lowest overlap 0.93  seam/step 0.8
+  ok   assembly/railgun/t3b-fire.png 4f  lowest overlap 0.93  seam/step 0.0
+  ok   assembly/railgun/t3b-idle.png 6f  lowest overlap 0.93  seam/step 0.8
+  ok   assembly/relay-mast/t1-idle.png 6f  lowest overlap 0.88  seam/step 0.8
+  ok   assembly/relay-mast/t2-idle.png 6f  lowest overlap 0.83  seam/step 0.8
+  ok   assembly/relay-mast/t3a-idle.png 6f  lowest overlap 0.89  seam/step 0.8
+  ok   assembly/relay-mast/t3b-idle.png 6f  lowest overlap 0.85  seam/step 0.8
+  ok   assembly/salvage-rig/t1-idle.png 6f  lowest overlap 0.87  seam/step 0.8
+  ok   assembly/salvage-rig/t2-idle.png 6f  lowest overlap 0.87  seam/step 0.8
+  ok   assembly/salvage-rig/t3a-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/salvage-rig/t3b-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/tar-sprayer/t1-idle.png 6f  lowest overlap 0.93  seam/step 0.8
+  ok   assembly/tar-sprayer/t2-idle.png 6f  lowest overlap 0.94  seam/step 0.8
+  ok   assembly/tar-sprayer/t3a-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   assembly/tar-sprayer/t3b-idle.png 6f  lowest overlap 0.94  seam/step 0.8
+  ok   chitin/acid-bloat/t1-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   chitin/acid-bloat/t2-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   chitin/acid-bloat/t3a-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   chitin/acid-bloat/t3b-idle.png 6f  lowest overlap 0.95  seam/step 0.8
+  ok   chitin/acid-bloat/turret-t1-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   chitin/acid-bloat/turret-t2-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   chitin/acid-bloat/turret-t3a-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   chitin/acid-bloat/turret-t3b-fire.png 4f  lowest overlap 0.88  seam/step 0.0
+  ok   chitin/creeps/brood-queen-die.png 5f  lowest overlap 0.00  seam/step 2.3
+  ok   chitin/creeps/brood-queen-walk.png 6f  lowest overlap 0.80  seam/step 0.8
+  ok   chitin/creeps/carapace-beetle-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   chitin/creeps/carapace-beetle-walk.png 6f  lowest overlap 0.75  seam/step 0.8
+  ok   chitin/creeps/siege-beetle-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   chitin/creeps/siege-beetle-walk.png 6f  lowest overlap 0.77  seam/step 0.8
+  ok   chitin/creeps/skitterling-die.png 5f  lowest overlap 0.00  seam/step 2.3
+  ok   chitin/creeps/skitterling-walk.png 6f  lowest overlap 0.79  seam/step 0.8
+  ok   chitin/mandible/t1-fire.png  4f  lowest overlap 0.89  seam/step 0.0
+  ok   chitin/mandible/t1-idle.png  6f  lowest overlap 0.88  seam/step 1.1
+  ok   chitin/mandible/t2-fire.png  4f  lowest overlap 0.90  seam/step 0.0
+  ok   chitin/mandible/t2-idle.png  6f  lowest overlap 0.90  seam/step 1.1
+  ok   chitin/mandible/t3a-fire.png 4f  lowest overlap 0.93  seam/step 0.0
+  ok   chitin/mandible/t3a-idle.png 6f  lowest overlap 0.92  seam/step 1.0
+  ok   chitin/mandible/t3b-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   chitin/mandible/t3b-idle.png 6f  lowest overlap 0.91  seam/step 1.1
+  ok   chitin/pheromone-node/t1-idle.png 6f  lowest overlap 0.89  seam/step 0.8
+  ok   chitin/pheromone-node/t2-idle.png 6f  lowest overlap 0.83  seam/step 0.8
+  ok   chitin/pheromone-node/t3a-idle.png 6f  lowest overlap 0.89  seam/step 0.8
+  ok   chitin/pheromone-node/t3b-idle.png 6f  lowest overlap 0.91  seam/step 0.8
+  ok   chitin/resin-nest/t1-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   chitin/resin-nest/t2-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   chitin/resin-nest/t3a-idle.png 6f  lowest overlap 0.93  seam/step 0.9
+  ok   chitin/resin-nest/t3b-idle.png 6f  lowest overlap 0.92  seam/step 0.8
+  ok   chitin/spitter/t1-fire.png   4f  lowest overlap 0.92  seam/step 0.0
+  ok   chitin/spitter/t1-idle.png   6f  lowest overlap 0.93  seam/step 1.0
+  ok   chitin/spitter/t2-fire.png   4f  lowest overlap 0.93  seam/step 0.0
+  ok   chitin/spitter/t2-idle.png   6f  lowest overlap 0.94  seam/step 1.0
+  ok   chitin/spitter/t3a-fire.png  4f  lowest overlap 0.91  seam/step 0.0
+  ok   chitin/spitter/t3a-idle.png  6f  lowest overlap 0.92  seam/step 1.0
+  ok   chitin/spitter/t3b-fire.png  4f  lowest overlap 0.94  seam/step 0.0
+  ok   chitin/spitter/t3b-idle.png  6f  lowest overlap 0.95  seam/step 1.0
+  ok   chitin/stalker-eye/t1-idle.png 6f  lowest overlap 0.87  seam/step 0.7
+  ok   chitin/stalker-eye/t2-idle.png 6f  lowest overlap 0.95  seam/step 1.0
+  ok   chitin/stalker-eye/t3a-idle.png 6f  lowest overlap 0.87  seam/step 1.0
+  ok   chitin/stalker-eye/t3b-idle.png 6f  lowest overlap 0.94  seam/step 1.0
+  ok   chitin/stalker-eye/turret-t1-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   chitin/stalker-eye/turret-t2-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   chitin/stalker-eye/turret-t3a-fire.png 4f  lowest overlap 0.90  seam/step 0.0
+  ok   chitin/stalker-eye/turret-t3b-fire.png 4f  lowest overlap 0.88  seam/step 0.0
+  ok   chitin/web-spinner/t1-idle.png 6f  lowest overlap 0.83  seam/step 0.8
+  ok   chitin/web-spinner/t2-idle.png 6f  lowest overlap 0.84  seam/step 0.9
+  ok   chitin/web-spinner/t3a-idle.png 6f  lowest overlap 0.84  seam/step 0.9
+  ok   chitin/web-spinner/t3b-idle.png 6f  lowest overlap 0.85  seam/step 0.9
+  ok   lumenari/chrono-field/t1-idle.png 6f  lowest overlap 0.89  seam/step 1.1
+  ok   lumenari/chrono-field/t2-idle.png 6f  lowest overlap 0.87  seam/step 1.1
+  ok   lumenari/chrono-field/t3a-idle.png 6f  lowest overlap 0.86  seam/step 1.1
+  ok   lumenari/chrono-field/t3b-idle.png 6f  lowest overlap 0.86  seam/step 1.1
+  ok   lumenari/creeps/bastion-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  ok   lumenari/creeps/bastion-walk.png 6f  lowest overlap 0.75  seam/step 0.7
+  ok   lumenari/creeps/prism-colossus-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   lumenari/creeps/prism-colossus-walk.png 6f  lowest overlap 0.74  seam/step 0.7
+  ok   lumenari/creeps/sentinel-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  ok   lumenari/creeps/sentinel-walk.png 6f  lowest overlap 0.77  seam/step 0.8
+  ok   lumenari/creeps/wisp-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   lumenari/creeps/wisp-walk.png 6f  lowest overlap 0.79  seam/step 0.7
+  ok   lumenari/lance/t1-fire.png   4f  lowest overlap 0.81  seam/step 0.0
+  ok   lumenari/lance/t1-idle.png   6f  lowest overlap 0.77  seam/step 0.7
+  ok   lumenari/lance/t2-fire.png   4f  lowest overlap 0.84  seam/step 0.0
+  ok   lumenari/lance/t2-idle.png   6f  lowest overlap 0.80  seam/step 0.8
+  ok   lumenari/lance/t3a-fire.png  4f  lowest overlap 0.83  seam/step 0.0
+  ok   lumenari/lance/t3a-idle.png  6f  lowest overlap 0.81  seam/step 0.8
+  ok   lumenari/lance/t3b-fire.png  4f  lowest overlap 0.83  seam/step 0.0
+  ok   lumenari/lance/t3b-idle.png  6f  lowest overlap 0.79  seam/step 0.7
+  ok   lumenari/nova/t1-idle.png    6f  lowest overlap 0.91  seam/step 0.9
+  ok   lumenari/nova/t2-idle.png    6f  lowest overlap 0.93  seam/step 0.9
+  ok   lumenari/nova/t3a-idle.png   6f  lowest overlap 0.91  seam/step 0.9
+  ok   lumenari/nova/t3b-idle.png   6f  lowest overlap 0.95  seam/step 0.8
+  ok   lumenari/nova/turret-t1-fire.png 4f  lowest overlap 0.88  seam/step 0.0
+  ok   lumenari/nova/turret-t2-fire.png 4f  lowest overlap 0.87  seam/step 0.0
+  ok   lumenari/nova/turret-t3a-fire.png 4f  lowest overlap 0.88  seam/step 0.0
+  ok   lumenari/nova/turret-t3b-fire.png 4f  lowest overlap 0.88  seam/step 0.0
+  ok   lumenari/prism/t1-fire.png   4f  lowest overlap 0.86  seam/step 0.0
+  ok   lumenari/prism/t1-idle.png   6f  lowest overlap 0.81  seam/step 0.7
+  ok   lumenari/prism/t2-fire.png   4f  lowest overlap 0.88  seam/step 0.0
+  ok   lumenari/prism/t2-idle.png   6f  lowest overlap 0.86  seam/step 0.8
+  ok   lumenari/prism/t3a-fire.png  4f  lowest overlap 0.84  seam/step 0.0
+  ok   lumenari/prism/t3a-idle.png  6f  lowest overlap 0.81  seam/step 0.8
+  ok   lumenari/prism/t3b-fire.png  4f  lowest overlap 0.83  seam/step 0.0
+  ok   lumenari/prism/t3b-idle.png  6f  lowest overlap 0.78  seam/step 0.8
+  ok   lumenari/pulsar/t1-fire.png  4f  lowest overlap 0.80  seam/step 0.0
+  ok   lumenari/pulsar/t1-idle.png  6f  lowest overlap 0.82  seam/step 1.1
+  ok   lumenari/pulsar/t2-fire.png  4f  lowest overlap 0.81  seam/step 0.0
+  ok   lumenari/pulsar/t2-idle.png  6f  lowest overlap 0.83  seam/step 1.1
+  ok   lumenari/pulsar/t3a-fire.png 4f  lowest overlap 0.77  seam/step 0.0
+  ok   lumenari/pulsar/t3a-idle.png 6f  lowest overlap 0.79  seam/step 1.1
+  ok   lumenari/pulsar/t3b-fire.png 4f  lowest overlap 0.78  seam/step 0.0
+  ok   lumenari/pulsar/t3b-idle.png 6f  lowest overlap 0.81  seam/step 1.1
+  ok   lumenari/resonator/t1-idle.png 6f  lowest overlap 0.83  seam/step 1.0
+  ok   lumenari/resonator/t2-idle.png 6f  lowest overlap 0.80  seam/step 1.1
+  ok   lumenari/resonator/t3a-idle.png 6f  lowest overlap 0.80  seam/step 1.1
+  ok   lumenari/resonator/t3b-idle.png 6f  lowest overlap 0.79  seam/step 1.1
+  ok   lumenari/solar-collector/t1-idle.png 6f  lowest overlap 0.88  seam/step 0.9
+  ok   lumenari/solar-collector/t2-idle.png 6f  lowest overlap 0.88  seam/step 0.9
+  ok   lumenari/solar-collector/t3a-idle.png 6f  lowest overlap 0.90  seam/step 0.9
+  ok   lumenari/solar-collector/t3b-idle.png 6f  lowest overlap 0.86  seam/step 0.9
+  ok   rootkin/creeps/elder-rootwalker-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   rootkin/creeps/elder-rootwalker-walk.png 6f  lowest overlap 0.75  seam/step 0.8
+  ok   rootkin/creeps/rootwalker-die.png 5f  lowest overlap 0.00  seam/step 2.3
+  ok   rootkin/creeps/rootwalker-walk.png 6f  lowest overlap 0.82  seam/step 0.8
+  ok   rootkin/creeps/seedling-die.png 5f  lowest overlap 0.00  seam/step 2.2
+  ok   rootkin/creeps/seedling-walk.png 6f  lowest overlap 0.79  seam/step 0.8
+  ok   rootkin/creeps/thornbeast-die.png 5f  lowest overlap 0.00  seam/step 2.4
+  ok   rootkin/creeps/thornbeast-walk.png 6f  lowest overlap 0.83  seam/step 0.7
+  ok   rootkin/elderwood/t1-idle.png 6f  lowest overlap 0.87  seam/step 0.9
+  ok   rootkin/elderwood/t2-idle.png 6f  lowest overlap 0.89  seam/step 0.9
+  ok   rootkin/elderwood/t3a-idle.png 6f  lowest overlap 0.90  seam/step 0.9
+  ok   rootkin/elderwood/t3b-idle.png 6f  lowest overlap 0.90  seam/step 0.9
+  ok   rootkin/ironbark/t1-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   rootkin/ironbark/t1-idle.png 6f  lowest overlap 0.91  seam/step 0.9
+  ok   rootkin/ironbark/t2-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   rootkin/ironbark/t2-idle.png 6f  lowest overlap 0.91  seam/step 0.9
+  ok   rootkin/ironbark/t3a-fire.png 4f  lowest overlap 0.89  seam/step 0.0
+  ok   rootkin/ironbark/t3a-idle.png 6f  lowest overlap 0.89  seam/step 0.9
+  ok   rootkin/ironbark/t3b-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   rootkin/ironbark/t3b-idle.png 6f  lowest overlap 0.91  seam/step 0.9
+  ok   rootkin/ironbark/turret-t1-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   rootkin/ironbark/turret-t2-fire.png 4f  lowest overlap 0.86  seam/step 0.0
+  ok   rootkin/ironbark/turret-t3a-fire.png 4f  lowest overlap 0.87  seam/step 0.0
+  ok   rootkin/ironbark/turret-t3b-fire.png 4f  lowest overlap 0.87  seam/step 0.0
+  ok   rootkin/needlespire/t1-fire.png 4f  lowest overlap 0.91  seam/step 0.0
+  ok   rootkin/needlespire/t1-idle.png 6f  lowest overlap 0.89  seam/step 0.8
+  ok   rootkin/needlespire/t2-fire.png 4f  lowest overlap 0.92  seam/step 0.0
+  ok   rootkin/needlespire/t2-idle.png 6f  lowest overlap 0.90  seam/step 0.8
+  ok   rootkin/needlespire/t3a-fire.png 4f  lowest overlap 0.89  seam/step 0.0
+  ok   rootkin/needlespire/t3a-idle.png 6f  lowest overlap 0.89  seam/step 0.8
+  ok   rootkin/needlespire/t3b-fire.png 4f  lowest overlap 0.89  seam/step 0.0
+  ok   rootkin/needlespire/t3b-idle.png 6f  lowest overlap 0.87  seam/step 0.8
+  ok   rootkin/sapwell/t1-idle.png  6f  lowest overlap 0.91  seam/step 0.8
+  ok   rootkin/sapwell/t2-idle.png  6f  lowest overlap 0.91  seam/step 0.8
+  ok   rootkin/sapwell/t3a-idle.png 6f  lowest overlap 0.91  seam/step 0.8
+  ok   rootkin/sapwell/t3b-idle.png 6f  lowest overlap 0.88  seam/step 0.8
+  ok   rootkin/spirebirch/t1-idle.png 6f  lowest overlap 0.91  seam/step 1.0
+  ok   rootkin/spirebirch/t2-idle.png 6f  lowest overlap 0.91  seam/step 1.0
+  ok   rootkin/spirebirch/t3a-idle.png 6f  lowest overlap 0.78  seam/step 1.1
+  ok   rootkin/spirebirch/t3b-idle.png 6f  lowest overlap 0.82  seam/step 1.1
+  ok   rootkin/spirebirch/turret-t1-fire.png 4f  lowest overlap 0.85  seam/step 0.0
+  ok   rootkin/spirebirch/turret-t2-fire.png 4f  lowest overlap 0.86  seam/step 0.0
+  ok   rootkin/spirebirch/turret-t3a-fire.png 4f  lowest overlap 0.83  seam/step 0.0
+  ok   rootkin/spirebirch/turret-t3b-fire.png 4f  lowest overlap 0.87  seam/step 0.0
+  ok   rootkin/weepvine/t1-idle.png 6f  lowest overlap 0.88  seam/step 0.8
+  ok   rootkin/weepvine/t2-idle.png 6f  lowest overlap 0.85  seam/step 0.9
+  ok   rootkin/weepvine/t3a-idle.png 6f  lowest overlap 0.90  seam/step 0.9
+  ok   rootkin/weepvine/t3b-idle.png 6f  lowest overlap 0.91  seam/step 0.9
+  ok   rootkin/whirlseed/t1-idle.png 6f  lowest overlap 0.95  seam/step 0.7
+  ok   rootkin/whirlseed/t2-idle.png 6f  lowest overlap 0.94  seam/step 0.7
+  ok   rootkin/whirlseed/t3a-idle.png 6f  lowest overlap 0.94  seam/step 0.7
+  ok   rootkin/whirlseed/t3b-idle.png 6f  lowest overlap 0.95  seam/step 0.7
+  ok   rootkin/whirlseed/turret-t1-fire.png 4f  lowest overlap 0.86  seam/step 0.0
+  ok   rootkin/whirlseed/turret-t2-fire.png 4f  lowest overlap 0.87  seam/step 0.0
+  ok   rootkin/whirlseed/turret-t3a-fire.png 4f  lowest overlap 0.85  seam/step 0.0
+  ok   rootkin/whirlseed/turret-t3b-fire.png 4f  lowest overlap 0.85  seam/step 0.0
+
+Summary: Towers 14/28; Creeps 16/16; Maps 10/10; Strips 212/212

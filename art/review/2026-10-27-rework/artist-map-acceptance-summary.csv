@@ -1,0 +1,11 @@
+map,width,height,expected,pads,verdict,master_png
+rootkin-forest-01,1536,2048,"(1536, 2048)",30,ALIGNED,art/masters/maps/rootkin-forest-01.png
+assembly-scrap-01,1536,2048,"(1536, 2048)",22,ALIGNED,art/masters/maps/assembly-scrap-01.png
+chitin-hive-01,1536,2048,"(1536, 2048)",24,ALIGNED,art/masters/maps/chitin-hive-01.png
+lumenari-crystal-01,1536,2048,"(1536, 2048)",14,ALIGNED,art/masters/maps/lumenari-crystal-01.png
+lanes-2-hollows,1536,2048,"(1536, 2048)",20,ALIGNED,art/masters/maps/lanes-2-hollows.png
+lanes-3-prism,1536,2304,"(1536, 2304)",27,ALIGNED,art/masters/maps/lanes-3-prism.png
+lanes-4-warrens,1536,2560,"(1536, 2560)",32,ALIGNED,art/masters/maps/lanes-4-warrens.png
+king-2-foundry,1664,2048,"(1664, 2048)",30,ALIGNED,art/masters/maps/king-2-foundry.png
+king-3-elderfork,1664,2304,"(1664, 2304)",31,ALIGNED,art/masters/maps/king-3-elderfork.png
+king-4-throne,1664,2432,"(1664, 2432)",35,ALIGNED,art/masters/maps/king-4-throne.png

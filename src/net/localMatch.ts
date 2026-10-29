@@ -1,4 +1,4 @@
-// Extra Terram — src/net/localMatch.ts v0.1.0 — matches between tabs of one browser, no server
+// Extra Terram — src/net/localMatch.ts v0.2.0 — matches between tabs of one browser, no server; team mode for 2 v 2
 // A BroadcastChannel per match carries the same MatchEvent payloads the Supabase channel does, and
 // presence is a heartbeat every second (a seat drops after 4 s of silence). Lobbies live in
 // localStorage so a second tab can join by code. It exists so the lobby and the race can be played
@@ -55,7 +55,7 @@ function randomCode(): string {
   return code;
 }
 
-export function localCreateMatch(opts: { mode: MatchMode; maxPlayers: number; levelId: string; raceId: string; contentVersion: string }): { match: MatchRow; seat: number } {
+export function localCreateMatch(opts: { mode: MatchMode; maxPlayers: number; teamMode?: boolean; levelId: string; raceId: string; contentVersion: string }): { match: MatchRow; seat: number } {
   const reg = readRegistry();
   const code = randomCode();
   const me = localUserId();
@@ -64,7 +64,7 @@ export function localCreateMatch(opts: { mode: MatchMode; maxPlayers: number; le
     code,
     mode: opts.mode,
     max_players: opts.maxPlayers,
-    team_mode: false,
+    team_mode: !!opts.teamMode,
     host_user_id: me,
     map_id: opts.levelId,
     seed: `${code.toLowerCase()}-${Math.random().toString(36).slice(2, 6)}`,

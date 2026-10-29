@@ -1,8 +1,9 @@
-// Extra Terram — src/ui/RaceDetails.tsx v0.2.0 — the precise picture: special ability in numbers, damage against every race, currency, every tower
+// Extra Terram — src/ui/RaceDetails.tsx v0.3.0 — the precise picture: special ability in numbers, damage against every race, currency (with its icon), every tower
 // The race picker says it in plain English; this panel gives the numbers behind it.
 import { content, currencyOf, matchupsFor, towersForRace } from '../content';
 import { TICK_RATE, towerStats, type RaceDef, type TowerDef } from '../engine';
 import { TowerIcon } from './TowerIcon';
+import { Money, UiIcon, currencyIcon } from './UiIcon';
 
 const ROLE: Record<string, string> = { starter: 'Starter', heavy: 'Heavy', control: 'Slow field', splash: 'Splash', range: 'Sniper', economy: 'Income', support: 'Buff', trap: 'Trap' };
 
@@ -63,7 +64,9 @@ export function RaceDetails({ race }: { race: RaceDef }) {
       </div>
 
       <div className="mt-2 rounded-md bg-grove-950/60 px-2 py-1.5">
-        <div className="text-[10px] uppercase tracking-wide text-grove-300/60">Money: {currency}</div>
+        <div className="flex items-center gap-1 text-[10px] uppercase tracking-wide text-grove-300/60">
+          Money: <UiIcon name={currencyIcon(currency)} size={14} /> {currency}
+        </div>
         <p className="text-grove-300/80">Earned from kills, from every wave cleared and by calling a wave early.</p>
       </div>
 
@@ -75,7 +78,7 @@ export function RaceDetails({ race }: { race: RaceDef }) {
             <span className="min-w-0">
               <span className="font-semibold">{t.name}</span>{' '}
               <span className="text-grove-300/60">
-                · {ROLE[t.role] ?? t.role} · {t.cost} {currency}
+                · {ROLE[t.role] ?? t.role} · <Money amount={t.cost} currency={currency} size={12} />
               </span>
               <span className="block text-grove-300/80">{t.description}</span>
               <span className="block text-sap/80">{traits(t, currency).join(' · ')}</span>

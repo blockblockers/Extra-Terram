@@ -1,4 +1,4 @@
-/* Extra Terram — src/styles/index.css v0.4.0 — the title lockup: gold beveled Oxanium over a cyan-glow Rajdhani subtitle */
+/* Extra Terram — src/styles/index.css v0.7.0 — lettering-free key art in two framings; the landscape menu draws its own plates and title */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -36,6 +36,270 @@ button {
 }
 
 /* The HUD is static by design: no transitions, no animations, the canvas is the only moving surface. */
+
+/*
+ * The title backdrop: two paintings of the same world, both free of lettering. Landscape screens get
+ * public/art/title.jpg (1672 x 941, 16:9: the Rootkin tree at the left, the Assembly fortress in the
+ * middle, Chitin on the trail, the Lumenari spire top right, the bottom 11% dark for the race bar);
+ * portrait screens get public/art/title-portrait.jpg (1536 x 2048, 3:4, the lower quarter dark for
+ * the quick bar). Pinned to the viewport and sized to the largest viewport (lvh), so the painting keeps
+ * one scale whatever the page's height, however far it scrolls, and whether or not the browser's bars
+ * are showing; 100vh is the fallback. Scaled by height: on a phone that crops the portrait painting's
+ * sides; in landscape the painting is anchored to its left corner, so the menu's plates stay over the
+ * calm tree, and beyond its right edge (viewports wider than 16:9) a blurred, darkened copy fills the gap.
+ */
+.et-backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100vh;
+  height: 100lvh;
+  pointer-events: none;
+}
+
+.et-backdrop-art {
+  background: url('/art/title-portrait.jpg') center top / auto 100% no-repeat;
+}
+
+.et-backdrop-ambient {
+  display: none;
+  background: url('/art/title.jpg') center / cover no-repeat;
+  filter: blur(28px) brightness(0.45) saturate(1.15);
+  transform: scale(1.12);
+}
+
+@media (min-aspect-ratio: 5/4) {
+  .et-backdrop-art {
+    background-image: url('/art/title.jpg');
+    background-position: left top;
+  }
+}
+
+@media (min-aspect-ratio: 1672/941) {
+  .et-backdrop-ambient {
+    display: block;
+  }
+}
+
+/*
+ * The landscape menu: one screen laid on the painting. Positions and sizes are in lvh (the painting is
+ * scaled by height, so they follow it); type is clamped to stay readable on a landscape phone. The
+ * plates draw the key art's own plate look — dark teal, a gold bevel, cyan for the primary — in CSS.
+ */
+.et-stage {
+  position: relative;
+  z-index: 10;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.et-stage-logo {
+  position: absolute;
+  left: 8lvh;
+  top: 7lvh;
+  text-align: left;
+}
+
+.et-stage-logo .et-title {
+  font-size: clamp(1.5rem, 7.2lvh, 4.4rem);
+}
+
+.et-stage-logo .et-subtitle {
+  justify-content: flex-start;
+  margin-top: 1.2lvh;
+  font-size: clamp(0.55rem, 1.6lvh, 0.95rem);
+}
+
+.et-stage-logo .et-subtitle::before {
+  display: none;
+}
+
+.et-plates {
+  position: absolute;
+  left: 8lvh;
+  top: 26lvh;
+  width: 42lvh;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2lvh;
+}
+
+.et-plate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.5lvh;
+  height: 7lvh;
+  min-height: 1.9rem;
+  padding: 0 1.8lvh 0 1.6lvh;
+  border-radius: 1.1lvh;
+  border: 1px solid rgba(232, 195, 58, 0.75);
+  background: linear-gradient(180deg, #1e4a5f 0%, #13293a 38%, #10252f 70%, #053d5c 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0.5lvh 1.4lvh rgba(0, 0, 0, 0.55);
+  color: #fff6d6;
+  text-align: left;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+}
+
+/* the bevel: a second, darker line inside the gold one */
+.et-plate::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(1.1lvh - 2px);
+  border: 1px solid rgba(7, 19, 26, 0.85);
+  pointer-events: none;
+}
+
+.et-plate-play {
+  height: 8lvh;
+  border-color: #4fd8e8;
+  background: linear-gradient(180deg, #033a60 0%, #264e67 40%, #1b4e6b 70%, #0179ba 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 0 1.8lvh rgba(79, 216, 232, 0.4),
+    0 0.5lvh 1.4lvh rgba(0, 0, 0, 0.55);
+  color: #f4fbff;
+}
+
+.et-plate:hover,
+.et-plate:focus-visible {
+  filter: brightness(1.18);
+}
+
+.et-plate:focus-visible {
+  outline: 2px solid #4fd8e8;
+  outline-offset: 2px;
+}
+
+.et-plate[aria-expanded='true'] {
+  border-color: #4fd8e8;
+  box-shadow:
+    inset 0 0 0 1px rgba(79, 216, 232, 0.7),
+    0 0 1.6lvh rgba(79, 216, 232, 0.45),
+    0 0.5lvh 1.4lvh rgba(0, 0, 0, 0.55);
+}
+
+.et-plate-icon {
+  flex: none;
+  width: 3.6lvh;
+  height: 3.6lvh;
+  min-width: 1rem;
+  min-height: 1rem;
+  color: #f2c84a;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.6));
+}
+
+.et-plate-label {
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2.8lvh, 1.5rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.et-plate-sub {
+  display: block;
+  margin-top: 0.3lvh;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.55rem, 1.45lvh, 0.8rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  text-transform: none;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-height: 520px) {
+  .et-plate-sub {
+    display: none;
+  }
+}
+
+.et-stage-panel {
+  position: absolute;
+  left: 54lvh;
+  top: 26lvh;
+  width: min(76lvh, calc(100% - 56lvh));
+  max-height: 60lvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.et-stage-top {
+  position: absolute;
+  right: 2lvh;
+  top: 1.2lvh;
+  width: min(44lvh, 40%);
+}
+
+.et-racebar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 11.4lvh;
+  min-height: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: linear-gradient(180deg, #0b1c22 0%, #07131a 100%);
+  border-top: 1px solid rgba(232, 195, 58, 0.5);
+  box-shadow: 0 -0.6lvh 2lvh rgba(0, 0, 0, 0.5);
+}
+
+.et-racebar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6lvh;
+  padding: 0 1lvh;
+  border-right: 1px solid rgba(27, 61, 62, 0.9);
+  opacity: 0.7;
+}
+
+.et-racebar button:last-child {
+  border-right: 0;
+}
+
+.et-racebar button:hover,
+.et-racebar button[aria-checked='true'] {
+  opacity: 1;
+}
+
+.et-racebar-name {
+  font-family: 'Rajdhani', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.75rem, 2.8lvh, 1.4rem);
+  line-height: 1;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.et-racebar-tag {
+  display: block;
+  margin-top: 0.5lvh;
+  font-size: clamp(0.55rem, 1.6lvh, 0.8rem);
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* The portrait menu's first screen keeps the painting clear above the quick bar (the panels start here). */
+.et-hero {
+  min-height: 71vh;
+  min-height: 71lvh;
+}
 
 /*
  * The title lockup. The name is one line that fills the column on any phone (Oxanium 800 runs

@@ -1,0 +1,13 @@
+{
+  "_about": "Hand-kept mount points, in pixels of the 256 tower canvas, per state (t1, t2, t3a, t3b). pivot: where a turret's centre goes, only for turret towers off the default (128, 99 / 102 / 107 / 107, i.e. 0.5 tile above the cell centre). emit: where beams and muzzle flashes start, for towers without a turret (default: the same point as the default pivot). scripts/sprites.py merges this with each turret's measured reach into public/sprites/mounts.json. Emitters set by eye from the v2 art drop (2026-10-27). Pivots for the mortar, pile driver, whirlseed and acid bloat set by eye on the 2026-10-27 rework bodies, which grew taller at T2/T3 with a socket at their new top (v0.15.2).",
+  "assembly/railgun": {"emit": {"t1": [128, 70], "t2": [128, 70], "t3a": [128, 70], "t3b": [128, 70]}},
+  "chitin/spitter": {"emit": {"t1": [128, 72], "t2": [128, 72], "t3a": [128, 72], "t3b": [128, 72]}},
+  "chitin/mandible": {"emit": {"t1": [128, 88], "t2": [128, 88], "t3a": [128, 88], "t3b": [128, 88]}},
+  "lumenari/prism": {"emit": {"t1": [128, 62], "t2": [128, 62], "t3a": [128, 62], "t3b": [128, 62]}},
+  "lumenari/lance": {"emit": {"t1": [128, 92], "t2": [128, 92], "t3a": [128, 92], "t3b": [128, 92]}},
+  "lumenari/pulsar": {"emit": {"t1": [128, 26], "t2": [128, 28], "t3a": [128, 28], "t3b": [128, 28]}},
+  "assembly/mortar": {"pivot": {"t2": [128, 94], "t3a": [128, 99], "t3b": [128, 91]}},
+  "assembly/pile-driver": {"pivot": {"t2": [128, 94], "t3a": [128, 99], "t3b": [128, 99]}},
+  "rootkin/whirlseed": {"pivot": {"t2": [128, 94], "t3a": [128, 91], "t3b": [128, 99]}},
+  "chitin/acid-bloat": {"pivot": {"t2": [128, 94], "t3a": [128, 95], "t3b": [128, 99]}}
+}

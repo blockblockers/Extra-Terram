@@ -1,0 +1,100 @@
+{
+  "_comment": "Loop points (seconds) and gain trims per music or effect id, from the composer's delivery notes (audio/delivery-sheet.csv of the 2026-10-28 masters). scripts/audio-manifest.py writes them into public/audio/manifest.json. Example: \"world-rootkin\": { \"loop\": [0.0, 96.0], \"gain\": 0.9 }",
+  "menu": {
+    "loop": [
+      0.0,
+      147.692313
+    ],
+    "bpm": 104,
+    "meter": "4/4",
+    "bars": 64
+  },
+  "world-rootkin": {
+    "loop": [
+      0.0,
+      128.0
+    ],
+    "bpm": 90,
+    "meter": "4/4",
+    "bars": 48
+  },
+  "world-rootkin-battle": {
+    "loop": [
+      0.0,
+      128.0
+    ],
+    "bpm": 90,
+    "meter": "4/4",
+    "bars": 48
+  },
+  "world-assembly": {
+    "loop": [
+      0.0,
+      112.0
+    ],
+    "bpm": 120,
+    "meter": "4/4",
+    "bars": 56
+  },
+  "world-assembly-battle": {
+    "loop": [
+      0.0,
+      112.0
+    ],
+    "bpm": 120,
+    "meter": "4/4",
+    "bars": 56
+  },
+  "world-chitin": {
+    "loop": [
+      0.0,
+      128.0
+    ],
+    "bpm": 105,
+    "meter": "7/8",
+    "bars": 64
+  },
+  "world-chitin-battle": {
+    "loop": [
+      0.0,
+      128.0
+    ],
+    "bpm": 105,
+    "meter": "7/8",
+    "bars": 64
+  },
+  "world-lumenari": {
+    "loop": [
+      0.0,
+      110.769229
+    ],
+    "bpm": 104,
+    "meter": "4/4",
+    "bars": 48
+  },
+  "world-lumenari-battle": {
+    "loop": [
+      0.0,
+      110.769229
+    ],
+    "bpm": 104,
+    "meter": "4/4",
+    "bars": 48
+  },
+  "_reencoded": "death-carapace, hit-acid, hit-splash, hit-thorn and boss-appear were re-encoded from the masters 3 dB down on integration (their ogg/m4a peaks overshot 0 dBFS); the gain below puts them back at the delivered level.",
+  "death-carapace": {
+    "gain": 1.41
+  },
+  "hit-acid": {
+    "gain": 1.41
+  },
+  "hit-splash": {
+    "gain": 1.41
+  },
+  "hit-thorn": {
+    "gain": 1.41
+  },
+  "boss-appear": {
+    "gain": 1.41
+  }
+}

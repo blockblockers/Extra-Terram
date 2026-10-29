@@ -1,4 +1,4 @@
-// Extra Terram — src/render/effects.ts v0.5.0 — colours for the four race damage types; chitin carapace deaths; beams, splash rings, income motes
+// Extra Terram — src/render/effects.ts v0.7.0 — particles live in board px and are drawn where the camera projects them
 // One pool, one shared texture, one container: the whole layer is a single draw batch. Nothing here
 // touches the simulation, and when the pool is full new bursts are dropped rather than allocated.
 import { Container, Graphics, Sprite, Texture, type Renderer as PixiRendererType } from 'pixi.js';
@@ -23,9 +23,18 @@ interface Particle {
   gravity: number;
   kind: 'dot' | 'spark' | 'shard' | 'leaf' | 'scrap' | 'ring' | 'beam';
   length: number; // beams only
+  /** Beams: the two ends, board px (drawn between their projections). */
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
 }
 
-const DAMAGE_COLOR: Record<DamageType, number> = { thorn: 0xd9c25a, kinetic: 0xf6f0c8, acid: 0x9fe84a, energy: 0x4fd8e8 };
+export const DAMAGE_COLOR: Record<DamageType, number> = { thorn: 0xd9c25a, kinetic: 0xf6f0c8, acid: 0x9fe84a, energy: 0x4fd8e8 };
+
+/** Board px → screen px with the local scale (the camera's projection; identity when there is none). */
+export type Project = (x: number, y: number) => { x: number; y: number; s: number };
+const IDENTITY: Project = (x, y) => ({ x, y, s: 1 });
 
 export class Effects {
   readonly container = new Container();
@@ -37,7 +46,11 @@ export class Effects {
   /** 1 = full budget, 0.5 = battery saver. */
   scale = 1;
 
-  constructor(renderer: PixiRendererType, capacity = 400) {
+  constructor(
+    renderer: PixiRendererType,
+    private project: Project = IDENTITY,
+    capacity = 400,
+  ) {
     this.textures = {
       dot: this.make(renderer, (g) => g.circle(8, 8, 7).fill(0xffffff)),
       spark: this.make(renderer, (g) => g.roundRect(0, 6, 16, 4, 2).fill(0xffffff)),
@@ -52,7 +65,7 @@ export class Effects {
       sprite.anchor.set(0.5);
       sprite.visible = false;
       this.container.addChild(sprite);
-      const p: Particle = { sprite, x: 0, y: 0, vx: 0, vy: 0, drag: 1, life: 0, maxLife: 1, size: 4, endSize: 0, color: 0xffffff, alpha: 1, spin: 0, gravity: 0, kind: 'dot', length: 0 };
+      const p: Particle = { sprite, x: 0, y: 0, vx: 0, vy: 0, drag: 1, life: 0, maxLife: 1, size: 4, endSize: 0, color: 0xffffff, alpha: 1, spin: 0, gravity: 0, kind: 'dot', length: 0, x0: 0, y0: 0, x1: 0, y1: 0 };
       this.pool.push(p);
       this.free.push(p);
     }
@@ -91,6 +104,10 @@ export class Effects {
     p.spin = opts.spin ?? 0;
     p.gravity = opts.gravity ?? 0;
     p.length = opts.length ?? 0;
+    p.x0 = opts.x0 ?? x;
+    p.y0 = opts.y0 ?? y;
+    p.x1 = opts.x1 ?? x;
+    p.y1 = opts.y1 ?? y;
     p.sprite.tint = p.color;
     p.sprite.visible = true;
     p.sprite.rotation = this.rand() * Math.PI * 2;
@@ -220,11 +237,16 @@ export class Effects {
     const dy = y1 - y0;
     const len = Math.sqrt(dx * dx + dy * dy);
     if (len < 1) return;
-    const p = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 5, endSize: 1, maxLife: 5, color, alpha: 0.95, drag: 1, length: len });
+    const p = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 5, endSize: 1, maxLife: 5, color, alpha: 0.95, drag: 1, length: len, x0, y0, x1, y1 });
     if (p) p.sprite.rotation = Math.atan2(dy, dx);
-    const core = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 2, endSize: 0.5, maxLife: 5, color: 0xffffff, alpha: 0.9, drag: 1, length: len });
+    const core = this.spawn('beam', (x0 + x1) / 2, (y0 + y1) / 2, { size: 2, endSize: 0.5, maxLife: 5, color: 0xffffff, alpha: 0.9, drag: 1, length: len, x0, y0, x1, y1 });
     if (core) core.sprite.rotation = Math.atan2(dy, dx);
     this.spawn('dot', x1, y1, { size: 7, endSize: 2, maxLife: 5, color, alpha: 0.9 });
+  }
+
+  /** The flash where a beam lands, on its own: a painted beam (paintedFx.ts) keeps it. */
+  beamFlash(x: number, y: number, type: DamageType): void {
+    this.spawn('dot', x, y, { size: 7, endSize: 2, maxLife: 5, color: DAMAGE_COLOR[type], alpha: 0.9 });
   }
 
   /** Sap paid out by an economy tower: gold motes rising. */
@@ -260,13 +282,19 @@ export class Effects {
       p.vy *= p.drag;
       const t = 1 - p.life / p.maxLife;
       const size = p.size + (p.endSize - p.size) * t;
-      p.sprite.position.set(p.x, p.y);
       if (p.kind === 'beam') {
-        p.sprite.width = p.length;
-        p.sprite.height = size;
+        // between the projected ends, so a beam lies right under the camera's angle
+        const a = this.project(p.x0, p.y0);
+        const b = this.project(p.x1, p.y1);
+        p.sprite.position.set((a.x + b.x) / 2, (a.y + b.y) / 2);
+        p.sprite.width = Math.hypot(b.x - a.x, b.y - a.y);
+        p.sprite.height = size * a.s;
+        p.sprite.rotation = Math.atan2(b.y - a.y, b.x - a.x);
       } else {
-        p.sprite.width = size * 2;
-        p.sprite.height = p.kind === 'spark' || p.kind === 'leaf' ? size : size * 2;
+        const q = this.project(p.x, p.y);
+        p.sprite.position.set(q.x, q.y);
+        p.sprite.width = size * 2 * q.s;
+        p.sprite.height = (p.kind === 'spark' || p.kind === 'leaf' ? size : size * 2) * q.s;
         p.sprite.rotation += p.spin * dtTicks;
         if (p.kind === 'spark' && (p.vx !== 0 || p.vy !== 0)) p.sprite.rotation = Math.atan2(p.vy, p.vx);
       }

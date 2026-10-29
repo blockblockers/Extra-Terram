@@ -1,0 +1,25 @@
+lanes-2-hollows: trail contrast median 68.0 (good); 0 of 68 cells weak (under 18.0)
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 65.4 (threshold 10.0); 0 of 20 pads without a visible socket
+  verdict: ALIGNED (by the numbers; confirm in the check image)
+lanes-3-prism: trail contrast median 83.9 (good); 0 of 69 cells weak (under 18.0)
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 92.1 (threshold 10.0); 0 of 27 pads without a visible socket
+  verdict: ALIGNED (by the numbers; confirm in the check image)
+lanes-4-warrens: trail contrast median 62.2 (good); 0 of 92 cells weak (under 18.0)
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 65.2 (threshold 10.0); 0 of 32 pads without a visible socket
+  verdict: ALIGNED (by the numbers; confirm in the check image)
+king-2-foundry: trail contrast median 51.9 (good); 14 of 49 cells weak (under 18.0): [('G14', 7.6), ('I14', 4.4), ('K12', 3.4), ('G11', 13.3), ('C11', 12.2), ('F7', 11.4), ('E7', 11.7), ('E6', 16.2), ('B2', 1.2), ('B0', 13.8), ('H7', 6.8), ('I6', 2.0), ('L2', 7.6), ('L0', 13.8)]
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 39.3 (threshold 10.0); 5 of 30 pads without a visible socket: [('K1', 6.4), ('A3', 2.5), ('J5', 7.8), ('F6', 7.4), ('D10', 6.6)]
+  verdict: NEEDS A LOOK
+king-3-elderfork: trail contrast median 38.5 (good); 12 of 52 cells weak (under 13.5): [('C2', 0.7), ('K4', 9.6), ('G6', 2.6), ('D8', 7.0), ('C9', 0.6), ('G9', 4.7), ('G11', 2.4), ('G12', 10.6), ('G13', 3.8), ('G15', 3.1), ('K8', 8.6), ('K9', 3.9)]
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 28.4 (threshold 10.0); 4 of 31 pads without a visible socket: [('I2', 6.5), ('B8', 6.4), ('J11', 5.5), ('A12', 8.5)]
+  verdict: NEEDS A LOOK
+note: painting is 1664x2560, resized to 1664x2432 for the check
+king-4-throne: trail contrast median 35.0 (good); 15 of 66 cells weak (under 12.2): [('G2', 3.4), ('G4', 3.6), ('E9', 1.2), ('D9', 8.9), ('C8', 8.1), ('B5', 4.4), ('C10', 5.1), ('C12', 9.4), ('B13', 4.5), ('I9', 1.6), ('L13', 0.4), ('K6', 5.4), ('L5', 0.9), ('L2', 6.5), ('L1', 9.3)]
+  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)
+  sockets: mean 22.9 (threshold 10.0); 7 of 35 pads without a visible socket: [('C0', 8.0), ('H2', 6.1), ('F5', 9.5), ('B7', 3.2), ('L7', 8.3), ('G10', 3.5), ('D11', 4.5)]
+  verdict: NEEDS A LOOK

@@ -1,0 +1,73 @@
+id,type,world,role,tempo_bpm,key,bars,numerator,denominator,duration_seconds,loop_start_seconds,loop_end_seconds,48k_samples,notes
+menu,music,,main,104,D major / modal,64,4,4,147.692313,0,147.692313,7089231,"Seamless file-edge loop, no intro"
+world-rootkin,music,rootkin,calm,90,D Dorian,48,4,4,128.000000,0,128.000000,6144000,"Seamless file-edge loop, no intro"
+world-rootkin-battle,music,rootkin,battle,90,D Dorian,48,4,4,128.000000,0,128.000000,6144000,"Seamless file-edge loop, no intro"
+world-assembly,music,assembly,calm,120,A Phrygian / minor,56,4,4,112.000000,0,112.000000,5376000,"Seamless file-edge loop, no intro"
+world-assembly-battle,music,assembly,battle,120,A Phrygian / minor,56,4,4,112.000000,0,112.000000,5376000,"Seamless file-edge loop, no intro"
+world-chitin,music,chitin,calm,105,"F# minor, 7/8",64,7,8,128.000000,0,128.000000,6144000,"Seamless file-edge loop, no intro"
+world-chitin-battle,music,chitin,battle,105,"F# minor, 7/8",64,7,8,128.000000,0,128.000000,6144000,"Seamless file-edge loop, no intro"
+world-lumenari,music,lumenari,calm,104,E Lydian,48,4,4,110.769229,0,110.769229,5316923,"Seamless file-edge loop, no intro"
+world-lumenari-battle,music,lumenari,battle,104,E Lydian,48,4,4,110.769229,0,110.769229,5316923,"Seamless file-edge loop, no intro"
+result-win,music,,sting,,D major,,,,6.250000,,,300000,Non-looping sting
+result-lose,music,,sting,,D minor,,,,6.500000,,,312000,Non-looping sting
+fire-thorn-1,sfx,,,,,,,,0.158000,,,7584,variation of fire-thorn
+fire-thorn-2,sfx,,,,,,,,0.175000,,,8400,variation of fire-thorn
+fire-thorn-3,sfx,,,,,,,,0.192000,,,9216,variation of fire-thorn
+fire-kinetic-1,sfx,,,,,,,,0.203000,,,9744,variation of fire-kinetic
+fire-kinetic-2,sfx,,,,,,,,0.220000,,,10560,variation of fire-kinetic
+fire-kinetic-3,sfx,,,,,,,,0.237000,,,11376,variation of fire-kinetic
+fire-acid-1,sfx,,,,,,,,0.213000,,,10224,variation of fire-acid
+fire-acid-2,sfx,,,,,,,,0.230000,,,11040,variation of fire-acid
+fire-acid-3,sfx,,,,,,,,0.247000,,,11856,variation of fire-acid
+fire-energy-1,sfx,,,,,,,,0.193000,,,9264,variation of fire-energy
+fire-energy-2,sfx,,,,,,,,0.210000,,,10080,variation of fire-energy
+fire-energy-3,sfx,,,,,,,,0.227000,,,10896,variation of fire-energy
+fire-splash-1,sfx,,,,,,,,0.383000,,,18384,variation of fire-splash
+fire-splash-2,sfx,,,,,,,,0.400000,,,19200,variation of fire-splash
+fire-beam-1,sfx,,,,,,,,0.368000,,,17664,variation of fire-beam
+fire-beam-2,sfx,,,,,,,,0.385000,,,18480,variation of fire-beam
+hit-thorn-1,sfx,,,,,,,,0.085000,,,4080,variation of hit-thorn
+hit-thorn-2,sfx,,,,,,,,0.100000,,,4800,variation of hit-thorn
+hit-thorn-3,sfx,,,,,,,,0.115000,,,5520,variation of hit-thorn
+hit-kinetic-1,sfx,,,,,,,,0.128000,,,6144,variation of hit-kinetic
+hit-kinetic-2,sfx,,,,,,,,0.145000,,,6960,variation of hit-kinetic
+hit-kinetic-3,sfx,,,,,,,,0.162000,,,7776,variation of hit-kinetic
+hit-acid-1,sfx,,,,,,,,0.138000,,,6624,variation of hit-acid
+hit-acid-2,sfx,,,,,,,,0.155000,,,7440,variation of hit-acid
+hit-acid-3,sfx,,,,,,,,0.172000,,,8256,variation of hit-acid
+hit-energy-1,sfx,,,,,,,,0.103000,,,4944,variation of hit-energy
+hit-energy-2,sfx,,,,,,,,0.120000,,,5760,variation of hit-energy
+hit-energy-3,sfx,,,,,,,,0.137000,,,6576,variation of hit-energy
+hit-splash-1,sfx,,,,,,,,0.398000,,,19104,variation of hit-splash
+hit-splash-2,sfx,,,,,,,,0.415000,,,19920,variation of hit-splash
+death-bark-1,sfx,,,,,,,,0.493000,,,23664,variation of death-bark
+death-bark-2,sfx,,,,,,,,0.510000,,,24480,variation of death-bark
+death-bark-3,sfx,,,,,,,,0.527000,,,25296,variation of death-bark
+death-plated-1,sfx,,,,,,,,0.493000,,,23664,variation of death-plated
+death-plated-2,sfx,,,,,,,,0.510000,,,24480,variation of death-plated
+death-plated-3,sfx,,,,,,,,0.527000,,,25296,variation of death-plated
+death-carapace-1,sfx,,,,,,,,0.473000,,,22704,variation of death-carapace
+death-carapace-2,sfx,,,,,,,,0.490000,,,23520,variation of death-carapace
+death-carapace-3,sfx,,,,,,,,0.507000,,,24336,variation of death-carapace
+death-shielded-1,sfx,,,,,,,,0.508000,,,24384,variation of death-shielded
+death-shielded-2,sfx,,,,,,,,0.525000,,,25200,variation of death-shielded
+death-shielded-3,sfx,,,,,,,,0.542000,,,26016,variation of death-shielded
+leak-1,sfx,,,,,,,,0.555000,,,26640,variation of leak
+leak-boss-1,sfx,,,,,,,,0.835000,,,40080,variation of leak-boss
+lives-low-1,sfx,,,,,,,,0.635000,,,30480,variation of lives-low
+place-1,sfx,,,,,,,,0.363000,,,17424,variation of place
+place-2,sfx,,,,,,,,0.380000,,,18240,variation of place
+upgrade-1,sfx,,,,,,,,0.448000,,,21504,variation of upgrade
+upgrade-2,sfx,,,,,,,,0.465000,,,22320,variation of upgrade
+reinforce-1,sfx,,,,,,,,0.400000,,,19200,variation of reinforce
+sell-1,sfx,,,,,,,,0.375000,,,18000,variation of sell
+income-1,sfx,,,,,,,,0.100000,,,4800,variation of income
+income-2,sfx,,,,,,,,0.110000,,,5280,variation of income
+wave-start-1,sfx,,,,,,,,0.845000,,,40560,variation of wave-start
+wave-boss-1,sfx,,,,,,,,1.225000,,,58800,variation of wave-boss
+wave-clear-1,sfx,,,,,,,,0.845000,,,40560,variation of wave-clear
+boss-appear-1,sfx,,,,,,,,1.000000,,,48000,variation of boss-appear
+send-1,sfx,,,,,,,,0.400000,,,19200,variation of send
+incoming-1,sfx,,,,,,,,0.515000,,,24720,variation of incoming
+ui-tap-1,sfx,,,,,,,,0.075000,,,3600,variation of ui-tap
+ui-error-1,sfx,,,,,,,,0.150000,,,7200,variation of ui-error

@@ -1,15 +1,19 @@
-// Extra Terram — src/net/progress.ts v0.1.0 — run results: post to the server, or keep them until you can
+// Extra Terram — src/net/progress.ts v0.3.0 — runs carry their rules to the server (Ultimate list); a device best for the Ultimate list too
 // A finished run always lands somewhere: on the server through the `submit_run` RPC when signed in,
 // otherwise in a local queue that is flushed the next time a session exists. Personal bests are
 // also kept locally so the menu can show them offline. Nothing here is trusted by the server: the
 // RPC re-validates every field, and leaderboards are computed from the stored rows.
-import type { LoggedInput } from '../engine';
+import type { LoggedInput, RunRules } from '../engine';
 import { supabase } from './supabase';
 
 export interface RunRecord {
   levelId: string;
   raceId: string;
   mode: 'campaign' | 'endless' | 'challenge';
+  /** Played under other rules than the level's own (rounds, mini-bosses, difficulty). Client-side only. */
+  custom?: boolean;
+  /** The rules it was played under (stored with the run; the Ultimate list shows them). */
+  rules?: RunRules;
   seed: string;
   outcome: 'won' | 'lost';
   score: number;
@@ -30,11 +34,15 @@ export interface LocalBest {
   stars: number;
   raceId: string;
   at: number;
+  /** Ultimate bests only: the rules of that run. */
+  rules?: RunRules;
 }
 
 const QUEUE_KEY = 'extra-terram.run-queue.v1';
 const BESTS_KEY = 'extra-terram.bests.v1';
+const ULTIMATE_KEY = 'extra-terram.bests-ultimate.v1';
 const QUEUE_LIMIT = 50;
+const SCORE_CAP = 1_000_000; // run_results.score check constraint
 const LOG_LIMIT = 2000; // inputs; longer logs are dropped from the upload, the row still counts
 
 function readJson<T>(key: string, fallback: T): T {
@@ -65,7 +73,24 @@ export function localBest(levelId: string): LocalBest | null {
   return localBests()[levelId] ?? null;
 }
 
+/** The device's best single-player score on a level under any rules (the Ultimate list's local twin). */
+export function localUltimateBest(levelId: string): LocalBest | null {
+  return readJson<Record<string, LocalBest>>(ULTIMATE_KEY, {})[levelId] ?? null;
+}
+
+function rememberUltimate(rec: RunRecord): void {
+  if (rec.mode === 'challenge') return; // matches have their own results
+  const bests = readJson<Record<string, LocalBest>>(ULTIMATE_KEY, {});
+  const prev = bests[rec.levelId];
+  if (!prev || rec.score > prev.score) {
+    bests[rec.levelId] = { score: rec.score, stars: rec.stars, raceId: rec.raceId, at: Date.now(), ...(rec.rules ? { rules: rec.rules } : {}) };
+    writeJson(ULTIMATE_KEY, bests);
+  }
+}
+
 function rememberBest(rec: RunRecord): void {
+  rememberUltimate(rec);
+  if (rec.custom) return; // the device best is the level as written, like the leaderboard
   const bests = localBests();
   const prev = bests[rec.levelId];
   if (!prev || rec.score > prev.score || (rec.score === prev.score && rec.stars > prev.stars)) {
@@ -83,7 +108,7 @@ function rpcArgs(rec: RunRecord) {
     p_mode: rec.mode,
     p_seed: rec.seed,
     p_outcome: rec.outcome,
-    p_score: Math.round(rec.score),
+    p_score: Math.min(SCORE_CAP, Math.max(0, Math.round(rec.score))),
     p_stars: rec.stars,
     p_waves_cleared: rec.wavesCleared,
     p_lives_left: rec.livesLeft,
@@ -91,6 +116,7 @@ function rpcArgs(rec: RunRecord) {
     p_content_version: rec.contentVersion,
     p_engine_version: rec.engineVersion,
     p_input_log: rec.inputLog && rec.inputLog.length <= LOG_LIMIT ? rec.inputLog : null,
+    ...(rec.rules ? { p_rules: { rounds: rec.rules.rounds, bossEvery: rec.rules.bossEvery, difficulty: rec.rules.difficulty } } : {}),
   };
 }
 
@@ -103,7 +129,13 @@ async function hasSession(): Promise<boolean> {
 /** Try the RPC once. Returns true on success, false when it should be retried later. Throws on a rejection. */
 async function submit(rec: RunRecord): Promise<boolean> {
   if (!supabase) return false;
-  const { error } = await supabase.rpc('submit_run', rpcArgs(rec));
+  let { error } = await supabase.rpc('submit_run', rpcArgs(rec));
+  if (error && error.code === 'PGRST202' && rec.rules) {
+    // a server without migration 0003 has no p_rules: post the run without them
+    const { p_rules: _rules, ...older } = rpcArgs(rec) as ReturnType<typeof rpcArgs> & { p_rules?: unknown };
+    void _rules;
+    ({ error } = await supabase.rpc('submit_run', older));
+  }
   if (!error) return true;
   // A validation error is final: the server will never accept this row, so don't keep it around.
   if (error.code && error.code.startsWith('P0')) throw new Error(error.message);
@@ -148,8 +180,9 @@ export async function recordRun(rec: RunRecord): Promise<SaveOutcome> {
 
 function enqueue(rec: RunRecord): void {
   const q = readQueue();
-  const { inputLog: _dropped, ...slim } = rec;
+  const { inputLog: _dropped, custom: _custom, ...slim } = rec;
   void _dropped;
+  void _custom;
   q.push(slim);
   writeQueue(q);
 }

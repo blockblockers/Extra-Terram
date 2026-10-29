@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/check-map.py v0.1.0 — does a painted map background line up with its guide?
+"""Extra Terram — scripts/check-map.py v0.1.1 — does a painted map background line up with its guide? (also runs from the map kit zip)
 
   python scripts/check-map.py <map-id> <painting.png|jpg> [--out DIR]
 
@@ -27,6 +27,8 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parent.parent
 GUIDES = ROOT / "art" / "guides"
+if not GUIDES.exists():  # the standalone map kit keeps the guide files at its top level
+    GUIDES = ROOT
 TRAIL_MIN = 18.0  # median trail-vs-ground difference below this = low-contrast trail (advisory)
 SOCKET_MIN = 10.0
 
@@ -83,12 +85,16 @@ def main() -> None:
         src = src.resize((W, H), Image.LANCZOS)
     img = lab_like(np.asarray(src, dtype=np.float32))
 
-    # --- trail presence and centring
-    cells = layout["path_cells_in_walking_order"]
+    # --- trail presence and centring (versus maps: every lane / every way to a base; shared cells once)
+    routes = layout.get("routes_in_walking_order") or [layout["path_cells_in_walking_order"]]
     weak = []
     offsets = []
     scores = []
-    for i, cell in enumerate(cells):
+    checked = set()
+    for cells, i, cell in ((r, i, c) for r in routes for i, c in enumerate(r)):
+        if tuple(cell["cell"]) in checked:
+            continue
+        checked.add(tuple(cell["cell"]))
         cx, cy = cell["centre_2x"]
         prev_c = cells[i - 1]["cell"] if i > 0 else None
         next_c = cells[i + 1]["cell"] if i + 1 < len(cells) else None

@@ -1,4 +1,4 @@
-// Extra Terram — src/render/anim.ts v0.5.0 — a tiny strip player, driven by the frame loop, no Pixi ticker
+// Extra Terram — src/render/anim.ts v0.6.0 — a tiny strip player, driven by the frame loop, no Pixi ticker; loops can arrive late (strips load on demand)
 // One Player per sprite. A looping strip (idle, walk) runs continuously; a one-shot strip (fire, die)
 // interrupts it and hands back when done. Time is in sim ticks (20 Hz) so playback follows the game
 // speed buttons, and nothing advances while the game is paused.
@@ -33,6 +33,18 @@ export class StripPlayer {
 
   get playingOnce(): boolean {
     return this.once !== null;
+  }
+
+  /** True when a looping strip is attached. */
+  get hasLoop(): boolean {
+    return this.loop !== null;
+  }
+
+  /** Attach a looping strip that arrived after the sprite was made (strips load on demand). */
+  setLoop(strip: Strip | null): void {
+    if (!strip || this.loop) return;
+    this.loop = strip;
+    this.apply();
   }
 
   /** Play a one-shot strip from its first frame. */

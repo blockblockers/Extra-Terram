@@ -7,11 +7,11 @@
   "buildTicks": 300,
   "waveBonus": 20,
   "scaling": {
-    "hpMult": 1.123,
-    "speedMult": 1.035,
-    "countMult": 1.052,
-    "hpPerWave": 0.0175,
-    "speedPerWave": 0.0052
+    "hpMult": 1.28,
+    "speedMult": 1.08,
+    "countMult": 1.12,
+    "hpPerWave": 0.04,
+    "speedPerWave": 0.012
   },
   "waves": [
     {
@@ -173,5 +173,14 @@
       ]
     }
   ],
-  "content_version": "0.6.0"
+  "content_version": "0.10.0",
+  "difficulty": {
+    "hard": 0.5,
+    "brutal": 0.8
+  },
+  "endless": {
+    "hpMax": 20,
+    "hpK": 60,
+    "countMax": 2
+  }
 }

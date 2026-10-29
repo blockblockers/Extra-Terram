@@ -1,9 +1,9 @@
-// Extra Terram — src/ui/HowToPlay.tsx v0.1.0 — the short guide: goal, building, money, upgrades, races and the matchup cycle, multiplayer
+// Extra Terram — src/ui/HowToPlay.tsx v0.3.3 — the sound settings
 // Opens by itself the first time a guest or a new player reaches the menu (see `shouldAutoOpenHowTo`),
 // and any time from "How to play" at the bottom of the menu or from the pause screen.
 import { useEffect, useRef } from 'react';
 import { content, currencyLabel, matchupsFor, raceById, towersForRace } from '../content';
-import type { RaceDef } from '../engine';
+import { BOSS_SEND_FROM_ROUND, DIFFICULTIES, MAX_REINFORCE, MAX_ROUNDS, REINFORCE_STEP, type RaceDef } from '../engine';
 import { TowerIcon } from './TowerIcon';
 
 const SEEN_KEY = 'extra-terram.howto.seen.v1';
@@ -89,6 +89,7 @@ function Section({ n, title, children }: { n: number; title: string; children: R
 
 export function HowToPlay({ raceId, onClose }: { raceId?: string; onClose(): void }) {
   const closeRef = useRef<HTMLButtonElement>(null);
+  const bossLeak = content.creeps.find((c) => c.archetype === 'boss')?.leakCost ?? 5;
   const race = raceById(raceId ?? content.races[0].id);
   const roster = towersForRace(race.id);
   const ring = cycle();
@@ -131,7 +132,7 @@ export function HowToPlay({ raceId, onClose }: { raceId?: string; onClose(): voi
           </Section>
 
           <Section n={4} title="Upgrade">
-            A gold <span className="font-bold text-amber-300">▲</span> over a tower means you can afford its next level — tap the tower. Level 2 is a straight upgrade; at level 3 you choose one of two specialities, and the buttons show exactly what changes. Selling gives part of the price back.
+            A gold <span className="font-bold text-amber-300">▲</span> over a tower means you can afford its next level — tap the tower. Level 2 is a straight upgrade; at level 3 you choose one of two specialities, and the buttons show exactly what changes. A tower at level 3 can then be <b>reinforced</b>: +{Math.round(REINFORCE_STEP * 100)}% damage a level, up to {MAX_REINFORCE} levels (a blue <span className="font-bold text-sky-200">+</span> shows when you can afford one). Selling gives part of the price back.
           </Section>
 
           <Section n={5} title="Pick your race">
@@ -177,10 +178,24 @@ export function HowToPlay({ raceId, onClose }: { raceId?: string; onClose(): voi
 
           <Section n={7} title="Play with others">
             <b>Multiplayer</b> on the menu: a <b>Parallel race</b> (same level, your own board, best score wins), <b>Mirror</b> (the same, and you can pay to send creeps into a rival's lane) or <b>Co-op</b> (one shared board; each player builds and upgrades their own towers). Signed-in players can invite friends by name or email.
+            <span className="mt-1.5 block">
+              <b>Lanes</b>: one board with a lane each. The same waves come down every lane, your towers guard only yours (its pads carry a ring in your colour), and the money you spend on <b>Send</b> drops creeps into a rival&rsquo;s lane. A lane that runs out of lives closes; the last player standing wins. In 2 v 2 a team shares one life pool and can build in both of its lanes.
+            </span>
+            <span className="mt-1.5 block">
+              <b>King of the Maze</b>: one trail that forks to a base for each player (or team). Every creep picks a base in turn and wears its colour. Towers on the shared trail help everyone (and earn their builder the bounty); pads on your fork (ringed in your colour) are yours alone; unringed pads are anyone&rsquo;s. Sends land where a rival&rsquo;s fork begins. A base that falls is out; the last base standing wins.
+            </span>
+            <span className="mt-1.5 block">
+              <b>Sending</b>: a sent creep costs more than its bounty, but every send raises your income for the rest of the run, and the strip over the board tells the rival what is coming. With more than one rival, pick who takes it (or leave it to chance). From round {BOSS_SEND_FROM_ROUND} the Send tab also offers your race&rsquo;s <b>mini-boss</b>, one at a time, for half the income a normal send would give.
+            </span>
+            <span className="mt-1.5 block text-xs text-grove-300/70">In Lanes and King, waves come on the clock (nobody calls one early). If the rounds run out first, the most lives wins, then the higher score. When a match ends, the host can open a <b>rematch</b>: a fresh lobby with the same rules, and a button to join it for everyone else.</span>
           </Section>
 
-          <Section n={8} title="Handy">
-            1×, 2× and 3× speed and Pause are at the top of the game. Settings has a battery saver and the build-confirm switch. A challenge code replays the exact same waves, so you and a friend can compare runs.
+          <Section n={8} title="Longer runs and mini-bosses">
+            Under the level list (or in a lobby, for the host) pick how many <b>rounds</b> to play, up to {MAX_ROUNDS}. Past the level&rsquo;s own waves the rounds keep getting harder, and every round counts for more points. <b>Mini-bosses</b> can close every 10th, 5th or 3rd round: one huge alien worth a big payout and triple points that costs {bossLeak} lives if it gets through. In co-op the host can also raise the difficulty to {DIFFICULTIES.slice(1).map((d) => d.name).join(' or ')}. Runs with other rules earn no stars and go on the level&rsquo;s <b>Ultimate</b> top scores (any rules) instead of the Standard list. In a long run, spend on Reinforce: money in the bank does not fight.
+          </Section>
+
+          <Section n={9} title="Handy">
+            1×, 2× and 3× speed and Pause are at the top of the game. Settings has the music and effects volumes, a mute switch, a battery saver and the build-confirm switch. A challenge code replays the exact same waves, so you and a friend can compare runs.
           </Section>
         </div>
 

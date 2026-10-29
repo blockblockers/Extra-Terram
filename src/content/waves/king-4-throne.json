@@ -1,0 +1,389 @@
+{
+  "id": "king-4-throne",
+  "map": "king-4-throne",
+  "startingResources": 200,
+  "lives": 20,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.315,
+    "speedMult": 1.09,
+    "countMult": 1.135,
+    "hpPerWave": 0.045,
+    "speedPerWave": 0.0135
+  },
+  "waves": [
+    {
+      "name": "Scouts",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 8,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Second scouts",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 12,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 8,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Column",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 6,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Mixed band",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "First heavy",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "skitterling",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Long column",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "skitterling",
+          "count": 14,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Rootkin raid",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 16,
+          "intervalTicks": 10,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 4,
+          "intervalTicks": 30,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Heavies",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Swarm",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 28,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 12,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Escort",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 40
+        },
+        {
+          "creep": "skitterling",
+          "count": 18,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Rootkin push",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 0
+        },
+        {
+          "creep": "seedling",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 6,
+          "intervalTicks": 24,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Siege line",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 8,
+          "intervalTicks": 44,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 12,
+          "intervalTicks": 20,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Flood",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 32,
+          "intervalTicks": 7,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 80
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Rootkin column",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 14,
+          "intervalTicks": 18,
+          "delayTicks": 0
+        },
+        {
+          "creep": "rootwalker",
+          "count": 5,
+          "intervalTicks": 56,
+          "delayTicks": 140
+        }
+      ]
+    },
+    {
+      "name": "Hammer",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 10,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 16,
+          "intervalTicks": 16,
+          "delayTicks": 100
+        },
+        {
+          "creep": "skitterling",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 260
+        }
+      ]
+    },
+    {
+      "name": "Tide",
+      "groups": [
+        {
+          "creep": "skitterling",
+          "count": 40,
+          "intervalTicks": 6,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 18,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Chitin and Rootkin",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 30
+        },
+        {
+          "creep": "seedling",
+          "count": 24,
+          "intervalTicks": 7,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Last wall",
+      "groups": [
+        {
+          "creep": "carapace-beetle",
+          "count": 22,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "siege-beetle",
+          "count": 10,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        },
+        {
+          "creep": "skitterling",
+          "count": 30,
+          "intervalTicks": 6,
+          "delayTicks": 240
+        }
+      ]
+    },
+    {
+      "name": "The final push",
+      "groups": [
+        {
+          "creep": "siege-beetle",
+          "count": 14,
+          "intervalTicks": 32,
+          "delayTicks": 0
+        },
+        {
+          "creep": "carapace-beetle",
+          "count": 20,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        },
+        {
+          "creep": "skitterling",
+          "count": 36,
+          "intervalTicks": 6,
+          "delayTicks": 220
+        },
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 420
+        }
+      ]
+    }
+  ],
+  "content_version": "0.10.0"
+}

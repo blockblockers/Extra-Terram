@@ -1,13 +1,16 @@
-// Extra Terram — src/ui/BuildBar.tsx v0.6.0 — the shell writes the hint line (confirm step, pad-first building)
+// Extra Terram — src/ui/BuildBar.tsx v0.7.0 — prices carry the currency icon; aiming towers shown whole
 // Bottom shop bar. Inset by the bottom safe area. Tap a tower, then tap a build pad on the board.
 import type { TowerDef } from '../engine';
 import { TowerIcon } from './TowerIcon';
+import { Price } from './UiIcon';
 
 interface Props {
   towers: TowerDef[];
   /** Cost per tower id after the race passive (towerCost). */
   costs: Record<string, number>;
   resources: number;
+  /** The player's currency, lower case: picks the price icon. */
+  currency: string;
   placing: string | null;
   /** The one-line hint under the shop; the shell knows the current step. */
   hint?: string;
@@ -25,7 +28,7 @@ const ROLE_LABEL: Record<string, string> = {
   trap: 'trap',
 };
 
-export function BuildBar({ towers, costs, resources, placing, hint, onPick }: Props) {
+export function BuildBar({ towers, costs, resources, currency, placing, hint, onPick }: Props) {
   return (
     <footer className="bg-grove-900 pb-[calc(var(--safe-bottom)+0.5rem)] pt-2">
       <div className="flex snap-x gap-2 overflow-x-auto px-[calc(var(--safe-left)+0.75rem)] pr-[calc(var(--safe-right)+0.75rem)] [scrollbar-width:none]">
@@ -45,8 +48,8 @@ export function BuildBar({ towers, costs, resources, placing, hint, onPick }: Pr
             >
               <TowerIcon tower={t} size={44} />
               <span className="mt-1 w-full truncate text-xs font-semibold">{t.name}</span>
-              <span className="text-[11px] text-grove-300/80">
-                {ROLE_LABEL[t.role] ?? t.role} · <span className="text-sap">{cost}</span>
+              <span className="whitespace-nowrap text-[11px] text-grove-300/80">
+                {ROLE_LABEL[t.role] ?? t.role} · <Price amount={cost} currency={currency} size={12} className="text-sap" />
               </span>
             </button>
           );

@@ -1,7 +1,9 @@
-// Extra Terram — src/ui/TowerPanel.tsx v0.8.0 — income in the race's currency; 'ignores armour' wording; upgrade buttons spell out what changes
+// Extra Terram — src/ui/TowerPanel.tsx v0.11.0 — Sell asks once more (armed for 4 s); prices and income carry the currency icon
 // Replaces the build bar while a tower is selected: stats, the next upgrade (a branch choice at tier 2), sell.
-import { TICK_RATE, towerStats, type PassiveMods, type RacePassive, type TowerDef, type TowerStats } from '../engine';
+import { useEffect, useState } from 'react';
+import { MAX_REINFORCE, REINFORCE_STEP, TICK_RATE, towerStats, type PassiveMods, type RacePassive, type TowerDef, type TowerStats } from '../engine';
 import { TowerIcon } from './TowerIcon';
+import { Money, Price } from './UiIcon';
 
 export interface SelectedTower {
   id: number;
@@ -15,6 +17,9 @@ export interface SelectedTower {
   kills: number;
   damageDealt: number;
   upgradeCost: number | null;
+  /** Reinforce levels bought (tier 3) and the price of the next one (null: none to buy). */
+  boost: number;
+  reinforceCost: number | null;
   sellValue: number;
   /** Shared boards: who built it; null when it is yours (or single player). */
   ownerName: string | null;
@@ -83,13 +88,24 @@ interface Props {
   currency: string;
   resources: number;
   onUpgrade(branch?: 'a' | 'b'): void;
+  onReinforce(): void;
   onSell(): void;
   onClose(): void;
 }
 
-export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onClose }: Props) {
+export function TowerPanel({ tower, currency, resources, onUpgrade, onReinforce, onSell, onClose }: Props) {
   const { def, stats } = tower;
+  // Sell asks twice: the first tap arms the button for a few seconds, the second sells. Another tower, or time, disarms it.
+  const [armed, setArmed] = useState(false);
+  useEffect(() => setArmed(false), [tower.id]);
+  useEffect(() => {
+    if (!armed) return;
+    const t = window.setTimeout(() => setArmed(false), 4000);
+    return () => window.clearTimeout(t);
+  }, [armed]);
   const canAfford = tower.upgradeCost !== null && resources >= tower.upgradeCost;
+  const canReinforce = tower.reinforceCost !== null && resources >= tower.reinforceCost;
+  const boostPct = Math.round(tower.boost * REINFORCE_STEP * 100);
   const dps = def.attack === 'aura' ? stats.dotPerSecond : (stats.damage * TICK_RATE) / stats.cooldownTicks;
   const attacks = def.attack === 'projectile' || def.attack === 'beam';
   const passiveNote = passiveLine(tower.passive, tower.mods, attacks);
@@ -100,13 +116,16 @@ export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onCl
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <TowerIcon tower={def} size={30} state={tower.tier === 3 ? (tower.branch === 'b' ? 't3b' : 't3a') : tower.tier === 2 ? 't2' : 't1'} />
-            <span className="font-semibold">{tower.name}</span>
-            <span className="text-grove-300/70">
+            <span className="shrink-0 font-semibold">{tower.name}</span>
+            <span className="min-w-0 truncate text-grove-300/70">
               tier {tower.tier}
               {tower.branch && ` · ${def.branches[tower.branch].name}`}
+              {tower.boost > 0 && <span className="text-sky-200"> · R{tower.boost}</span>}
             </span>
+            {(attacks || def.attack === 'aura') && <span className="ml-auto shrink-0 text-xs text-grove-300/60">{tower.kills} kills</span>}
           </div>
-          <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-grove-300/80">
+          {/* one line where it can be: at tier 3 the action row below must stay in the fixed footer */}
+          <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-grove-300/80">
             <span>range {stats.range.toFixed(1)}</span>
             {def.attack === 'aura' && (
               <>
@@ -136,7 +155,7 @@ export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onCl
             )}
             {def.attack === 'economy' && (
               <span className="text-sap">
-                +{stats.income} {currency} per wave
+                +<Money amount={stats.income} currency={currency} size={12} /> per wave
               </span>
             )}
             {def.attack === 'support' && stats.buff && (
@@ -146,12 +165,7 @@ export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onCl
                 <span>{Math.round((1 - stats.buff.cooldownMult) * 100)}% faster</span>
               </>
             )}
-            {(attacks || def.attack === 'aura') && (
-              <>
-                <span>kills {tower.kills}</span>
-                <span>dealt {tower.damageDealt}</span>
-              </>
-            )}
+            {(attacks || def.attack === 'aura') && <span>dealt {tower.damageDealt}</span>}
           </div>
           {passiveNote && <p className="mt-0.5 truncate text-xs text-sap/90">{passiveNote}</p>}
           {tower.ownerName && <p className="mt-0.5 truncate text-xs text-amber-200/90">{tower.ownerName}'s tower — only they can upgrade or sell it</p>}
@@ -166,7 +180,7 @@ export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onCl
         {!tower.ownerName && tower.tier === 1 && tower.upgradeCost !== null && (
           <button onClick={() => onUpgrade()} disabled={!canAfford} className={`${upgradeClass(canAfford)} min-w-0 flex-1`}>
             <span className="block font-semibold">
-              Upgrade to tier 2 · <span className="text-sap">{tower.upgradeCost}</span>
+              Upgrade to tier 2 · <Price amount={tower.upgradeCost} currency={currency} className="text-sap" />
             </span>
             <span className="block truncate text-xs text-grove-300/80">{upgradeChanges(def, 1, null, 2, null).join(' · ') || 'Tougher growth'}</span>
           </button>
@@ -177,17 +191,39 @@ export function TowerPanel({ tower, currency, resources, onUpgrade, onSell, onCl
           (['a', 'b'] as const).map((b) => (
             <button key={b} onClick={() => onUpgrade(b)} disabled={!canAfford} className={`${upgradeClass(canAfford)} min-w-0 flex-1 basis-[45%]`} title={def.branches[b].description}>
               <span className="block font-semibold">
-                {def.branches[b].name} · <span className="text-sap">{tower.upgradeCost}</span>
+                {def.branches[b].name} · <Price amount={tower.upgradeCost ?? 0} currency={currency} className="text-sap" />
               </span>
               <span className="block text-xs text-grove-300/80">{def.branches[b].description}</span>
               <span className="block truncate text-[11px] text-sap/80">{upgradeChanges(def, 2, null, 3, b).join(' · ')}</span>
             </button>
           ))}
-        {!tower.ownerName && tower.tier === 3 && <span className="self-center text-xs text-grove-300/70">Fully grown.</span>}
-        {!tower.ownerName && (
-          <button onClick={onSell} className="ml-auto rounded-lg border border-rust/60 px-3 py-2 text-rust hover:bg-grove-800" title="Refunds part of what you have put into this tower">
-            Sell · +{tower.sellValue}
+        {!tower.ownerName && tower.tier === 3 && tower.reinforceCost !== null && (
+          <button onClick={onReinforce} disabled={!canReinforce} className={`${upgradeClass(canReinforce)} min-w-0 flex-1 !py-1.5`} title="Each level adds damage; prices rise with every level">
+            <span className="block font-semibold">
+              Reinforce · <Price amount={tower.reinforceCost} currency={currency} className="text-sap" />
+            </span>
+            <span className="block truncate text-xs text-grove-300/80">
+              Level {tower.boost + 1} of {MAX_REINFORCE}: +{Math.round(REINFORCE_STEP * 100)}% damage{boostPct > 0 ? ` (now +${boostPct}%)` : ''}
+            </span>
           </button>
+        )}
+        {!tower.ownerName && tower.tier === 3 && tower.reinforceCost === null && (
+          <span className="self-center text-xs text-grove-300/70">{tower.boost >= MAX_REINFORCE ? `Fully reinforced: +${boostPct}% damage.` : 'Fully grown.'}</span>
+        )}
+        {!tower.ownerName && !armed && (
+          <button onClick={() => setArmed(true)} className="ml-auto rounded-lg border border-rust/60 px-3 py-2 text-rust hover:bg-grove-800" title="Refunds part of what you have put into this tower (asks once more)">
+            Sell · +<Price amount={tower.sellValue} currency={currency} />
+          </button>
+        )}
+        {!tower.ownerName && armed && (
+          <span className="ml-auto flex items-center gap-1.5" role="group" aria-label="Confirm sell">
+            <button onClick={onSell} className="rounded-lg bg-rust px-3 py-2 font-semibold text-grove-950 hover:bg-rust/80" title="Sells the tower now">
+              Sell it · +<Price amount={tower.sellValue} currency={currency} />
+            </button>
+            <button onClick={() => setArmed(false)} className="rounded-lg border border-grove-700 px-2.5 py-2 text-grove-300 hover:bg-grove-800" aria-label="Keep the tower">
+              Keep
+            </button>
+          </span>
         )}
       </div>
     </footer>

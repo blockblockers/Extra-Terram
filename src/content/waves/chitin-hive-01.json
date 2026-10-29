@@ -7,6 +7,7 @@
   "buildTicks": 300,
   "waveBonus": 20,
   "scaling": {
+    "rampWaves": 3,
     "hpMult": 1.525,
     "speedMult": 1.15,
     "countMult": 1.225,
@@ -265,5 +266,12 @@
       ]
     }
   ],
-  "content_version": "0.6.0"
+  "content_version": "0.10.0",
+  "difficulty": {
+    "hard": 0.3,
+    "brutal": 0.6
+  },
+  "endless": {
+    "hpMax": 3.5
+  }
 }

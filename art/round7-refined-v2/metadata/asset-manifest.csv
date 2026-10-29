@@ -1,0 +1,334 @@
+asset_path,bytes,sha256,changed_from_v1,method
+public/art/title.jpg,1280046,2ddf8a2472196ae4c0fc95e78c30863b3c5492a38ef7441ce5010042918e86f3,1,sharpening and color grade of existing title image; NOT a fresh native painting
+public/sprites/assembly/creeps/mega-dozer-die.png,224985,62ea2cc414b6da9c319ee8366e6343d18a049f060e6505c21305cf102a7e50c0,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/assembly/creeps/mega-dozer-walk.png,297987,5c650be18a062c311fbb2593a57bacd3b512795b4bf664c3a6fed2957baf7007,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/assembly/creeps/mega-dozer.png,48597,8f351a2d1729218c125aa30e06565b7fad514e3c3165138f294732e16d0bc858,1,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/assembly/fx/beam-railgun.png,4266,334cbe21c3f06a25bc77a8ac92eea49face24db300f37cedadb76d48492064fa,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/field-tar-sprayer.png,49751,b4aa25d39eb9abe91e0bc529732548004fe71954efabb66cfb6652f3d6cbc8de,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/impact.png,19504,11d0b9a139f454f497b5264cb474260f29fd71f1ca6f834a0bda825dfb9cf292,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/muzzle.png,3165,d24ae2bb6c5be9bf07f17d19abf7b26fc06c01ce021e957a51a8d5d7bbbd5440,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/spin-up.png,2233,a36b320891fd86060719a8f4a5433dedbec95692b0c110d0fcc584af4f095b73,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/mortar/t1-idle.png,123695,55764cac5f6d0d69d1bce4dcd98772937b8c45d9a4de9fbbec35fd60b0606e4a,0,unchanged from draft v1
+public/sprites/assembly/mortar/t1.png,47914,5aac570a651516659248ad1a3700e4ba32c348de2597f2dcb9a73f5a2a9212c3,0,unchanged from draft v1
+public/sprites/assembly/mortar/t2-idle.png,131925,f4e729805b2c080721825fb6e2d95372638ac32675e741ef0830a980db9fc940,0,unchanged from draft v1
+public/sprites/assembly/mortar/t2.png,52200,6b661d9fbdb1cc1930701dc4d00977eddfb0f7b2bbc00a45e8b1259bb1dfe168,0,unchanged from draft v1
+public/sprites/assembly/mortar/t3a-idle.png,126988,92ede4da7f11705e642add7f0f37556be3ad039eeb326da1c81e356f1c9fc4d0,0,unchanged from draft v1
+public/sprites/assembly/mortar/t3a.png,51775,dcd1fb7e13dad26140f2190a2346a509857081246677b1fbc90e1226c1eb3f53,0,unchanged from draft v1
+public/sprites/assembly/mortar/t3b-idle.png,135473,6567a49d826fa71a330076f01a5a86062cd7974d34b87d208b958f7161b5f528,0,unchanged from draft v1
+public/sprites/assembly/mortar/t3b.png,54962,7b69c914250cb425f473d5a956ef674b558a39dc587973be2f4efb1f70675a4e,0,unchanged from draft v1
+public/sprites/assembly/mortar/turret-t1-fire.png,39058,3bc0ac21bfa8bd76c856b2c8e66097199714653d1f5e605a9d852d893e6e1bf3,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t1.png,19264,4be74b224123762c8300e66fe3c435154978345a3f969a5d42bae1dd85b3c0b7,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t2-fire.png,37145,83b62cab00a978932d58bfd879321956b6e315e8a918c83b24d22131e1a768f2,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t2.png,19634,e35b003303b3f2d4857e5c79365ed09973da5fc587bf483dc4457418ad4bf07d,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t3a-fire.png,41039,947b70e1729291972df3982bca1ccf99f51c20d458b8d068272860c03bb57680,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t3a.png,20102,0ee6607eae4ff933a7ceaab5983dc7fe8ed14092e1de7e7ddfaec4689c8d22b0,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t3b-fire.png,38904,5a5cbbd7ed3432dd77c2609da28cbdb5889373288f3c80bfd1ff374b1a6382ea,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t3b.png,20439,a363cbd268bccedd66aaa1ae83ac5e145822658cd17c4b82711fec3809a10c4d,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/nailgun/t1-fire.png,170077,5542ccd435f969d97af560147525569267a408f63222760f56d8a96ce9d48239,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t1-idle.png,153112,e5d8b77b750d6abf3561e163f01f33da011fdca1a8128defec78e57b9c9a3061,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t2-fire.png,199425,b81206249e4b194c23a6fda5f10e8aaff6a05e0f3a4ea12fa81277ff80ca2195,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t2-idle.png,178806,ae80c947dc4752a08bb04a4d8c14094be3baa7f2e53c0d2f09aca2d5f9613171,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t3a-fire.png,203333,1134940eba3fb756300f4086909991a383caeb26119b059b0c11e873f767dd62,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t3a-idle.png,179536,30b4cf2206a2c7655e21175784e01ba3ed6f525e82dd712f01b6bc80d902cc00,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t3b-fire.png,224152,dde1f777080692c174a0f511cb7223716dde99bb060af1f96625f562b6e622ef,0,unchanged from draft v1
+public/sprites/assembly/nailgun/t3b-idle.png,201339,767c49d4ef9a1c2ea34b1612a2c7c05b9397752f49410159777f8bb597d425e0,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t1-idle.png,107568,f774974d0fc54f707308182005f4b6d2f15c669d6e653d18664a9d0dd67621f1,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t1.png,45167,f87cb544a9828e013d928f831bf0aebfcdf30d268c07feb2a16ade8f436f9420,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t2-idle.png,122586,efbc0cdd6c5391705c1e876f09c3d9b42915b35a0edce493eaeeb1543bc348d9,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t2.png,52672,fabcd15680c0e92110266d645407b9f8c2599c45a8c0b3ccd9d154907f8c1511,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t3a-idle.png,118056,810fc71515ff02b4c43ffd079b12d8208f4664103fecfcdc7e79fee98dc800a2,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t3a.png,52208,91498ce716ac9bb471d3855818a3d1aed150d1f08341b754de2400ae51e4e139,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t3b-idle.png,127930,9f83f6161e6e9351a6b713e8abc6651d10a4aa7a2ee1e17f3f22238eff926ed7,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/t3b.png,55872,3aa28aa53b1b2dc446cdf400e808eb2005e6636ca1a0709585941a1312828a20,0,unchanged from draft v1
+public/sprites/assembly/pile-driver/turret-t1-fire.png,36262,3feed15d46fbb3389d3c6c51811ec541229af75d241902ad48d75e82763f5c6c,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t1.png,18654,61408bbc432a23bbd5ff43cb47a5542b87ee4b56ff847d60efa1b0fa1b29eafa,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t2-fire.png,36072,f857d67ed96e39e926aa2a5f6cbed32306bf226714fb30a15e87f22ed4080bfc,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t2.png,19563,c167f40b55fb6aa1b6457f33534895cab7166d2f8758adfa600714d05683beb4,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t3a-fire.png,35821,1337167e7ab1cf47dcb7ea24595e091a63a06dc0eeccdcf9935028325a321835,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t3a.png,19946,723de2ef0b5254804190444a22b793f4f61a79bd591f52233d57ba598fdd69c7,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t3b-fire.png,36464,f14bd0be5c74b792e66c409cbd3636f8b63629ee9c58b3c4c0c7925f845f3be0,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t3b.png,19858,8e50469cafe28fb487ddaaa492cf336c3642db10c48b6f54c250151384a5ce0b,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/railgun/t1-fire.png,191606,e7b8b0a1da9aefe845d6856ea1b7d593c4458e03c4eecf17a9b5049e2a530f3e,0,unchanged from draft v1
+public/sprites/assembly/railgun/t1-idle.png,169826,bf88291768fb27a7428848aa3cd123a4e126638a51244452886fc7013689937c,0,unchanged from draft v1
+public/sprites/assembly/railgun/t2-fire.png,161694,82e5a0c4a43513c9866f79732a76249b8bd64746d39cc9d019c522b3c2549403,0,unchanged from draft v1
+public/sprites/assembly/railgun/t2-idle.png,142858,e4fd01d02f49f6a0de44e58551c1e1afb7b409710255a8e9618813a78f46d0d0,0,unchanged from draft v1
+public/sprites/assembly/railgun/t3a-fire.png,260174,e848c8a7d1f222ba40c6e055481038dcbd286fc2b24ae6b12f19deb2958634b2,0,unchanged from draft v1
+public/sprites/assembly/railgun/t3a-idle.png,229163,977e1fe610988a391da2fcc6f9793284357bc8b5945394b8e0553badcde8c2bc,0,unchanged from draft v1
+public/sprites/assembly/railgun/t3b-fire.png,224079,c69bf347d5d3f44a7536619229ca23f802fc6c577d43c163add3971e78646579,0,unchanged from draft v1
+public/sprites/assembly/railgun/t3b-idle.png,197343,fd3e04fce6589035b1a9d5bf3f12465c634071a5780ee4994ddadb0f455b76c3,0,unchanged from draft v1
+public/sprites/assembly/relay-mast/t1-idle.png,129425,b5082773852b750914e7fc5cdb1b7b9efd1f3890bf62e5bc7c42af95c5dc1658,0,unchanged from draft v1
+public/sprites/assembly/relay-mast/t2-idle.png,163997,93c81ed7c407b20e63b35c435361c92763114dc2c659edab74c6b4e4d536f37e,0,unchanged from draft v1
+public/sprites/assembly/relay-mast/t3a-idle.png,203143,3ef018e339c0ec6eb60d83cfff1d8a26fda5c4884deda849294ea0f80a2845c1,0,unchanged from draft v1
+public/sprites/assembly/relay-mast/t3b-idle.png,234299,697086f2d48afb09d1097ecfa9a704b834bf2959e889574fc2175763dafe91d5,0,unchanged from draft v1
+public/sprites/assembly/salvage-rig/t1-idle.png,186440,17e85d1d3c07abe206a5c60f7a2743ae0d416c14349b2e906edde010b092b94b,0,unchanged from draft v1
+public/sprites/assembly/salvage-rig/t2-idle.png,189174,39f5bc738e721fd80d1b50384957cdf546229b4b5cb4c5f8bd68f41b4b408077,0,unchanged from draft v1
+public/sprites/assembly/salvage-rig/t3a-idle.png,244780,9ccc7843ef343e8144a08f719d19acde26ec8d1a0718b9a81f53f78234018f5e,0,unchanged from draft v1
+public/sprites/assembly/salvage-rig/t3b-idle.png,236385,bf2c69579d2ddebcd015f5be14be3d96da6ee33353a58d835b0314f74937d8e1,0,unchanged from draft v1
+public/sprites/assembly/tar-sprayer/t1-idle.png,210182,c4fd059ea04059084b49fbd2e8fa10e9bb6c697b2cb1f4eeaf4d016bd504ff2a,0,unchanged from draft v1
+public/sprites/assembly/tar-sprayer/t2-idle.png,199537,e40bfdbde3008bcb28b0a79539bced978f8cf509e81edd9ded155a24746ec469,0,unchanged from draft v1
+public/sprites/assembly/tar-sprayer/t3a-idle.png,244064,6b62dd30d1fe02ab35c8e0d61e34cb601d707631844f3afb73971047dc4c23b7,0,unchanged from draft v1
+public/sprites/assembly/tar-sprayer/t3b-idle.png,201833,8c1e040e7e150c71adf767fa4aed01ee0a6ce6ed7f30fe17ea37b941460fa8c2,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t1-idle.png,140389,78ecad5cc2513a25af9fb82538813476391d830adf1b9b6a399d8f64e58f9559,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t1.png,53106,ec82774163cf56dcf8d6d731df4dec57b647cbbe37eae7866e385d72901f74c5,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t2-idle.png,138839,f3038ce045c6fbd52ce2b7caed4aff267a35e2eec631451539bca6e3422d7745,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t2.png,53737,a1aaebd0cebd8130ec2a803b6a44cdab3d4a2bbbfbb8bea9af2bf2abf2361d33,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t3a-idle.png,123741,df6e97b29cf98e348517dc26ce13068bf19b298c4df43af4cdf6846edb4f0dc7,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t3a.png,52204,0319c8ce67a7eb8c6b59fd12bffcb5bcad869f330d10d9ab3572773d5e420a52,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t3b-idle.png,142531,253b38ec671060ceb88dda2601ce7faa9fb572d30ce6baba7225bd33e1d44d97,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/t3b.png,55806,a147d682ac2b0f2ff6fd3696be2c8e54bbec5efa6cca1884bf0ea56fbe2ed3c4,0,unchanged from draft v1
+public/sprites/chitin/acid-bloat/turret-t1-fire.png,41912,48bd02ca61978c86bd22553596f381c00036111177ddc2fc4e94defe924899d1,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t1.png,20780,cf9f25901703e8f5e77f75e137ba623b1d99eb3533c89a8d2cac1ff6f497cbcd,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t2-fire.png,42822,95056b5537e0ebdf1f4a5194a60eb9503325e88b14ce9a47ed6b86a56b39c23c,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t2.png,21182,d3b7e3e2472bbdd2dae4853d4c6aae4cce2bd0a25904364697247e04050f6c83,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t3a-fire.png,43918,43bfb6a9cd427e5e11f5a11905bba21ec447dd434911b6a84c2721335c82866b,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t3a.png,21503,ede3e7819b667c5575d76e71c5323d31a49d53888db85c932b5beaaec9e6777c,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t3b-fire.png,44253,801e97eeda89c7243d7536276fe723d0f17b9f21073334ec3ec7a32c491297e8,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t3b.png,20793,1484d151047e60463043f65a855ec69ce748f92c9518d6132ed389eaf5592dd2,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/creeps/brood-queen-die.png,249041,78550cb968332906dfbba3053210369d064d2d5349331612cf05a634412e7bc2,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/chitin/creeps/brood-queen-walk.png,313837,5301961f67025082b251c77506f75bf02d5bfe824c521ca2aa63af70a4e03035,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/chitin/creeps/brood-queen.png,51051,120b82f033eaaaec6eb0a58a5099b77376d30353ce2c552ab0c6fb437e8561c9,1,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/chitin/creeps/carapace-beetle-die.png,67805,1958643882e38dfe0cb38cb2e7fdc74ea6d8d5464b9e84d6e6ab248e9a27a842,0,unchanged from draft v1
+public/sprites/chitin/creeps/carapace-beetle-walk.png,59632,1fce2830a1e0274500422398e5021c1fbcae06dd9425f90aadf78e48fb6b7dea,0,unchanged from draft v1
+public/sprites/chitin/creeps/siege-beetle-die.png,58810,d988c780119276a5e3f859421111d6bf939db20889c8c58b3349036e605e8564,0,unchanged from draft v1
+public/sprites/chitin/creeps/siege-beetle-walk.png,49299,9acba40db42cdf8f5068a795507bec3e39cf215ebc53bec780f4850070da71df,0,unchanged from draft v1
+public/sprites/chitin/creeps/skitterling-die.png,72830,795f27bf0a82e746ad57505b310b66da80749f0ca29107c34634724dd46d89de,0,unchanged from draft v1
+public/sprites/chitin/creeps/skitterling-walk.png,66917,fd99cacaf2cd2079e4fe65d6221378bd2b6cdb83e22109779c2b141ef458a2f8,0,unchanged from draft v1
+public/sprites/chitin/fx/bite-mandible.png,19395,2b1539c90a300af5a9ab33cb4b7249d5d91950e28f75aa213fa72aa2263ad005,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/field-web-spinner.png,93843,182d529e38e7f6e532775496a009d04e039e0c35a0655ab6d2bf449ea9b5e91c,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/hive-link.png,347,b7a24569c3a63e98dc9fcb147c2d052dfdd2659f5a814b953dd467dee1d96a01,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/impact.png,17109,b0005438f38e27ede37aa2a5b052e2d9727c159537f9865f6ef4179f35685ef9,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/muzzle.png,3895,1d53fedf5e23b58d14f51b1b9e2b651bd97317a0d24fc8db0dbfee141a30fd74,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/mandible/t1-fire.png,212574,9c98ef0d25872bb9aabeed324db9d8ee4d1acb46593f74b4e0748cb99a3933f3,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t1-idle.png,318367,b34c38dfbdd6d7fbc392bda31768ec69c84307b2e6931f2a2e0309d3e1e1754e,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t1.png,52226,d4ef44261fb18949f6460db3f136b1f4c08dbd71dbbe3ca279a7cc2715fb1d47,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t2-fire.png,228655,491edd2c8bebd8eba019a5559b359b3052c3b3f5bd7be304f66d4857e9948db5,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t2-idle.png,342275,3170073f69ba1957bb1d5b118aaf125d324dacc2ec1ef7fbd2fd1e401f435d92,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t2.png,56151,f57186ed3ed47aeb7444e18390c22334aacf035dbabff38d307370641a37d8df,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t3a-fire.png,246065,0053346cef208ebfa853ab949f552e81ed38f508f2026cd5b4ad80081fb67d8f,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3a-idle.png,368368,07a2b8fd4a5d074507daebef4dddb61f84752144a2791a212ca97e78647e1542,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3a.png,60918,a9bc123c27af458e9c8ca183dda224895105e66ee82bcf0ab0104d00027ab7ca,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t3b-fire.png,242308,54043a26066538172b66eb4f564a3019b0095b503faddfb9ff4810f9b5f8bccf,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3b-idle.png,362536,973ab24786f478c9d0b10e33fc5a7054edfdfc99d5a46e3772a2196738604e3b,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3b.png,60252,724ba0049a8e55aae9153bb3c491fcdd8cf4bc72c6b36b36e9ec4bd7d1da0c7f,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/pheromone-node/t1-idle.png,140556,d155ad76d49e1be0ba67074df12adf0e40af9f456ec9499665cd6161eb2a7777,0,unchanged from draft v1
+public/sprites/chitin/pheromone-node/t2-idle.png,199662,dddb57ed4b077d8cbc3e30efe2c03f72796071b8e77296dc9f231f7dbe6a06da,0,unchanged from draft v1
+public/sprites/chitin/pheromone-node/t3a-idle.png,463574,8f5b9bf676c1015550df306101e1c89e6336e89fe24d5d9d413e533ac42a6d52,0,unchanged from draft v1
+public/sprites/chitin/pheromone-node/t3a.png,80936,b521968fc0d3f44396f4deafbbe73f23233384b0fa6c2d441d3ba2646160e73a,0,unchanged from draft v1
+public/sprites/chitin/pheromone-node/t3b-idle.png,284670,f6d68b54eee59e9293ca3e48eab1eb1c5e9489dbd95e0a4ba57e96d7f7543906,0,unchanged from draft v1
+public/sprites/chitin/pheromone-node/t3b.png,84319,6e4778101b4cf680604f54bff47d3489868a70ebd55b690c0a1ebeb56932e844,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t1-idle.png,129397,7537f5146258fb20bab0dd6effee9c3ee8c7621a2711c660ca159ef5e824e124,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t2-idle.png,195989,a2b46972039261f6727c96c821579d6e6a0795141355fdbe9715b3290a31e5b3,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t3a-idle.png,504751,f6a5d4f1eea2a1bd37dc5bd70aa907b35de78199d4aecf5229ef717f46d70114,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t3a.png,88442,11efe93fcd128764b4ec2449e6c5ce12b4d5d732317ba09a66d8b59e4366c158,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t3b-idle.png,275568,80d73e68a139b021d0341fd579f90f8fac02c3087d1294143e01bf21dc248beb,0,unchanged from draft v1
+public/sprites/chitin/resin-nest/t3b.png,82872,ed16af55a5aff124a509851392bf082b1b6da2131bb8a5184c4335e53b2360f0,0,unchanged from draft v1
+public/sprites/chitin/spitter/t1-fire.png,204955,9c8f4439ef56b16c78ab8a5c6f4280c77943913bec09552048b0b68de850839b,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t1-idle.png,306469,0ac98e2a01178f1d6e09bc38052a53fa6832cf37e4c68cc46042485b9697da44,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t1.png,50851,23f980f6c2e07d0fe1cd4cac7e9df21b002700c345a5521457f522200bc5bad4,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t2-fire.png,193667,d1ae50052172204c5890a6a634b5917a859f4924a5b7c01dd208a033412fa039,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t2-idle.png,289837,b0530b79cbe334598dc3fa4486f629967b71f5c4204f1ac98d47897fccf3fe1b,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t2.png,48207,c3fabd6c7ff54d7beba20e72ac98f57741bf9566803201cd1241f88ba7416ba7,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t3a-fire.png,240418,05fc8f1560b8fc8253a77f5239ffd1ffbf6b7c0a28df06c3928b59948675d1dd,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3a-idle.png,359846,098eefc4702aade3162c0118bb81cabb23f8c1cf6dbe7f341f49baaa6265bfb1,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3a.png,59467,4ce98da401cbc64ecb7c272425b29321f932147a669202325380bfbad49a3cf9,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t3b-fire.png,213244,0d841f297af683a409fb6f56205bec280bd8b6485984410277122d06110eca6c,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3b-idle.png,318529,cb8ca55fec448e1eaca3cdc21d94394302cf27f778342e766aab7db10eae4939,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3b.png,53153,8f327f6cf353a1ee36a2f040e23e33417ed976ccc7ecbd9288dddc8bd7208d44,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/stalker-eye/t1-idle.png,85626,a68ef8f1579ec72442a101ffbd927fd1184a822158972fea4280ac22cf572c33,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t1.png,25914,524d0ee5486bb20d8352cdc4cfecd806bfc9db3a6d6a702ca5c4220c568a93a2,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t2-idle.png,129390,f0cb422c181ccbbac425040b37b711afa0696dd8de38ecb03ded73d8e38e6fe8,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t2.png,44408,0bce4a2b5f242be1bda298e59792c7960f6dc7824d644d9048be8284f962937a,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t3a-idle.png,132194,50cd295f67f71df9d4b617b4beb07d5b70ef34cef0132fd153af53b1c34a27ec,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t3a.png,45828,a4540691662ed81fd1afe45c4fb2986e4a85fbc4cb8369d7994d5223cd96e8f9,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t3b-idle.png,138056,bf473003fcf706968cbd0201789f07d05b2ac6f6c2c84acb16ee035670bf70be,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/t3b.png,47236,c2b1862f791bdaf9349316f67e6bade2c9376db58198cd988d5d04b12265abfb,0,unchanged from draft v1
+public/sprites/chitin/stalker-eye/turret-t1-fire.png,29867,e6c9be3ab19a5f648a9a6c52385b6e74aeb848cacd3590b34b66fea88781132a,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t1.png,13311,9022495808c295b16bdd7309818e8d3a695060c3e6c083e0505e9a24a05b4817,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t2-fire.png,31527,0c2f0aa0c8e569598b622f64a3d1c813b08768495161e4142a72cd5a60e27495,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t2.png,17323,41f13d5873fcbd962f9dc6aaae6e761b100b8df628363b2767fd6c114288dfd4,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t3a-fire.png,31751,bc637487916a86da8bd572ae33361563d0af0f70b6543ede41edf0995b7f2f79,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t3a.png,17308,64bb1c99f518fe3618dc665a3fcda289e07f754ee4111a5a3dbc8a1410c2d73d,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t3b-fire.png,35247,ca5e7652a108efe7f8efe30460ee82199019cca3d418e0b229deaed2898b017a,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t3b.png,18974,158bca80c748f3970257d1a4dc00dc8fcf8a88a65f0816449c5deedf270e5d36,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/web-spinner/t1-idle.png,137870,ca2f3f50054dce7d5ba5842bdd19cd3b8b5530cab63a97ab04bfb7058ea6bab5,0,unchanged from draft v1
+public/sprites/chitin/web-spinner/t2-idle.png,190354,c69a17f04212b7d2574757dc74ba068989b17b0bf9125839811102e294355c87,0,unchanged from draft v1
+public/sprites/chitin/web-spinner/t3a-idle.png,278839,7ef4878b3b6499aa3a2ded382d1f4751cca5f62e83c4424868a2e62aba651b5f,0,unchanged from draft v1
+public/sprites/chitin/web-spinner/t3a.png,82047,1502f6475a51f7b63ca333b6e4d2a1a86ee25a5452509ecee04ea693985d2dee,0,unchanged from draft v1
+public/sprites/chitin/web-spinner/t3b-idle.png,243873,2cb4e25e513d74027154da8bc8c4f4d269489c8f82d53adfbb3934d333cf4b5b,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t1-idle.png,114689,7663c054c94e9fa96ec7a4831196032409d0f746afc433f8b09a897ba7a9ef54,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t2-idle.png,223459,9c1bba1267dac0fbe20f8c275b51a2206e266cc191bccc2dc2f8223270ff910b,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t2.png,63005,ede3007179755bd281014a695f58240d27760bf69fdf104ac5456c9d67c51520,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t3a-idle.png,385362,7ffd285507dbe73a5497f1980dcfe91808daf2fa3e8443628c4a5d4f45e78bcc,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t3a.png,64294,7cbe7f9070c1b717c27c6565fe00a97cb2a0f1281457b4b409d849cfdb9cae53,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t3b-idle.png,277942,a486d9ecba3aea388eba24dafdc17df6c3ef6499a5b2f8919873449969301dde,0,unchanged from draft v1
+public/sprites/lumenari/chrono-field/t3b.png,78746,28d6ebdd29a243b5521398273c5a6c86bbb3a4c36e1078bc45d9cc15673b6e34,0,unchanged from draft v1
+public/sprites/lumenari/creeps/bastion-die.png,57389,19e76b01eb271cf4ca5af2717890b194118684ff674d36c4a456f92807e6d591,0,unchanged from draft v1
+public/sprites/lumenari/creeps/bastion-walk.png,52732,d55229783503305bd533ef458ce08ba4a3e03b4fdd901c703d072f941567d95d,0,unchanged from draft v1
+public/sprites/lumenari/creeps/prism-colossus-die.png,280692,1e55e6a0fcf63a38b81da3edf2ea3baa9483768c99fd742930a884d81e217f00,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/lumenari/creeps/prism-colossus-walk.png,366521,5d5892a180bdb5018183712d486f35f2956383a776baa4b859c3d4714ac4bfa9,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/lumenari/creeps/prism-colossus.png,57731,69a40cbe87c7f7b7e57284d675854c4d0398bd4e5ec7ddd9bbc9eff05aac284e,1,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/lumenari/creeps/sentinel-die.png,61730,977b186396f06dd9feeacc9732abf9216bd85fac771b0bdfcbe443caaa97f684,0,unchanged from draft v1
+public/sprites/lumenari/creeps/sentinel-walk.png,55208,566ecc1b8b392ece4e657286b1aaa3ca062cc33ccfc94ca14e9438996ccacab5,0,unchanged from draft v1
+public/sprites/lumenari/creeps/wisp-die.png,58295,8ed652bf6ce1bca88735016c9983996676436d1f7a526a5d5c7f781b98dadeed,0,unchanged from draft v1
+public/sprites/lumenari/creeps/wisp-walk.png,52209,973ddda45a869444bbd0ba5a3193bd68d32582b0c673c753aec4d1469f1a6c4b,0,unchanged from draft v1
+public/sprites/lumenari/fx/beam-lance.png,2435,ae9c4f5f97bcf15eebc61e3bf7351e47718cbc96c6a2910c32f43f27516c7e19,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/beam-prism.png,2871,ccdc1e9d439aea50befdb573b3df95cce5b2ac697479fba174e7505df23676a3,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/beam-pulsar.png,3057,41d520a0776e04d20417a963f4335b249aa799f12d5bea95e0d9aacd0ae89983,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/field-chrono-field.png,29011,ca80e29f72bbd918183d0114cb6ebbd19397db8b0b789d2466a9bb03b3f6e60c,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/impact.png,7780,09c6e7ae9d67af904c4075bd520934f62d9fdcf5cd1f31a6def844820e2e5dae,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/muzzle.png,3070,e181b28076b83f90392d77d4c08edb34063752d796e3a55fcece751ed6df16b8,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/overcharge.png,1016,b077fc038d17f442930efdafe57a857b3a14cc6b62bebb53ae64738335bd18fd,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/lance/t1-fire.png,184415,9d1da03f0d6c30155382990bf2c02d672f5573ad135513d4935991359fd93e3d,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t1-idle.png,279229,ee446c5bd1285203ce4a8eb19f7f0f3a0bacec64f8762988263515604c763436,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t1.png,44506,27e19a9f2212cbc7217070706024012f8df2b7549d92b809ff423fcac0fefa98,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t2-fire.png,180884,6f3454536b366a4f54a9efff229f3e33bf5267a28d6402baefac0d42670a2985,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t2-idle.png,274153,bc6d6f8e1acf51a67b236d77a8673d174aed7df9b941f89ba3a1c1b18a4135f3,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t2.png,43949,f12c031e9877e2f6b6c8ecd8f8b7541b0a829d96bf6fc5dddc0dfb8e910554a1,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t3a-fire.png,205715,5782a6dc6b9115370edf5177e0e7b79f161caa67f6da944aab61a6e23acf17ef,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3a-idle.png,311859,1ef6fe927f0545e62cb2c6b12d83766fa78728525e04face60706f008445e62d,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3a.png,50845,dde6bafa0ca01a26b56a9b6af31d19d3c3cdc5052203a6cd1dc9bf5e2b274f97,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t3b-fire.png,212900,3f4f77c51e1d5b54d01de13ceca558082d64136e4e1b2bf5c6658771fc3f2081,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3b-idle.png,323779,ec90fe507fd1ab05ad4d938f38dce017716fa647f4792824b68cf44643b55c10,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3b.png,51649,43604db5d0eec490e162b3c2ef1f83e180b9281ee1a2601bc35ff19813f32804,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/nova/t1-idle.png,99999,4d6b495035be2d64dfa632d02e6434b8aa663b81b85e1d2f7979569bf274bde3,0,unchanged from draft v1
+public/sprites/lumenari/nova/t1.png,38781,f52d896078cd5c38e5ab33c87392c88603ae788aa148151b8c2463199706eb72,0,unchanged from draft v1
+public/sprites/lumenari/nova/t2-idle.png,117209,35db9054ba5251c6b8e0ba7fc7b5f56e3a72c3a5c0558e7511ccc03253b54fc0,0,unchanged from draft v1
+public/sprites/lumenari/nova/t2.png,47392,0d2eedcffd0412c36200faac0a54e20e145eaeb732914c7b275bfbc1e00274ec,0,unchanged from draft v1
+public/sprites/lumenari/nova/t3a-idle.png,173412,4aa21df5079a48441027659046c53654cd065308a7ad7ef1f76944a08f2e70a7,0,unchanged from draft v1
+public/sprites/lumenari/nova/t3a.png,51266,26aabe0b9ac3a0c22475054edd673f9c9ae2a186124fff70ef3dcb8b6c88247d,0,unchanged from draft v1
+public/sprites/lumenari/nova/t3b-idle.png,147324,a186ae884a77e2bfdc3b973edb85cedc03983af4c9a2ba4f85232774e271d66b,0,unchanged from draft v1
+public/sprites/lumenari/nova/t3b.png,58155,5d641d6ca0ebc26002683b82bd2e51a18babd5c878fa019491330a5c55a5c17e,0,unchanged from draft v1
+public/sprites/lumenari/nova/turret-t1-fire.png,45558,36098361d57e4f17ccc9edd2681897be423ca23cfb113c3c04a452e7fe8a7ce7,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t1.png,20275,be0a0bb1f5e67c73b6895a2e6ef42462809144d116dd904ca0dbd851ac2890c9,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t2-fire.png,47051,66ea0907744273e3fe5a62c1f412e54d24db930282a1d28603a0bf1a92cb8b2f,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t2.png,22886,3b0e6f24eb959f19c251b291c3eb21d78e1951ea74011ef6820d0c214342a0f9,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t3a-fire.png,45454,9f6dce82eba69e71ff11116fdbe97e923a969ac7f04a46f955287ed575870d7d,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t3a.png,23197,c6c139d8e34000ae73a17fed9527bd0cd383e6bba676f880ecf61e601124ca7d,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t3b-fire.png,45091,a03464e7521cdd8ed5d06d8fec4562c7767ed68c04b7d52b2777a42b7bc0985e,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t3b.png,24374,4cc23141827ac9448630fee4b5eed963cbc5887e8b7be4832ee49a0b36a85800,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/prism/t1-fire.png,167171,c4e991d18c68e44aaa5dfbec6af9a3401221361e7957cdb945fef2899b84c26e,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t1-idle.png,251996,161ddbc8f4b90002edaa7978614f13a5e3c27ea6af0f337f4eb5ae52be352a81,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t1.png,41917,b3d1a696a0bbf112b477acdf237a40aff6a0916625a8c66c20ce5d65879c2429,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t2-fire.png,168560,083cf7644f69644cb45428a58afc7763c7fb6673255be602fcb6fb1ca7a19895,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t2-idle.png,253475,5c71b5d91b467e467e4b603ea6f415b17d01e39b5a4cb9069a12922ec0501ccd,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t2.png,42233,e7c8193766a50f493f61be506243b12b4085d5114ee588b3e51daea0f021407a,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t3a-fire.png,194409,b6521210a87c84705b2c3141979b6107e38aecded9afa83bfd75a488b1b481f2,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3a-idle.png,293649,cb3857e75fc4cf183575d52808bbb48a586457add0ea1136bacc3ee3ff0450e1,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3a.png,48569,fed49cd8fbf9f42ab11c5271ff60a797fb4ea36806db04560db964ef0e600902,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t3b-fire.png,211417,0a95d1b8aa49d8990902256594c36049177db946ef0c149079f6453d85eb3e21,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3b-idle.png,318984,821df7ca0b4ca2cc415bf3a012bd36b13faadabc58ffd98e45ec79eb348a2817,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3b.png,52631,6a0a3221ec6c5a71adaa17bace561db868d4df6ee761e687f3ceab8a8ae50d31,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/pulsar/t1-fire.png,108327,5ba9901516f2363ddbdd6c2d1a1dcf3111e144994b44a58001602382dac38d68,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t1-idle.png,101465,e242da1e54ac00289fdef748a23148007f361036bedf362a6501105c4f7e3916,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t2-fire.png,105507,92b2f5a97e66dc98c5a0dee6339cd08da8c1580fc00ee30187dfdad17a2a9d6b,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t2-idle.png,99082,194f8371c4e9ed9c6c77b0c8d5fd887d59f46ebbc8bc65e71a7a8f559d3fed38,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t3a-fire.png,127255,cc9e69a69057b8903da343aced612a401455e364aba956767bde29038719a2a6,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t3a-idle.png,117673,6cd0fe952c982ce1c03a815f11d385b58a8997316b3fb85b1c375ccadf0d0891,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t3b-fire.png,159496,1a078568fec23639cdd9e64fcc8233bd0e518b3e64e4507043d16770601fbe7a,0,unchanged from draft v1
+public/sprites/lumenari/pulsar/t3b-idle.png,148127,193a81c68bb982a17d8e42f7a74e2c79b1d434edb887f46fe743d0c790b38388,0,unchanged from draft v1
+public/sprites/lumenari/resonator/t1-idle.png,139458,7b53a55b10267d2fee321445569e1d7471b323b19a5001b07e8666e7bd192365,0,unchanged from draft v1
+public/sprites/lumenari/resonator/t2-idle.png,133209,fef8bb735a8256ff6ff40d0cf869cc0eaad8c09f03c7541980f1847881a60fab,0,unchanged from draft v1
+public/sprites/lumenari/resonator/t3a-idle.png,177282,e3c61ad124dd6f0e7db24b9ee9a68ce01d1bc9c28e24d87fd94ff77a1224be6b,0,unchanged from draft v1
+public/sprites/lumenari/resonator/t3b-idle.png,189256,25286845aecf79c4bc6e1668a7fef73bad2eeb050ed631a6ff04697343a18836,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t1-idle.png,242115,2796c15a46635a7e95af14eacb5d0a6ef51abe0b4d2a199d78e9eda45092be9b,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t2-idle.png,435743,23cfbbc39ed73e2b481d951052173fbe93d9dee141af09773d9d6ee14925cf52,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t2.png,74243,f17e2f59d21db7eb3b8b1cc40472a7216e123fa0914b16d5a7749562804b7669,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t3a-idle.png,406184,52c61a524ba300cadbbc18f5e82a65ba1514299e0c98f4ecf5736ffa1a067496,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t3a.png,69923,96b73e1f7ab5a1fb5233c3ee3a679279befaad600bf4ef182ab9976065cb6fc1,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t3b-idle.png,501710,77e7c677e68a9144cfb35ddc8d00d16876e80574c7c7aebe3ef85ebdd30df1a7,0,unchanged from draft v1
+public/sprites/lumenari/solar-collector/t3b.png,86143,fcce9102fc2240cd81ec522f7b288917392a88c478fcd0aeff6458ad7aee04d6,0,unchanged from draft v1
+public/sprites/rootkin/creeps/elder-rootwalker-die.png,292396,5164b2832cc3a54fd86d7c2e7c02fe792e07f78c50790c9229427466b5344dc5,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/rootkin/creeps/elder-rootwalker-walk.png,378631,b34a5e5dc38be4335fa0579bf864e6db4535ed7b8d1168f438db0428ad8024fb,1,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/rootkin/creeps/elder-rootwalker.png,60914,a0eb4603ffef70f1d24581920dbf947e5f2b4ca0af86c5ce60a727b2a3a399db,1,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/rootkin/creeps/rootwalker-die.png,61670,374908adc6a117ac45d4481d96674baeb0e55f401a6c75052a8dad570d6dbc21,0,unchanged from draft v1
+public/sprites/rootkin/creeps/rootwalker-walk.png,53101,9e6bdcc69e123909db6ce4a116e066a4837313fa74e84939d609614a255bfd9e,0,unchanged from draft v1
+public/sprites/rootkin/creeps/seedling-die.png,56155,d7d60c6de2858b41f32f6383b13de9f3d7f520fadaa950d9218feeca1c68b11e,0,unchanged from draft v1
+public/sprites/rootkin/creeps/seedling-walk.png,50545,21127ed064edbbd674c59e4598b581e2634a92d065c16706a396def94966e156,0,unchanged from draft v1
+public/sprites/rootkin/creeps/thornbeast-die.png,74803,80ba4afe73d919cbed5b372c9a283d168ef3f5beaaceb787f22bc4cdaf8db9e0,0,unchanged from draft v1
+public/sprites/rootkin/creeps/thornbeast-walk.png,68091,e9a0478e00cbdd17b6a800d4d4aa32ddabc60a20ad7057b72a5b7329377d118f,0,unchanged from draft v1
+public/sprites/rootkin/elderwood/t1-idle.png,164816,4718bbc0b843bb62f0549f879ded4227508331b6253c329c38cccba374351300,0,unchanged from draft v1
+public/sprites/rootkin/elderwood/t2-idle.png,178975,adf6b3b905d3f91a45bb83b59e22e810e3a94cad899027d2a26d079c1a83f03e,0,unchanged from draft v1
+public/sprites/rootkin/elderwood/t3a-idle.png,224620,4ad256fe764f69e5431a82f01973aa2346f9b5d95aaade67b57fae460b421dd8,0,unchanged from draft v1
+public/sprites/rootkin/elderwood/t3b-idle.png,230880,52ba1f090ac230ccce9e2388a1fbccc3c23f0eff7dd7c905c2159e5ac90a6327,0,unchanged from draft v1
+public/sprites/rootkin/fx/field-weepvine.png,100975,e415c3efd35c904e73f752ff23acab83b84680b53e3143853b817da8fa34f53d,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/impact.png,12220,e0c9253a2f3209a400b4f86b66a9c9f80ddb1d36f830b77ec41a2907238e4b2e,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/muzzle.png,3366,a3a8062d8b3077d52629f88f8546fea3dece5100e53dca427b2e34a63053bd9c,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/rooted.png,10357,ddc8732be3b9c911cfa6a093a9f5116652efd49702effb86126f142248dd46a4,1,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/ironbark/turret-t2-fire.png,39151,f56fdec71d4074f72e7cbafc5eb2efc875f5d19f0ea6bc1d527b98b042404cdf,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t2.png,21233,3cc16eecfa6d3ba3a6b96dc4a456950417779cc0fdf0df186649d74e701d06a9,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/ironbark/turret-t3a-fire.png,39324,5ab25f944da797d3cc4ddab07edab3ba0a99a906c2daf34aa383cc6a2e69d051,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t3a.png,21851,582ec312352b8900f193bf48fd16f12aa8f4c4ed070aba49677e15c3aaa5b047,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/ironbark/turret-t3b-fire.png,39193,5d4869ad7bd9c285f87e61d2c1e7b6e1a792d880fa788dd6dc30a43fa79109e4,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t3b.png,22122,35408538228ac0e9231968fd78e5acd05e3deb6caf8304608d51548e69e33faf,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/needlespire/t1-fire.png,168771,0fdc5b90135dbdb206ad7161a704c014aa5803568585ec773d29ca1424e879ac,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t1-idle.png,251667,866dfa493b74c024f618a5dcc5c441d8a78853988c126e490a470a086144f04c,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t1.png,42391,914642e0a6649f765690b8423904750ce041be1d559e8ecf815ae8ff57d6d24c,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t2-fire.png,201650,a8dffd9e24d385e3264aab02ee0d845188875d84b68108bb64102726c76d9b16,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t2-idle.png,301314,df610dc50920b4f350c92929429fac4c8b8cca66e123f8e830491abd6a18b157,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t2.png,50461,4c97add8c9168159a311a2d98b2efedea2dbd647f9dc2ff878f2d958a2560c55,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t3a-fire.png,212931,399ac0fc9d77198f1aef3350ca68b8ee2a58403b455e94a1c24ab52ec38867d9,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3a-idle.png,318226,50057c8553ffb718c7be1e3608d2980f8d25ac5155c5a95e6af9f85cfc97deac,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3a.png,53182,9179f5f6cbaef4b4edc43624d19bf8aba76b7d10a4ba43d55275d12de3aa6563,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t3b-fire.png,263824,3b56fb97356bc6f44183f4f42a5ecf4609658140ea267d5d2c1007eb7e51e79e,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3b-idle.png,394520,973973a2349dc0725ffc16b6c5e2b2498db67d62fc4916626623dece5a0f691f,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3b.png,65334,c3ff1c662055f17dbd03fec00441cfed1235b82c3465fc0cdc04496430622f46,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/sapwell/t1-idle.png,169227,f24aeb74dba222c7b3f1ab9f4e767494de38b01307e22d9f8e6c380dfd312e79,0,unchanged from draft v1
+public/sprites/rootkin/sapwell/t2-idle.png,184841,6c4f3bacefd093adb0124c66c9c3a7fd29450ce22b9b0c9db9258802ea304d1f,0,unchanged from draft v1
+public/sprites/rootkin/sapwell/t3a-idle.png,168769,d3d4651373165e889cdfa63d7eb6819826f16f9a0b132cf3321fefbea1baf80e,0,unchanged from draft v1
+public/sprites/rootkin/sapwell/t3b-idle.png,171897,39560f47ab829076c15625ed550807f149a832b9a0694ff470bd237024b5dae1,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/projectile.png,2496,ff0b5c84d9682e4d131f3f2bfc218f93642da77a294ad56f317bf88914718544,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t1-idle.png,67519,339dc2930060b5db8ca3839f2902e5f937f10951909a9c4a29e8b081ec03c3fc,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t1.png,22201,22e84786cb9c5bf3a6fdbb5fc909356f06d1dacec8f390b117efa189dc656b98,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t2-idle.png,67069,fa74aeb09ae32722170a81b757b589766ac9e8f7afee9dafef04ea84aa74c103,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t2.png,23003,13e9aa19ecca3aeba38821ccd22f71b0c883dd8d2135f2d5e97380af1d5a1495,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t3a-idle.png,84850,61c51f9afe5ceef89104113dc389800696e76cf00947f02ddf23ab0bbec20f37,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t3a.png,29517,61504fcb0fd05c274416cb37164b42d0cdc6aabb6860c52deffe4e49444e7316,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t3b-idle.png,71799,0d9e3063344837c3d126e67e990d2acaf0ed97b26114cdce14a339f0450cc77a,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/t3b.png,24339,045497df34e675da5db4003692743089dead79fb11d65baa4d74c05fe6aeb779,0,unchanged from draft v1
+public/sprites/rootkin/spirebirch/turret-t1-fire.png,27986,5dcba2e2c395f04e4f70d6695611381341f99a165cf8cd2a3404489a88f75c2d,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t1.png,11373,ba83ed5f780989039748c272642172e25d3a2f0b78f662a332799cdcca797611,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t2-fire.png,28900,d340ac0562e2ab045f1f07faef475c66a5d34ea3e625d29fcaf4ace4603d7c2a,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t2.png,11789,f3c9bdfdec06397cfd28ab036d7321fe034cc6d377f44b1ac1e809bdc894be1f,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t3a-fire.png,31568,b53f74f20e3de2b453882d7f21f39eb60ffa886ac22b9bed1229aaebaf80ba22,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t3a.png,13446,4fa2df8643065c3c53497d8f7bce472b3e1d6a50dad878ed7841f33a11710fbd,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t3b-fire.png,30386,441c2511e5f565c7126f529f811e39571f048536931332399643a027731455b5,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t3b.png,12752,d1610535a745a86542aef184a0960be53b952eae14f5dcae6025ca136d3e2ed1,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/weepvine/t1-idle.png,318881,66d69d757bcec56291b736272b1a4f56c6dd4277a1dece2eede65799c8552401,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t1.png,52858,19ee340bb8ea9e9d267c16478aa75a4fc476757eab1cfac0077b462d761c43ae,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t2-idle.png,331974,9cfbe6858df53df3c1c3d464dfffd6cb96d428eaf4886ebea3112d510424b313,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t2.png,54711,65d128f86027f0dc8ba13d9d92ddcb8c5984a5d7e10346c1086400c13c2cdeeb,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t3a-idle.png,380748,ce6341641882871a0e49741b364606aeddf1553ab8e1d63b07cbd768452fc462,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t3a.png,62512,c82be2f57592cea928022bf4ceb60ba03c7b3d0205f783a56470d2b4933934ae,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t3b-idle.png,387708,c410782aecb3d2abb276abf00a17d50f92cb0170331eec3d59127e46b5a1e984,1,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t3b.png,63627,d3b4b0fef926e50ca149d0889ab3c3c630e4114ca51bfcf22ffb09a2453f80b9,1,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/whirlseed/projectile.png,2831,6c519037fb14bf08dfd39f73e6e2f621a0e88390a7236a7ab9a522a6e800dc8e,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t1-idle.png,211708,6fea9281693ec4db102b82655f9f6e44ce2454c3fb22ab5c2fe94cc1e3adc7af,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t1.png,57916,3ee497382f0d93261ffeb00bd7d3eef159e401c179fb3641530b565ea21a86a8,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t2-idle.png,126598,3fb40e03a5f0ab165dfff9e48abb3d743c9538e842caa18e36e4c8c96e95fd93,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t2.png,54821,74be64b23fb6025533033f8d85145a8db2c159da09c2ed130e366fa45ce243c5,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t3a-idle.png,118854,77f64985e8e0381e5de75fa8d396b70a561f7ddf781227e1b13285dce735b9fc,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t3a.png,50456,1ee985912cd850cb228e9f5b4af2a7392f966a47ee2a63fa036d17af51d7e6cb,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t3b-idle.png,131582,132c61a5a5c798017ff21ffd898806e77cb1c1c0d306db55e2c6d30d8f43c02b,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/t3b.png,58464,15286e648b47398fccf952e63865f25991143e3e3fe17a5d4d606f8c0ff33582,0,unchanged from draft v1
+public/sprites/rootkin/whirlseed/turret-t1-fire.png,37822,342f032be7cb01cb8fc27ef0894dd4dc2fed13465c5155f9770deed3978205ea,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t1.png,20148,3bbdc846d1bc97dceafe257ec4e6363311baf86b2584855ee52364ed0ab9edf1,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t2-fire.png,43326,3a9c2b2d68282eef4dc2bedc7dea23869c005acbf8d5fb57b0636b5cc3776c18,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t2.png,20391,85c1cbf39ea5f173e77e6a4c7a48fd776afc0c187ff2d7b259d3bb91738f8d66,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t3a-fire.png,40608,b9492c8d1abac1b9bf3feecc79f666bd9aa68f4a34d8ad410b87b8f509ff5d94,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t3a.png,20088,e08eb0cfbbf525c741fd6f5061cf0aeda515194ec7a655f076f9b0d6535cadfe,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t3b-fire.png,41509,e669b1f4959a2834b734f4143583cf0f22654aec15cd8b482212c45317ac7da0,1,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t3b.png,21263,8ad1dee941a1ee5b46d8565a13b3f567afc8dcb7c7d7b9158222ad51d7f53f3a,1,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/ui/currency-lumen.png,13924,75a5407417d6339c5a82dfdb02d78a2bff457338bb0117a405c98b3cc969092c,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-resin.png,16157,1866b9f33de8fb5745aaab62f3c27787048a1a3a35913fac836a511c3b138df3,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-sap.png,12997,7991e326c6146edf445a0f786d4daec268d3a4ec128bd25b7f3032f805b638b7,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-scrap.png,17164,cd84fda354a6ab9a07cc212ff29233b943398cff6185f4b81df48a845c4faf42,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-assembly.png,21267,d99b7a6e4aa56dab55b45ced5d4b75c9234c09cba84115286ee8427024f01ed4,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-chitin.png,19570,6b83fd820f192051641cbd4a2e19e207b55f8f785b0e0d74615f3eff839211fc,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-lumenari.png,21492,07ae209928062efa32762b0db1645e057ede033e194acbe6f04d2b8446e4af75,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-rootkin.png,19426,bf54fd6cec70ab82b24e53a857ce3874de587abbcb2da4f1f8b0f0ec318b0ecb,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/lives.png,16266,fcdf479f8fc7c7a6ffaca1d06037dbab77fcd74ac9a04f07aa55b9d7947e863c,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-coop.png,10743,7818a75876844257c26e9fe498ab00d557c127dd71281fdea1305a67a36caac8,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-king.png,11336,e8c3c6becd028bb4054b1aa121659a5a49b2130c492a076415a963615c185d5b,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-lanes.png,11254,afcf4737c7b86e1fb2833105a303322c63f6203630f05adb677baddaf1e9ac4f,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-mirror.png,9161,5ead91012dfbeb0ea3732f3af68a321ced236d2a989aeef01475a6194e6f82f8,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-race.png,9884,77fea634194174c4c091c0cc40db130c137e0e98a097c3840395ab59a45b7b0f,1,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"

@@ -1,0 +1,179 @@
+changed_asset,refinement_method
+public/art/title.jpg,sharpening and color grade of existing title image; NOT a fresh native painting
+public/sprites/assembly/creeps/mega-dozer-die.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/assembly/creeps/mega-dozer-walk.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/assembly/creeps/mega-dozer.png,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/assembly/fx/beam-railgun.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/field-tar-sprayer.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/impact.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/muzzle.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/fx/spin-up.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/assembly/mortar/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/mortar/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/mortar/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/assembly/pile-driver/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/assembly/pile-driver/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/acid-bloat/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/acid-bloat/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/creeps/brood-queen-die.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/chitin/creeps/brood-queen-walk.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/chitin/creeps/brood-queen.png,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/chitin/fx/bite-mandible.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/field-web-spinner.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/hive-link.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/impact.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/fx/muzzle.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/chitin/mandible/t1-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t2-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t3a-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/mandible/t3b-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/mandible/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t1-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t2-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t3a-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/spitter/t3b-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/chitin/spitter/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/chitin/stalker-eye/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/chitin/stalker-eye/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/chitin/stalker-eye/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/creeps/prism-colossus-die.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/lumenari/creeps/prism-colossus-walk.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/lumenari/creeps/prism-colossus.png,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/lumenari/fx/beam-lance.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/beam-prism.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/beam-pulsar.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/field-chrono-field.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/impact.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/muzzle.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/fx/overcharge.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/lumenari/lance/t1-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t2-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t3a-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/lance/t3b-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/lance/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/nova/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/nova/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/lumenari/nova/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/lumenari/prism/t1-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t2-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t3a-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/lumenari/prism/t3b-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/lumenari/prism/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/creeps/elder-rootwalker-die.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/rootkin/creeps/elder-rootwalker-walk.png,retimed nonrigid warps and alpha-dissolve derived from revised stills; frame zero exact
+public/sprites/rootkin/creeps/elder-rootwalker.png,"recomposed original hand-painted tank sprites with artistically drawn race-specific crowns, armor, chassis, eggs and crystals"
+public/sprites/rootkin/fx/field-weepvine.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/impact.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/muzzle.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/fx/rooted.png,"enhanced material treatments: curved roots, heated vents, resin links, cyan lens facets, beam/burst/field texture"
+public/sprites/rootkin/ironbark/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/ironbark/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/ironbark/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/ironbark/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/needlespire/t1-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t2-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t3a-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/needlespire/t3b-fire.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/needlespire/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/spirebirch/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/spirebirch/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/spirebirch/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/weepvine/t1-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t1.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t2-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t2.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t3a-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t3a.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/weepvine/t3b-idle.png,nonrigid local detail movement and lighting changes around revised stills; frame zero exact
+public/sprites/rootkin/weepvine/t3b.png,"original painted tower stills with remodeled jaws, vine crowns, acid spouts, needles, prisms or lance facets"
+public/sprites/rootkin/whirlseed/turret-t1-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t1.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t2-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t2.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t3a-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t3a.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/sprites/rootkin/whirlseed/turret-t3b-fire.png,updated body-part recoil strips made from revised turrets; frame zero exact
+public/sprites/rootkin/whirlseed/turret-t3b.png,"painted texture extracted from tower-family stills, blended into rotating head shapes with material-specific details"
+public/ui/currency-lumen.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-resin.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-sap.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/currency-scrap.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-assembly.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-chitin.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-lumenari.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/emblem-rootkin.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/lives.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-coop.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-king.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-lanes.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-mirror.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"
+public/ui/mode-race.png,"material texture, small-scale bevel lighting, no redesign of already recognizable motifs"

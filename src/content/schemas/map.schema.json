@@ -2,29 +2,122 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://extraterram.app/schemas/map.schema.json",
   "title": "Map (fixed maze) content file",
-  "description": "A painted tile grid. The engine derives the waypoint path from the path tiles at load; the author never types coordinates.",
+  "description": "A painted tile grid. The engine derives the waypoint routes from the path tiles at load; the author never types coordinates. Versus maps (mode lanes or king) add a zones layer: a digit per cell owned by that lane or base, '.' shared.",
   "type": "object",
-  "required": ["id", "name", "world", "difficulty", "cols", "rows", "legend", "grid", "background", "content_version"],
+  "required": [
+    "id",
+    "name",
+    "world",
+    "difficulty",
+    "cols",
+    "rows",
+    "legend",
+    "grid",
+    "background",
+    "content_version"
+  ],
   "additionalProperties": false,
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
-    "name": { "type": "string", "minLength": 1 },
-    "world": { "type": "string", "description": "race id whose home world this map is set on" },
-    "difficulty": { "enum": ["easy", "normal", "hard"] },
-    "cols": { "type": "integer", "minimum": 4, "maximum": 64 },
-    "rows": { "type": "integer", "minimum": 4, "maximum": 64 },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "world": {
+      "type": "string",
+      "description": "race id whose home world this map is set on"
+    },
+    "difficulty": {
+      "enum": [
+        "easy",
+        "normal",
+        "hard"
+      ]
+    },
+    "cols": {
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 64
+    },
+    "rows": {
+      "type": "integer",
+      "minimum": 4,
+      "maximum": 64
+    },
     "legend": {
       "type": "object",
       "description": "single character -> tile kind",
-      "additionalProperties": { "enum": ["scenery", "path", "pad", "spawn", "exit", "water"] },
-      "propertyNames": { "type": "string", "minLength": 1, "maxLength": 1 }
+      "additionalProperties": {
+        "enum": [
+          "scenery",
+          "path",
+          "pad",
+          "spawn",
+          "exit",
+          "water"
+        ]
+      },
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 1
+      }
     },
     "grid": {
       "type": "array",
       "minItems": 4,
-      "items": { "type": "string", "minLength": 4 }
+      "items": {
+        "type": "string",
+        "minLength": 4
+      }
     },
-    "background": { "type": "string", "pattern": "^/maps/[a-z0-9-]+\\.png$" },
-    "content_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
-  }
+    "background": {
+      "type": "string",
+      "pattern": "^/maps/[a-z0-9-]+\\.(png|jpg)$"
+    },
+    "content_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "mode": {
+      "enum": [
+        "lanes",
+        "king"
+      ],
+      "description": "versus maps only: lanes = a lane per player; king = a shared trail forking to a base per player or team"
+    },
+    "slots": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 4,
+      "description": "versus maps: lanes or bases"
+    },
+    "zones": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "string",
+        "pattern": "^[.0-9]+$"
+      },
+      "description": "versus maps: same size as grid; a digit marks a cell as that lane's or base's, '.' shared"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "required": [
+          "slots",
+          "zones"
+        ]
+      }
+    }
+  ]
 }

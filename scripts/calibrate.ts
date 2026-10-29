@@ -21,6 +21,7 @@ export function scalingFor(d: number) {
     countMult: 1 + 0.15 * d,
     hpPerWave: 0.05 * d,
     speedPerWave: 0.015 * d,
+    rampWaves: 0,
   };
 }
 

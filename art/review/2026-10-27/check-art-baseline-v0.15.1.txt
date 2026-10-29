@@ -1,0 +1,273 @@
+
+Towers (outline growth by tier, branches, families, head-less tops, contour): 0 of 28 meet the spec
+  FAIL rootkin/needlespire          T2/T3A/T3B 1.34/1.64/1.98  branches 0.71  closest 0.70  contour L* 67  <- no dark contour (outer ring L* 67, <= 25)
+  FAIL rootkin/ironbark             T2/T3A/T3B 1.20/1.48/1.51  branches 0.79  closest 0.83  top 70px  contour L* 63  <- T3A/T3B overlap 0.79 (<= 0.75); alike weepvine at T1 (0.83); flat top 70 px (a socket <= 52); no dark contour (outer ring L* 63, <= 25); 35 stray pixels
+  FAIL rootkin/weepvine             T2/T3A/T3B 1.15/1.54/1.61  branches 0.82  closest 0.83  contour L* 54  <- T3A/T3B overlap 0.82 (<= 0.75); alike ironbark at T1 (0.83); no dark contour (outer ring L* 54, <= 25); 691 stray pixels
+  FAIL rootkin/whirlseed            T2/T3A/T3B 0.96/0.94/1.04  branches 0.80  closest 0.56  top 134px  contour L* 40  <- T2 grows 0.96x (>= 1.15); T3 grows 0.94x (>= 1.35); T3A/T3B overlap 0.80 (<= 0.75); flat top 134 px (a socket <= 52); no dark contour (outer ring L* 40, <= 25); 4464 stray pixels
+  FAIL rootkin/spirebirch           T2/T3A/T3B 1.01/1.39/1.21  branches 0.80  closest 0.42  top 46px  contour L* 44  <- T2 grows 1.01x (>= 1.15); T3 grows 1.21x (>= 1.35); T3A/T3B overlap 0.80 (<= 0.75); no dark contour (outer ring L* 44, <= 25); 1025 stray pixels
+  FAIL rootkin/sapwell              T2/T3A/T3B 1.15/1.19/1.19  branches 0.78  closest 0.77  contour L* 37  <- T3 grows 1.19x (>= 1.35); T3A/T3B overlap 0.78 (<= 0.75); alike ironbark at T1 (0.77); no dark contour (outer ring L* 37, <= 25)
+  FAIL rootkin/elderwood            T2/T3A/T3B 1.23/1.77/1.75  branches 0.84  closest 0.74  contour L* 36  <- T3A/T3B overlap 0.84 (<= 0.75); alike ironbark at T1 (0.74); no dark contour (outer ring L* 36, <= 25); 3 stray pixels
+  FAIL assembly/nailgun             T2/T3A/T3B 1.34/1.43/1.70  branches 0.71  closest 0.65  contour L* 59  <- no dark contour (outer ring L* 59, <= 25)
+  FAIL assembly/pile-driver         T2/T3A/T3B 1.15/1.16/1.38  branches 0.83  closest 0.88  top 28px  contour L* 57  <- T3 grows 1.16x (>= 1.35); T3A/T3B overlap 0.83 (<= 0.75); alike mortar at T1 (0.88); no dark contour (outer ring L* 57, <= 25); 2928 stray pixels
+  FAIL assembly/tar-sprayer         T2/T3A/T3B 0.99/1.49/1.13  branches 0.73  closest 0.65  contour L* 43  <- T2 grows 0.99x (>= 1.15); T3 grows 1.13x (>= 1.35); no dark contour (outer ring L* 43, <= 25); 2 stray pixels
+  FAIL assembly/mortar              T2/T3A/T3B 1.16/1.20/1.31  branches 0.88  closest 0.88  top 124px  contour L* 58  <- T3 grows 1.20x (>= 1.35); T3A/T3B overlap 0.88 (<= 0.75); alike pile-driver at T1 (0.88); flat top 124 px (a socket <= 52); no dark contour (outer ring L* 58, <= 25); 4123 stray pixels
+  FAIL assembly/railgun             T2/T3A/T3B 0.88/1.89/1.63  branches 0.72  closest 0.55  contour L* 49  <- T2 grows 0.88x (>= 1.15); no dark contour (outer ring L* 49, <= 25)
+  FAIL assembly/salvage-rig         T2/T3A/T3B 1.15/2.12/2.12  branches 0.80  closest 0.65  contour L* 51  <- T3A/T3B overlap 0.80 (<= 0.75); no dark contour (outer ring L* 51, <= 25)
+  FAIL assembly/relay-mast          T2/T3A/T3B 1.42/2.07/2.52  branches 0.62  closest 0.63  contour L* 55  <- no dark contour (outer ring L* 55, <= 25)
+  FAIL chitin/spitter               T2/T3A/T3B 1.01/1.38/1.46  branches 0.72  closest 0.78  contour L* 54  <- T2 grows 1.01x (>= 1.15); alike mandible at T1 (0.78); no dark contour (outer ring L* 54, <= 25)
+  FAIL chitin/mandible              T2/T3A/T3B 1.15/1.41/1.52  branches 0.78  closest 0.78  contour L* 44  <- T3A/T3B overlap 0.78 (<= 0.75); alike spitter at T1 (0.78); no dark contour (outer ring L* 44, <= 25); 3 stray pixels
+  FAIL chitin/web-spinner           T2/T3A/T3B 1.64/2.92/2.47  branches 0.70  closest 0.78  contour L* 57  <- alike resin-nest at T1 (0.78); no dark contour (outer ring L* 57, <= 25); 10 stray pixels
+  FAIL chitin/acid-bloat            T2/T3A/T3B 1.06/0.90/1.27  branches 0.70  closest 0.76  top 127px  contour L* 54  <- T2 grows 1.06x (>= 1.15); T3 grows 0.90x (>= 1.35); alike resin-nest at T1 (0.76); flat top 127 px (a socket <= 52); no dark contour (outer ring L* 54, <= 25); 4231 stray pixels
+  FAIL chitin/stalker-eye           T2/T3A/T3B 1.55/1.85/1.89  branches 0.81  closest 0.56  top 51px  contour L* 53  <- T3A/T3B overlap 0.81 (<= 0.75); no dark contour (outer ring L* 53, <= 25); 1320 stray pixels
+  FAIL chitin/resin-nest            T2/T3A/T3B 1.78/3.34/3.05  branches 0.77  closest 0.78  contour L* 53  <- T3A/T3B overlap 0.77 (<= 0.75); alike web-spinner at T1 (0.78); no dark contour (outer ring L* 53, <= 25); 24 stray pixels
+  FAIL chitin/pheromone-node        T2/T3A/T3B 1.56/2.74/3.01  branches 0.71  closest 0.74  contour L* 55  <- alike resin-nest at T1 (0.74); no dark contour (outer ring L* 55, <= 25); 47 stray pixels
+  FAIL lumenari/prism               T2/T3A/T3B 1.21/1.57/1.45  branches 0.63  closest 0.59  contour L* 82  <- no dark contour (outer ring L* 82, <= 25); 187 stray pixels
+  FAIL lumenari/lance               T2/T3A/T3B 1.17/1.68/1.54  branches 0.66  closest 0.59  contour L* 84  <- no dark contour (outer ring L* 84, <= 25); 313 stray pixels
+  FAIL lumenari/chrono-field        T2/T3A/T3B 2.45/2.91/3.54  branches 0.47  closest 0.41  contour L* 79  <- no dark contour (outer ring L* 79, <= 25); 24 stray pixels
+  FAIL lumenari/nova                T2/T3A/T3B 1.25/1.52/1.67  branches 0.68  closest 0.46  top 105px  contour L* 75  <- flat top 105 px (a socket <= 52); no dark contour (outer ring L* 75, <= 25); 5382 stray pixels
+  FAIL lumenari/pulsar              T2/T3A/T3B 1.01/1.34/1.68  branches 0.57  closest 0.51  contour L* 76  <- T2 grows 1.01x (>= 1.15); T3 grows 1.34x (>= 1.35); no dark contour (outer ring L* 76, <= 25)
+  FAIL lumenari/solar-collector     T2/T3A/T3B 1.06/1.14/1.26  branches 0.61  closest 0.51  contour L* 77  <- T2 grows 1.06x (>= 1.15); T3 grows 1.14x (>= 1.35); no dark contour (outer ring L* 77, <= 25); 9 stray pixels
+  FAIL lumenari/resonator           T2/T3A/T3B 0.94/1.46/1.52  branches 0.66  closest 0.51  contour L* 80  <- T2 grows 0.94x (>= 1.15); no dark contour (outer ring L* 80, <= 25)
+
+Creeps (visible area by class, contour, stray pixels, the step across the outline on every painted trail): 0 of 16 meet the spec
+  FAIL assembly/compactor           rusher    area 0.41 tiles^2 (29% opaque)  contour L* 61  outline step 27-45  <- area 0.41 tiles^2 (0.25-0.35; 29% of the canvas is opaque); no dark contour (outer ring L* 61, <= 25)
+  FAIL assembly/dump-hauler         workhorse area 0.36 tiles^2 (16% opaque)  contour L* 45  outline step 17-27  <- area 0.36 tiles^2 (0.45-0.6; 16% of the canvas is opaque); no dark contour (outer ring L* 45, <= 25); 39 stray pixels; outline step under 20 L* on rootkin-forest-01 18, assembly-scrap-01 19, chitin-hive-01 18, lanes-2-hollows 17, lanes-4-warrens 18
+  FAIL assembly/dozer               tank      area 0.38 tiles^2 (13% opaque)  contour L* 43  outline step 13-23  <- area 0.38 tiles^2 (0.7-0.9; 13% of the canvas is opaque); no dark contour (outer ring L* 43, <= 25); 36 stray pixels; outline step under 20 L* on rootkin-forest-01 16, assembly-scrap-01 16, chitin-hive-01 15, lanes-2-hollows 13, lanes-4-warrens 14
+  FAIL rootkin/seedling             rusher    area 0.26 tiles^2 (18% opaque)  contour L* 69  outline step 14-21  <- no dark contour (outer ring L* 69, <= 25); 14 stray pixels; outline step under 20 L* on rootkin-forest-01 15, assembly-scrap-01 15, chitin-hive-01 17, lumenari-crystal-01 14, lanes-2-hollows 19, lanes-3-prism 14
+  FAIL rootkin/thornbeast           workhorse area 0.68 tiles^2 (30% opaque)  contour L* 66  outline step 18-23  <- area 0.68 tiles^2 (0.45-0.6; 30% of the canvas is opaque); no dark contour (outer ring L* 66, <= 25); outline step under 20 L* on rootkin-forest-01 18
+  FAIL rootkin/rootwalker           tank      area 0.71 tiles^2 (25% opaque)  contour L* 60  outline step 20-22  <- no dark contour (outer ring L* 60, <= 25)
+  FAIL chitin/skitterling           rusher    area 0.30 tiles^2 (25% opaque)  contour L* 63  outline step 10-15  <- no dark contour (outer ring L* 63, <= 25); outline step under 20 L* on rootkin-forest-01 10, assembly-scrap-01 10, chitin-hive-01 11, lumenari-crystal-01 13, lanes-2-hollows 13, lanes-3-prism 13, lanes-4-warrens 15
+  FAIL chitin/carapace-beetle       workhorse area 0.49 tiles^2 (22% opaque)  contour L* 52  outline step 14-19  <- no dark contour (outer ring L* 52, <= 25); 13 stray pixels; outline step under 20 L* on rootkin-forest-01 16, assembly-scrap-01 17, chitin-hive-01 16, lumenari-crystal-01 19, lanes-2-hollows 14, lanes-3-prism 17, lanes-4-warrens 16
+  FAIL chitin/siege-beetle          tank      area 0.55 tiles^2 (19% opaque)  contour L* 52  outline step 12-19  <- area 0.55 tiles^2 (0.7-0.9; 19% of the canvas is opaque); no dark contour (outer ring L* 52, <= 25); 5 stray pixels; outline step under 20 L* on rootkin-forest-01 15, assembly-scrap-01 17, chitin-hive-01 14, lumenari-crystal-01 19, lanes-2-hollows 12, lanes-3-prism 17, lanes-4-warrens 13
+  FAIL lumenari/wisp                rusher    area 0.22 tiles^2 (19% opaque)  contour L* 80  outline step 8-23  <- area 0.22 tiles^2 (0.25-0.35; 19% of the canvas is opaque); no dark contour (outer ring L* 80, <= 25); outline step under 20 L* on rootkin-forest-01 15, assembly-scrap-01 17, chitin-hive-01 19, lumenari-crystal-01 8, lanes-3-prism 8
+  FAIL lumenari/sentinel            workhorse area 0.48 tiles^2 (21% opaque)  contour L* 84  outline step 7-22  <- no dark contour (outer ring L* 84, <= 25); outline step under 20 L* on rootkin-forest-01 15, assembly-scrap-01 16, chitin-hive-01 18, lumenari-crystal-01 7, lanes-2-hollows 20, lanes-3-prism 7
+  FAIL lumenari/bastion             tank      area 0.50 tiles^2 (17% opaque)  contour L* 74  outline step 13-25  <- area 0.50 tiles^2 (0.7-0.9; 17% of the canvas is opaque); no dark contour (outer ring L* 74, <= 25); outline step under 20 L* on rootkin-forest-01 19, lumenari-crystal-01 16, lanes-3-prism 13
+  FAIL rootkin/elder-rootwalker     boss      area 1.64 tiles^2 (31% opaque)  contour L* 50  <- no dark contour (outer ring L* 50, <= 25); 3 stray pixels
+  FAIL assembly/mega-dozer          boss      area 1.74 tiles^2 (33% opaque)  contour L* 66  <- no dark contour (outer ring L* 66, <= 25); 114 stray pixels
+  FAIL chitin/brood-queen           boss      area 1.42 tiles^2 (27% opaque)  contour L* 66  <- no dark contour (outer ring L* 66, <= 25); 1 stray pixels
+  FAIL lumenari/prism-colossus      boss      area 1.39 tiles^2 (26% opaque)  contour L* 86  <- area 1.39 tiles^2 (1.4-1.8; 26% of the canvas is opaque); no dark contour (outer ring L* 86, <= 25); 5 stray pixels
+
+Maps (trail L* 45-65, C* 8-30; ground within a tile of the trail L* 25-38, C* 20-35): 0 of 7 meet the spec
+  FAIL rootkin-forest-01            trail L* 65.3 C* 39.4 | ground L* 39.2 C* 47.9  <- trail L* 65; trail C* 39; ground L* 39; ground C* 48
+  FAIL assembly-scrap-01            trail L* 63.0 C*  4.1 | ground L* 33.1 C* 50.5  <- trail C* 4; ground C* 51
+  FAIL chitin-hive-01               trail L* 59.6 C* 28.3 | ground L* 34.0 C* 51.7  <- ground C* 52
+  FAIL lumenari-crystal-01          trail L* 79.4 C* 13.5 | ground L* 31.4 C* 54.1  <- trail L* 79; ground C* 54
+  FAIL lanes-2-hollows              trail L* 57.9 C* 36.9 | ground L* 37.7 C* 47.2  <- trail C* 37; ground C* 47
+  FAIL lanes-3-prism                trail L* 78.8 C* 13.8 | ground L* 30.0 C* 61.3  <- trail L* 79; ground C* 61
+  FAIL lanes-4-warrens              trail L* 52.7 C* 31.6 | ground L* 33.5 C* 53.6  <- trail C* 32; ground C* 54
+
+Strips (real motion, closed loops, fire strips that start and end on the still, deaths that end empty): 28 of 212 meet the spec
+  FAIL assembly/creeps/compactor-die.png 5f  lowest overlap 0.01  seam/step 2.0  <- last frame not empty (alpha 0.06)
+  FAIL assembly/creeps/compactor-walk.png 6f  lowest overlap 0.92  seam/step 1.0  <- mid-cycle overlap 0.94 (0.75-0.9)
+  FAIL assembly/creeps/dozer-die.png 5f  lowest overlap 0.01  seam/step 1.6  <- last frame not empty (alpha 0.03)
+  ok   assembly/creeps/dozer-walk.png 6f  lowest overlap 0.83  seam/step 1.0
+  FAIL assembly/creeps/dump-hauler-die.png 5f  lowest overlap 0.01  seam/step 1.7  <- last frame not empty (alpha 0.04)
+  FAIL assembly/creeps/dump-hauler-walk.png 6f  lowest overlap 0.87  seam/step 1.1  <- mid-cycle overlap 0.91 (0.75-0.9)
+  FAIL assembly/creeps/mega-dozer-die.png 5f  lowest overlap 0.00  seam/step 2.1  <- last frame not empty (alpha 0.02)
+  FAIL assembly/creeps/mega-dozer-walk.png 6f  lowest overlap 0.96  seam/step 1.2  <- mid-cycle overlap 0.99 (0.75-0.9); loop seam 1.2x a step
+  FAIL assembly/mortar/t1-idle.png  6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/mortar/t2-idle.png  6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/mortar/t3a-idle.png 6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/mortar/t3b-idle.png 6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/mortar/turret-t1-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/mortar/turret-t2-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/mortar/turret-t3a-fire.png 4f  lowest overlap 0.99  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.99, <= 0.95)
+  FAIL assembly/mortar/turret-t3b-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  ok   assembly/nailgun/t1-fire.png 4f  lowest overlap 0.94  seam/step 0.2
+  FAIL assembly/nailgun/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/nailgun/t2-fire.png 4f  lowest overlap 0.96  seam/step 0.2  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL assembly/nailgun/t2-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  ok   assembly/nailgun/t3a-fire.png 4f  lowest overlap 0.95  seam/step 0.2
+  FAIL assembly/nailgun/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/nailgun/t3b-fire.png 4f  lowest overlap 0.96  seam/step 0.2  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL assembly/nailgun/t3b-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/pile-driver/t1-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/pile-driver/t2-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/pile-driver/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/pile-driver/t3b-idle.png 6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/pile-driver/turret-t1-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/pile-driver/turret-t2-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/pile-driver/turret-t3a-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/pile-driver/turret-t3b-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL assembly/railgun/t1-fire.png 4f  lowest overlap 0.96  seam/step 0.3  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL assembly/railgun/t1-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  ok   assembly/railgun/t2-fire.png 4f  lowest overlap 0.95  seam/step 0.3
+  FAIL assembly/railgun/t2-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/railgun/t3a-fire.png 4f  lowest overlap 0.97  seam/step 0.3  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL assembly/railgun/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/railgun/t3b-fire.png 4f  lowest overlap 0.97  seam/step 0.3  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL assembly/railgun/t3b-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/relay-mast/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/relay-mast/t2-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL assembly/relay-mast/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/relay-mast/t3b-idle.png 6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL assembly/salvage-rig/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/salvage-rig/t2-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/salvage-rig/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/salvage-rig/t3b-idle.png 6f  lowest overlap 0.99  seam/step 1.6  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/tar-sprayer/t1-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/tar-sprayer/t2-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/tar-sprayer/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL assembly/tar-sprayer/t3b-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/acid-bloat/t1-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/acid-bloat/t2-idle.png 6f  lowest overlap 0.98  seam/step 1.5  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.5x a step
+  FAIL chitin/acid-bloat/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/acid-bloat/t3b-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/acid-bloat/turret-t1-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/acid-bloat/turret-t2-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/acid-bloat/turret-t3a-fire.png 4f  lowest overlap 0.98  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/acid-bloat/turret-t3b-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  ok   chitin/creeps/brood-queen-die.png 5f  lowest overlap 0.00  seam/step 2.0
+  FAIL chitin/creeps/brood-queen-walk.png 6f  lowest overlap 0.97  seam/step 1.2  <- mid-cycle overlap 0.99 (0.75-0.9); loop seam 1.2x a step
+  FAIL chitin/creeps/carapace-beetle-die.png 5f  lowest overlap 0.00  seam/step 2.0  <- last frame not empty (alpha 0.02)
+  FAIL chitin/creeps/carapace-beetle-walk.png 6f  lowest overlap 0.95  seam/step 1.3  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.3x a step
+  FAIL chitin/creeps/siege-beetle-die.png 5f  lowest overlap 0.00  seam/step 1.9  <- last frame not empty (alpha 0.02)
+  FAIL chitin/creeps/siege-beetle-walk.png 6f  lowest overlap 0.96  seam/step 1.2  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.2x a step
+  FAIL chitin/creeps/skitterling-die.png 5f  lowest overlap 0.00  seam/step 2.0  <- last frame not empty (alpha 0.02)
+  FAIL chitin/creeps/skitterling-walk.png 6f  lowest overlap 0.98  seam/step 1.2  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.2x a step
+  FAIL chitin/mandible/t1-fire.png  4f  lowest overlap 0.98  seam/step 1.3  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/mandible/t1-idle.png  6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL chitin/mandible/t2-fire.png  4f  lowest overlap 0.98  seam/step 1.4  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/mandible/t2-idle.png  6f  lowest overlap 0.96  seam/step 1.1  <- lowest overlap 0.96 (a frame at 0.85-0.95)
+  FAIL chitin/mandible/t3a-fire.png 4f  lowest overlap 0.98  seam/step 1.3  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/mandible/t3a-idle.png 6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL chitin/mandible/t3b-fire.png 4f  lowest overlap 0.98  seam/step 1.4  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/mandible/t3b-idle.png 6f  lowest overlap 0.97  seam/step 1.1  <- lowest overlap 0.97 (a frame at 0.85-0.95)
+  FAIL chitin/pheromone-node/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/pheromone-node/t2-idle.png 6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL chitin/pheromone-node/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.5  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.5x a step
+  FAIL chitin/pheromone-node/t3b-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/resin-nest/t1-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/resin-nest/t2-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/resin-nest/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.5  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.5x a step
+  FAIL chitin/resin-nest/t3b-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/spitter/t1-fire.png   4f  lowest overlap 0.98  seam/step 1.4  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/spitter/t1-idle.png   6f  lowest overlap 0.96  seam/step 1.1  <- lowest overlap 0.96 (a frame at 0.85-0.95)
+  FAIL chitin/spitter/t2-fire.png   4f  lowest overlap 0.97  seam/step 1.4  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL chitin/spitter/t2-idle.png   6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL chitin/spitter/t3a-fire.png  4f  lowest overlap 0.97  seam/step 1.4  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL chitin/spitter/t3a-idle.png  6f  lowest overlap 0.95  seam/step 1.2  <- loop seam 1.2x a step
+  FAIL chitin/spitter/t3b-fire.png  4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/spitter/t3b-idle.png  6f  lowest overlap 0.97  seam/step 1.1  <- lowest overlap 0.97 (a frame at 0.85-0.95)
+  FAIL chitin/stalker-eye/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/stalker-eye/t2-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/stalker-eye/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/stalker-eye/t3b-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL chitin/stalker-eye/turret-t1-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/stalker-eye/turret-t2-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/stalker-eye/turret-t3a-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL chitin/stalker-eye/turret-t3b-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL chitin/web-spinner/t1-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL chitin/web-spinner/t2-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL chitin/web-spinner/t3a-idle.png 6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL chitin/web-spinner/t3b-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/chrono-field/t1-idle.png 6f  lowest overlap 0.86  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/chrono-field/t2-idle.png 6f  lowest overlap 0.89  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/chrono-field/t3a-idle.png 6f  lowest overlap 0.91  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/chrono-field/t3b-idle.png 6f  lowest overlap 0.88  seam/step 1.6  <- loop seam 1.6x a step
+  ok   lumenari/creeps/bastion-die.png 5f  lowest overlap 0.00  seam/step 2.0
+  FAIL lumenari/creeps/bastion-walk.png 6f  lowest overlap 0.96  seam/step 1.1  <- mid-cycle overlap 0.99 (0.75-0.9)
+  ok   lumenari/creeps/prism-colossus-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  FAIL lumenari/creeps/prism-colossus-walk.png 6f  lowest overlap 0.94  seam/step 1.2  <- mid-cycle overlap 0.98 (0.75-0.9); loop seam 1.2x a step
+  ok   lumenari/creeps/sentinel-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  FAIL lumenari/creeps/sentinel-walk.png 6f  lowest overlap 0.97  seam/step 1.1  <- mid-cycle overlap 1.00 (0.75-0.9)
+  ok   lumenari/creeps/wisp-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  FAIL lumenari/creeps/wisp-walk.png 6f  lowest overlap 0.97  seam/step 1.1  <- mid-cycle overlap 1.00 (0.75-0.9)
+  FAIL lumenari/lance/t1-fire.png   4f  lowest overlap 0.96  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL lumenari/lance/t1-idle.png   6f  lowest overlap 0.93  seam/step 1.2  <- loop seam 1.2x a step
+  FAIL lumenari/lance/t2-fire.png   4f  lowest overlap 0.96  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL lumenari/lance/t2-idle.png   6f  lowest overlap 0.94  seam/step 1.2  <- loop seam 1.2x a step
+  FAIL lumenari/lance/t3a-fire.png  4f  lowest overlap 0.96  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL lumenari/lance/t3a-idle.png  6f  lowest overlap 0.94  seam/step 1.3  <- loop seam 1.3x a step
+  FAIL lumenari/lance/t3b-fire.png  4f  lowest overlap 0.96  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL lumenari/lance/t3b-idle.png  6f  lowest overlap 0.93  seam/step 1.2  <- loop seam 1.2x a step
+  FAIL lumenari/nova/t1-idle.png    6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/nova/t2-idle.png    6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/nova/t3a-idle.png   6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL lumenari/nova/t3b-idle.png   6f  lowest overlap 0.94  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/nova/turret-t1-fire.png 4f  lowest overlap 0.96  seam/step 1.9  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL lumenari/nova/turret-t2-fire.png 4f  lowest overlap 0.97  seam/step 2.0  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/nova/turret-t3a-fire.png 4f  lowest overlap 0.97  seam/step 2.0  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/nova/turret-t3b-fire.png 4f  lowest overlap 0.97  seam/step 2.0  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/prism/t1-fire.png   4f  lowest overlap 0.97  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/prism/t1-idle.png   6f  lowest overlap 0.95  seam/step 1.3  <- loop seam 1.3x a step
+  FAIL lumenari/prism/t2-fire.png   4f  lowest overlap 0.97  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/prism/t2-idle.png   6f  lowest overlap 0.96  seam/step 1.3  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.3x a step
+  FAIL lumenari/prism/t3a-fire.png  4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL lumenari/prism/t3a-idle.png  6f  lowest overlap 0.94  seam/step 1.3  <- loop seam 1.3x a step
+  ok   lumenari/prism/t3b-fire.png  4f  lowest overlap 0.95  seam/step 1.7
+  FAIL lumenari/prism/t3b-idle.png  6f  lowest overlap 0.93  seam/step 1.2  <- loop seam 1.2x a step
+  ok   lumenari/pulsar/t1-fire.png  4f  lowest overlap 0.85  seam/step 0.1
+  FAIL lumenari/pulsar/t1-idle.png  6f  lowest overlap 0.89  seam/step 1.6  <- loop seam 1.6x a step
+  ok   lumenari/pulsar/t2-fire.png  4f  lowest overlap 0.82  seam/step 0.1
+  FAIL lumenari/pulsar/t2-idle.png  6f  lowest overlap 0.87  seam/step 1.6  <- loop seam 1.6x a step
+  ok   lumenari/pulsar/t3a-fire.png 4f  lowest overlap 0.82  seam/step 0.2
+  FAIL lumenari/pulsar/t3a-idle.png 6f  lowest overlap 0.86  seam/step 1.6  <- loop seam 1.6x a step
+  ok   lumenari/pulsar/t3b-fire.png 4f  lowest overlap 0.84  seam/step 0.2
+  FAIL lumenari/pulsar/t3b-idle.png 6f  lowest overlap 0.88  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/resonator/t1-idle.png 6f  lowest overlap 0.91  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/resonator/t2-idle.png 6f  lowest overlap 0.89  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/resonator/t3a-idle.png 6f  lowest overlap 0.88  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/resonator/t3b-idle.png 6f  lowest overlap 0.85  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL lumenari/solar-collector/t1-idle.png 6f  lowest overlap 0.93  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/solar-collector/t2-idle.png 6f  lowest overlap 0.93  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/solar-collector/t3a-idle.png 6f  lowest overlap 0.93  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL lumenari/solar-collector/t3b-idle.png 6f  lowest overlap 0.92  seam/step 1.5  <- loop seam 1.5x a step
+  FAIL rootkin/creeps/elder-rootwalker-die.png 5f  lowest overlap 0.00  seam/step 1.8  <- last frame not empty (alpha 0.02)
+  FAIL rootkin/creeps/elder-rootwalker-walk.png 6f  lowest overlap 0.94  seam/step 1.2  <- mid-cycle overlap 0.98 (0.75-0.9); loop seam 1.2x a step
+  FAIL rootkin/creeps/rootwalker-die.png 5f  lowest overlap 0.00  seam/step 2.0  <- last frame not empty (alpha 0.02)
+  FAIL rootkin/creeps/rootwalker-walk.png 6f  lowest overlap 0.97  seam/step 1.3  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.3x a step
+  ok   rootkin/creeps/seedling-die.png 5f  lowest overlap 0.00  seam/step 2.1
+  FAIL rootkin/creeps/seedling-walk.png 6f  lowest overlap 0.96  seam/step 1.3  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.3x a step
+  FAIL rootkin/creeps/thornbeast-die.png 5f  lowest overlap 0.00  seam/step 2.0  <- last frame not empty (alpha 0.02)
+  FAIL rootkin/creeps/thornbeast-walk.png 6f  lowest overlap 0.98  seam/step 1.4  <- mid-cycle overlap 1.00 (0.75-0.9); loop seam 1.4x a step
+  FAIL rootkin/elderwood/t1-idle.png 6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL rootkin/elderwood/t2-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/elderwood/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/elderwood/t3b-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  ok   rootkin/ironbark/t1-fire.png 4f  lowest overlap 0.92  seam/step 0.8
+  ok   rootkin/ironbark/t1-idle.png 6f  lowest overlap 0.93  seam/step 0.9
+  ok   rootkin/ironbark/t2-fire.png 4f  lowest overlap 0.92  seam/step 0.8
+  ok   rootkin/ironbark/t2-idle.png 6f  lowest overlap 0.93  seam/step 0.9
+  ok   rootkin/ironbark/t3a-fire.png 4f  lowest overlap 0.94  seam/step 0.8
+  ok   rootkin/ironbark/t3a-idle.png 6f  lowest overlap 0.95  seam/step 0.9
+  ok   rootkin/ironbark/t3b-fire.png 4f  lowest overlap 0.94  seam/step 0.8
+  ok   rootkin/ironbark/t3b-idle.png 6f  lowest overlap 0.94  seam/step 1.0
+  ok   rootkin/ironbark/turret-t1-fire.png 4f  lowest overlap 0.90  seam/step 0.6
+  FAIL rootkin/ironbark/turret-t2-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL rootkin/ironbark/turret-t3a-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL rootkin/ironbark/turret-t3b-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL rootkin/needlespire/t1-fire.png 4f  lowest overlap 0.98  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL rootkin/needlespire/t1-idle.png 6f  lowest overlap 0.97  seam/step 1.2  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/needlespire/t2-fire.png 4f  lowest overlap 0.98  seam/step 1.5  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL rootkin/needlespire/t2-idle.png 6f  lowest overlap 0.97  seam/step 1.2  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/needlespire/t3a-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL rootkin/needlespire/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.2  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/needlespire/t3b-fire.png 4f  lowest overlap 0.98  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.98, <= 0.95)
+  FAIL rootkin/needlespire/t3b-idle.png 6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/sapwell/t1-idle.png  6f  lowest overlap 0.97  seam/step 1.5  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.5x a step
+  FAIL rootkin/sapwell/t2-idle.png  6f  lowest overlap 0.97  seam/step 1.6  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/sapwell/t3a-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/sapwell/t3b-idle.png 6f  lowest overlap 0.96  seam/step 1.6  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/spirebirch/t1-idle.png 6f  lowest overlap 0.95  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL rootkin/spirebirch/t2-idle.png 6f  lowest overlap 0.93  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL rootkin/spirebirch/t3a-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  FAIL rootkin/spirebirch/t3b-idle.png 6f  lowest overlap 0.94  seam/step 1.6  <- loop seam 1.6x a step
+  ok   rootkin/spirebirch/turret-t1-fire.png 4f  lowest overlap 0.95  seam/step 1.7
+  FAIL rootkin/spirebirch/turret-t2-fire.png 4f  lowest overlap 0.97  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  ok   rootkin/spirebirch/turret-t3a-fire.png 4f  lowest overlap 0.94  seam/step 1.8
+  FAIL rootkin/spirebirch/turret-t3b-fire.png 4f  lowest overlap 0.96  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  FAIL rootkin/weepvine/t1-idle.png 6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/weepvine/t2-idle.png 6f  lowest overlap 0.96  seam/step 1.2  <- lowest overlap 0.96 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/weepvine/t3a-idle.png 6f  lowest overlap 0.97  seam/step 1.2  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/weepvine/t3b-idle.png 6f  lowest overlap 0.97  seam/step 1.2  <- lowest overlap 0.97 (a frame at 0.85-0.95); loop seam 1.2x a step
+  FAIL rootkin/whirlseed/t1-idle.png 6f  lowest overlap 0.99  seam/step 1.5  <- lowest overlap 0.99 (a frame at 0.85-0.95); loop seam 1.5x a step
+  FAIL rootkin/whirlseed/t2-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/whirlseed/t3a-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/whirlseed/t3b-idle.png 6f  lowest overlap 0.98  seam/step 1.6  <- lowest overlap 0.98 (a frame at 0.85-0.95); loop seam 1.6x a step
+  FAIL rootkin/whirlseed/turret-t1-fire.png 4f  lowest overlap 0.97  seam/step 1.6  <- no recoil or squash in the outline (lowest overlap 0.97, <= 0.95)
+  FAIL rootkin/whirlseed/turret-t2-fire.png 4f  lowest overlap 0.96  seam/step 1.7  <- no recoil or squash in the outline (lowest overlap 0.96, <= 0.95)
+  ok   rootkin/whirlseed/turret-t3a-fire.png 4f  lowest overlap 0.95  seam/step 1.6
+  ok   rootkin/whirlseed/turret-t3b-fire.png 4f  lowest overlap 0.95  seam/step 1.7
+
+Summary: Towers 0/28; Creeps 0/16; Maps 0/7; Strips 28/212

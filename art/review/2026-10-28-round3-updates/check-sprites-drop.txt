@@ -1,0 +1,15 @@
+
+
+OK    public/art/title.jpg
+FAIL  public/art/title@2x.jpg
+      the game does not look for a file with this name; did you mean public/art/title.jpg?
+OK    public/sprites/assembly/salvage-rig/t3a-idle.png
+WARN  public/sprites/assembly/salvage-rig/t3a.png
+      the base is centred on x = 92, not 128
+OK    public/sprites/assembly/salvage-rig/t3b-idle.png
+WARN  public/sprites/assembly/salvage-rig/t3b.png
+      a straight left edge 32 px tall: check the unit is not cut by its crop
+WARN  public/maps/chitin-hive-01.jpg
+      not checked here: map backgrounds are checked with check-map.py from the map kit
+
+7 files: 3 OK, 3 to look at, 1 failing. Contact sheet: <drop>/sprite-check.png

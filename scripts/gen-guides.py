@@ -24,11 +24,7 @@ OUT = ROOT / "art" / "guides"
 COLS_LETTERS = "ABCDEFGHIJKLMNOP"
 
 
-def path_cells(grid, legend, cols, rows):
-    """Spawn → exit cell list by the same BFS the engine runs, plus the kind of every cell."""
-    kinds = {(c, r): legend[grid[r][c]] for r in range(rows) for c in range(cols)}
-    start = next(k for k, v in kinds.items() if v == "spawn")
-    goal = next(k for k, v in kinds.items() if v == "exit")
+def bfs(kinds, start, goal, allowed):
     prev = {start: None}
     queue = [start]
     while queue:
@@ -37,7 +33,7 @@ def path_cells(grid, legend, cols, rows):
             break
         c, r = cur
         for n in ((c, r - 1), (c + 1, r), (c, r + 1), (c - 1, r)):
-            if n in kinds and n not in prev and kinds[n] in ("path", "spawn", "exit"):
+            if n in kinds and n not in prev and kinds[n] in ("path", "spawn", "exit") and allowed(n):
                 prev[n] = cur
                 queue.append(n)
     path = []
@@ -46,7 +42,29 @@ def path_cells(grid, legend, cols, rows):
         path.append(node)
         node = prev[node]
     path.reverse()
-    return path, kinds
+    return path
+
+
+def path_cells(m):
+    """Spawn → exit cell lists by the same BFS the engine runs (one per lane or King base on a versus
+    map), plus the kind of every cell."""
+    grid, legend, cols, rows = m["grid"], m["legend"], m["cols"], m["rows"]
+    kinds = {(c, r): legend[grid[r][c]] for r in range(rows) for c in range(cols)}
+    zone = {(c, r): (int(m["zones"][r][c]) if m.get("zones") and m["zones"][r][c].isdigit() else -1) for r in range(rows) for c in range(cols)}
+    spawns = [k for k, v in kinds.items() if v == "spawn"]
+    exits = [k for k, v in kinds.items() if v == "exit"]
+    if not m.get("mode"):
+        return [bfs(kinds, spawns[0], exits[0], lambda n: True)], kinds
+    paths = []
+    for s in range(m["slots"]):
+        goal = next(k for k in exits if zone[k] == s)
+        if m["mode"] == "lanes":
+            start = next(k for k in spawns if zone[k] == s)
+            paths.append(bfs(kinds, start, goal, lambda n, s=s: zone[n] == s))
+        else:
+            start = next(k for k in spawns if zone[k] == -1)
+            paths.append(bfs(kinds, start, goal, lambda n, s=s: zone[n] in (-1, s)))
+    return paths, kinds
 
 
 def centre(cell, tile):
@@ -54,7 +72,7 @@ def centre(cell, tile):
     return (c * tile + tile / 2, r * tile + tile / 2)
 
 
-def draw_guide(m, path, kinds, tile, labels):
+def draw_guide(m, paths, kinds, tile, labels):
     cols, rows = m["cols"], m["rows"]
     w, h = cols * tile, rows * tile
     img = Image.new("RGB", (w, h), (112, 112, 112))
@@ -63,10 +81,11 @@ def draw_guide(m, path, kinds, tile, labels):
         d.line([(x, 0), (x, h)], fill=(122, 122, 122))
     for y in range(0, h, tile):
         d.line([(0, y), (w, y)], fill=(122, 122, 122))
-    points = [centre(p, tile) for p in path]
-    d.line(points, fill=(120, 84, 48), width=int(tile * 0.8), joint="curve")
-    for x, y in points:
-        d.ellipse([x - tile * 0.4, y - tile * 0.4, x + tile * 0.4, y + tile * 0.4], fill=(120, 84, 48))
+    for path in paths:
+        points = [centre(p, tile) for p in path]
+        d.line(points, fill=(120, 84, 48), width=int(tile * 0.8), joint="curve")
+        for x, y in points:
+            d.ellipse([x - tile * 0.4, y - tile * 0.4, x + tile * 0.4, y + tile * 0.4], fill=(120, 84, 48))
     for cell, kind in kinds.items():
         cx, cy = centre(cell, tile)
         if kind == "pad":
@@ -86,7 +105,7 @@ def draw_guide(m, path, kinds, tile, labels):
     return img
 
 
-def draw_overlay(m, path, kinds, tile):
+def draw_overlay(m, paths, kinds, tile):
     cols, rows = m["cols"], m["rows"]
     w, h = cols * tile, rows * tile
     img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
@@ -95,21 +114,23 @@ def draw_overlay(m, path, kinds, tile):
         d.line([(x, 0), (x, h)], fill=(255, 255, 255, 40))
     for y in range(0, h + 1, tile):
         d.line([(0, y), (w, y)], fill=(255, 255, 255, 40))
-    points = [centre(p, tile) for p in path]
     # trail edges: the band the painted path must cover (±0.5 tile), as an outline
     edge = Image.new("L", (w, h), 0)
     ed = ImageDraw.Draw(edge)
-    ed.line(points, fill=255, width=tile, joint="curve")
-    for x, y in points:
-        ed.ellipse([x - tile / 2, y - tile / 2, x + tile / 2, y + tile / 2], fill=255)
     inner = Image.new("L", (w, h), 0)
     idr = ImageDraw.Draw(inner)
-    idr.line(points, fill=255, width=tile - 6, joint="curve")
-    for x, y in points:
-        idr.ellipse([x - tile / 2 + 3, y - tile / 2 + 3, x + tile / 2 - 3, y + tile / 2 - 3], fill=255)
+    for path in paths:
+        points = [centre(p, tile) for p in path]
+        ed.line(points, fill=255, width=tile, joint="curve")
+        for x, y in points:
+            ed.ellipse([x - tile / 2, y - tile / 2, x + tile / 2, y + tile / 2], fill=255)
+        idr.line(points, fill=255, width=tile - 6, joint="curve")
+        for x, y in points:
+            idr.ellipse([x - tile / 2 + 3, y - tile / 2 + 3, x + tile / 2 - 3, y + tile / 2 - 3], fill=255)
     ring = Image.eval(Image.composite(Image.new("L", (w, h), 0), edge, inner), lambda v: v)
     img.paste(Image.new("RGBA", (w, h), (255, 0, 255, 170)), (0, 0), ring)
-    d.line(points, fill=(255, 0, 255, 220), width=max(2, tile // 32), joint="curve")
+    for path in paths:
+        d.line([centre(p, tile) for p in path], fill=(255, 0, 255, 220), width=max(2, tile // 32), joint="curve")
     for cell, kind in kinds.items():
         cx, cy = centre(cell, tile)
         if kind == "pad":
@@ -130,18 +151,24 @@ def main():
     for map_path in sorted((ROOT / "src" / "content" / "maps").glob("*.json")):
         m = json.loads(map_path.read_text())
         cols, rows = m["cols"], m["rows"]
-        path, kinds = path_cells(m["grid"], m["legend"], cols, rows)
+        paths, kinds = path_cells(m)
+        path = paths[0]
         t2 = TILE * 2
-        draw_guide(m, path, kinds, TILE, labels=False).save(OUT / f"{m['id']}-guide.png", optimize=True)
-        draw_guide(m, path, kinds, t2, labels=True).save(OUT / f"{m['id']}-guide@2x.png", optimize=True)
-        draw_overlay(m, path, kinds, t2).save(OUT / f"{m['id']}-overlay@2x.png", optimize=True)
-        bg = ROOT / "public" / "maps" / f"{m['id']}.png"
+        draw_guide(m, paths, kinds, TILE, labels=False).save(OUT / f"{m['id']}-guide.png", optimize=True)
+        draw_guide(m, paths, kinds, t2, labels=True).save(OUT / f"{m['id']}-guide@2x.png", optimize=True)
+        draw_overlay(m, paths, kinds, t2).save(OUT / f"{m['id']}-overlay@2x.png", optimize=True)
+        bg = ROOT / "public" / m["background"].lstrip("/")
         if bg.exists():
-            Image.open(bg).convert("RGB").resize((cols * t2, rows * t2), Image.LANCZOS).save(OUT / f"{m['id']}-template@2x.png", optimize=True)
+            tpl = Image.open(bg).convert("RGB").resize((cols * t2, rows * t2), Image.LANCZOS)
+            if bg.suffix == ".jpg":
+                tpl.save(OUT / f"{m['id']}-template@2x.jpg", quality=92, optimize=True)  # JPEG backgrounds keep JPEG templates (a tenth of the size)
+            else:
+                tpl.save(OUT / f"{m['id']}-template@2x.png", optimize=True)
         pads = [cell for cell, kind in kinds.items() if kind == "pad"]
         pads.sort(key=lambda c: (c[1], c[0]))
         spawn = next(c for c, k in kinds.items() if k == "spawn")
         exit_ = next(c for c, k in kinds.items() if k == "exit")
+        cell_list = lambda p: [{"cell": [c, r], "label": f"{COLS_LETTERS[c]}{r}", "centre_2x": list(centre((c, r), t2))} for c, r in p]
         layout = {
             "map": m["id"],
             "name": m["name"],
@@ -160,6 +187,11 @@ def main():
             "spawn": {"cell": list(spawn), "label": f"{COLS_LETTERS[spawn[0]]}{spawn[1]}", "centre_2x": list(centre(spawn, t2))},
             "exit": {"cell": list(exit_), "label": f"{COLS_LETTERS[exit_[0]]}{exit_[1]}", "centre_2x": list(centre(exit_, t2))},
         }
+        if m.get("mode"):
+            # versus maps: every lane (or every way to a King base), each from its spawn to its exit
+            layout["mode"] = m["mode"]
+            layout["routes_in_walking_order"] = [cell_list(p) for p in paths]
+            layout["zones"] = m["zones"]
         (OUT / f"{m['id']}-layout.json").write_text(json.dumps(layout, indent=2) + "\n")
         print(f"wrote {m['id']}: guide, guide@2x, overlay@2x, template@2x, layout.json ({len(path)} path cells, {len(pads)} pads)")
 

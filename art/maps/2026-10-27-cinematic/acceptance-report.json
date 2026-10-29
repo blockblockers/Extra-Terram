@@ -1,0 +1,70 @@
+{
+  "rootkin-forest-01": {
+    "map_size": [
+      1536,
+      2048
+    ],
+    "trail_cells": 60,
+    "build_pads": 30,
+    "minimum_edge_clearance_from_trail_px": 29.0,
+    "map_checker": [
+      "rootkin-forest-01: trail contrast median 69.2 (good); 0 of 60 cells weak (under 18.0)",
+      "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+      "  sockets: mean 62.7 (threshold 10.0); 0 of 30 pads without a visible socket",
+      "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+    ],
+    "v0.13_layout_matches_v2_kit": true,
+    "openraster_layer_archive_valid": true
+  },
+  "assembly-scrap-01": {
+    "map_size": [
+      1536,
+      2048
+    ],
+    "trail_cells": 54,
+    "build_pads": 22,
+    "minimum_edge_clearance_from_trail_px": 29.0,
+    "map_checker": [
+      "assembly-scrap-01: trail contrast median 82.5 (good); 0 of 54 cells weak (under 18.0)",
+      "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+      "  sockets: mean 80.6 (threshold 10.0); 0 of 22 pads without a visible socket",
+      "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+    ],
+    "v0.13_layout_matches_v2_kit": true,
+    "openraster_layer_archive_valid": true
+  },
+  "chitin-hive-01": {
+    "map_size": [
+      1536,
+      2048
+    ],
+    "trail_cells": 46,
+    "build_pads": 24,
+    "minimum_edge_clearance_from_trail_px": 29.0,
+    "map_checker": [
+      "chitin-hive-01: trail contrast median 66.7 (good); 0 of 46 cells weak (under 18.0)",
+      "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+      "  sockets: mean 59.6 (threshold 10.0); 0 of 24 pads without a visible socket",
+      "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+    ],
+    "v0.13_layout_matches_v2_kit": true,
+    "openraster_layer_archive_valid": true
+  },
+  "lumenari-crystal-01": {
+    "map_size": [
+      1536,
+      2048
+    ],
+    "trail_cells": 30,
+    "build_pads": 14,
+    "minimum_edge_clearance_from_trail_px": 29.0,
+    "map_checker": [
+      "lumenari-crystal-01: trail contrast median 91.7 (good); 0 of 30 cells weak (under 18.0)",
+      "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+      "  sockets: mean 91.1 (threshold 10.0); 0 of 14 pads without a visible socket",
+      "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+    ],
+    "v0.13_layout_matches_v2_kit": true,
+    "openraster_layer_archive_valid": true
+  }
+}

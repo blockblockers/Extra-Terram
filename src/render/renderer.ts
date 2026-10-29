@@ -1,4 +1,4 @@
-// Extra Terram — src/render/renderer.ts v0.4.0 — pending build pad (confirm step), pad picked before a tower
+// Extra Terram — src/render/renderer.ts v0.5.0 — the camera options (tilt, ground lighting)
 // The thin interface the app drives. PixiRenderer is the one implementation today; keeping the
 // surface small means a Canvas 2D fallback or a different engine could slot in without touching
 // the sim or the UI.
@@ -26,6 +26,13 @@ export interface RenderOverlay {
   padPick: Cell | null;
 }
 
+export interface CameraOptions {
+  /** The board seen from an angle (far rows smaller) rather than straight down. */
+  tilt: boolean;
+  /** The ground lit by a normal map, a sun and the shots; off = the painting as it is. */
+  lighting: boolean;
+}
+
 export interface RenderFrame {
   state: SimState;
   ctx: SimContext;
@@ -42,6 +49,8 @@ export interface Renderer {
   pushEvents(events: SimEvent[], ctx: SimContext, state: SimState): void;
   /** 1 = full particle budget, 0.5 = battery saver. */
   setEffectsScale(scale: number): void;
+  /** How the board is seen; may be called any time after mount. */
+  setCamera(opts: CameraOptions): void;
   /** Map a pointer position (CSS pixels relative to the viewport) to a board cell, or null when outside the board. */
   screenToCell(clientX: number, clientY: number): Cell | null;
   destroy(): void;

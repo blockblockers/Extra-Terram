@@ -1,0 +1,42 @@
+{
+  "rootkin-forest-01": {
+    "trail_cells": 60,
+    "pads": 30,
+    "canvas": [
+      1536,
+      2048
+    ],
+    "geometry_source": "Map Kit v2 layout.json",
+    "editable_layers": 6
+  },
+  "assembly-scrap-01": {
+    "trail_cells": 54,
+    "pads": 22,
+    "canvas": [
+      1536,
+      2048
+    ],
+    "geometry_source": "Map Kit v2 layout.json",
+    "editable_layers": 6
+  },
+  "chitin-hive-01": {
+    "trail_cells": 46,
+    "pads": 24,
+    "canvas": [
+      1536,
+      2048
+    ],
+    "geometry_source": "Map Kit v2 layout.json",
+    "editable_layers": 6
+  },
+  "lumenari-crystal-01": {
+    "trail_cells": 30,
+    "pads": 14,
+    "canvas": [
+      1536,
+      2048
+    ],
+    "geometry_source": "Map Kit v2 layout.json",
+    "editable_layers": 6
+  }
+}

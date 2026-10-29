@@ -1,4 +1,4 @@
-// Extra Terram — src/net/match.ts v0.3.0 — shared-board events (frames with speed, string hashes, rejects, addressed snapshots), party size in start
+// Extra Terram — src/net/match.ts v0.6.0 — rematch event; the start event names the seats playing and 2 v 2 (versus boards)
 // Postgres sees a match twice: when the lobby is made (create_match / join_match / start_match) and
 // when it ends (submit_match_result / save_match_log). Everything in between — ready flags, the
 // host's input frames for a shared board, creep sends and board summaries for mirrored boards,
@@ -6,7 +6,7 @@
 // `match:<id>`. No postgres_changes subscription anywhere, so no publication or replica-identity
 // setup is ever needed (the Deadblock gotcha).
 import type { RealtimeChannel } from '@supabase/supabase-js';
-import type { LoggedInput, SimInput } from '../engine';
+import type { LoggedInput, RunRules, SimInput } from '../engine';
 import { errorMessage, supabase } from './supabase';
 
 export type MatchMode = 'coop' | 'lanes' | 'king' | 'mirror' | 'parallel';
@@ -103,12 +103,14 @@ export interface SeatPresence {
   name: string;
   raceId: string;
   ready: boolean;
+  /** The host only: the rules it has picked so far, so the lobby shows them live. */
+  rules?: RunRules;
 }
 
 /** Everything that crosses the wire during a match. Entity positions never do; inputs and summaries only. */
 export type MatchEvent =
   | { type: 'ready'; seat: number; ready: boolean }
-  | { type: 'start'; seed: string; startAt: number; levelId: string; seats: number; party: number } // host: wall-clock ms for the shared countdown; wallets to make and players present
+  | { type: 'start'; seed: string; startAt: number; levelId: string; seats: number; party: number; rules?: RunRules; present?: number[]; teams?: boolean } // host: wall-clock ms for the shared countdown; wallets to make and players present (and their seats); the run rules everyone plays; 2 v 2
   | { type: 'input'; seat: number; seq: number; input: SimInput } // client -> host (shared board)
   | { type: 'frame'; tick: number; inputs: LoggedInput[]; speed: number } // host -> all, every 5 ticks (shared board): the inputs that applied at that tick
   | { type: 'reject'; seat: number; seq: number; reason: string; need?: number } // host -> the client whose input failed on the host (need = the price it could not pay)
@@ -118,6 +120,7 @@ export type MatchEvent =
   | { type: 'snapshot-request'; seat: number }
   | { type: 'snapshot'; to: string; tick: number; state: string } // host -> one peer (serialize(state) without the log)
   | { type: 'finished'; seat: number; result: 'won' | 'lost'; score: number; lives: number; wave: number }
+  | { type: 'rematch'; code: string; matchId: string } // host -> all, after the result: a new lobby with the same settings is open under this code
   | { type: 'chat'; seat: number; text: string };
 
 export type MatchEventHandler = (event: MatchEvent, fromUserId: string) => void;
@@ -165,7 +168,7 @@ export class MatchChannel implements MatchChannelLike {
       this.seats = Object.values(state)
         .map((entries) => entries[0])
         .filter((p): p is SeatPresence & { presence_ref: string } => !!p)
-        .map(({ userId, seat, name, raceId, ready }) => ({ userId, seat, name, raceId, ready }))
+        .map(({ userId, seat, name, raceId, ready, rules }) => ({ userId, seat, name, raceId, ready, ...(rules ? { rules } : {}) }))
         .sort((a, b) => a.seat - b.seat);
       for (const h of this.presenceHandlers) h(this.seats);
     });

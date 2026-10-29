@@ -1,0 +1,32 @@
+
+Towers (outline growth by tier, branches, families, head-less tops, contour): 7 of 28 meet the spec
+  ok   rootkin/needlespire          T2/T3A/T3B 1.34/1.64/1.98  branches 0.71  closest 0.70  contour L* 19
+  FAIL rootkin/ironbark             T2/T3A/T3B 1.13/1.42/1.55  branches 0.82  closest 0.82  top 47px  contour L* 19  <- T2 grows 1.13x (>= 1.15); T3A/T3B overlap 0.82 (<= 0.75); alike weepvine at T1 (0.82)
+  FAIL rootkin/weepvine             T2/T3A/T3B 1.08/1.56/1.67  branches 0.82  closest 0.82  contour L* 18  <- T2 grows 1.08x (>= 1.15); T3A/T3B overlap 0.82 (<= 0.75); alike ironbark at T1 (0.82); 7 stray pixels
+  FAIL rootkin/whirlseed            T2/T3A/T3B 1.22/1.39/1.57  branches 0.82  closest 0.52  top 47px  contour L* 12  <- T3A/T3B overlap 0.82 (<= 0.75)
+  FAIL rootkin/spirebirch           T2/T3A/T3B 1.37/2.35/2.10  branches 0.76  closest 0.45  top 59px  contour L* 17  <- T3A/T3B overlap 0.76 (<= 0.75); flat top 59 px (a socket <= 52)
+  FAIL rootkin/sapwell              T2/T3A/T3B 1.15/1.22/1.21  branches 0.81  closest 0.76  contour L* 15  <- T3 grows 1.21x (>= 1.35); T3A/T3B overlap 0.81 (<= 0.75); alike ironbark at T1 (0.76)
+  FAIL rootkin/elderwood            T2/T3A/T3B 1.23/1.79/1.75  branches 0.84  closest 0.74  contour L* 13  <- T3A/T3B overlap 0.84 (<= 0.75); alike ironbark at T1 (0.74)
+  ok   assembly/nailgun             T2/T3A/T3B 1.34/1.43/1.70  branches 0.71  closest 0.63  contour L* 17
+  FAIL assembly/pile-driver         T2/T3A/T3B 1.42/1.68/2.01  branches 0.80  closest 0.91  top 37px  contour L* 15  <- T3A/T3B overlap 0.80 (<= 0.75); alike mortar at T1 (0.91)
+  FAIL assembly/tar-sprayer         T2/T3A/T3B 1.22/1.65/1.31  branches 0.75  closest 0.65  contour L* 13  <- T3 grows 1.31x (>= 1.35)
+  FAIL assembly/mortar              T2/T3A/T3B 1.43/1.72/1.91  branches 0.87  closest 0.91  top 47px  contour L* 15  <- T3A/T3B overlap 0.87 (<= 0.75); alike pile-driver at T1 (0.91)
+  FAIL assembly/railgun             T2/T3A/T3B 1.24/2.04/1.91  branches 0.76  closest 0.55  contour L* 14  <- T3A/T3B overlap 0.76 (<= 0.75)
+  FAIL assembly/salvage-rig         T2/T3A/T3B 1.13/2.27/2.46  branches 0.81  closest 0.65  contour L* 14  <- T2 grows 1.13x (>= 1.15); T3A/T3B overlap 0.81 (<= 0.75)
+  ok   assembly/relay-mast          T2/T3A/T3B 1.42/2.07/2.52  branches 0.62  closest 0.63  contour L* 16
+  FAIL chitin/spitter               T2/T3A/T3B 0.99/1.28/1.51  branches 0.75  closest 0.78  contour L* 17  <- T2 grows 0.99x (>= 1.15); T3 grows 1.28x (>= 1.35); alike mandible at T1 (0.78)
+  FAIL chitin/mandible              T2/T3A/T3B 1.12/1.32/1.58  branches 0.77  closest 0.78  contour L* 14  <- T2 grows 1.12x (>= 1.15); T3 grows 1.32x (>= 1.35); T3A/T3B overlap 0.77 (<= 0.75); alike spitter at T1 (0.78)
+  FAIL chitin/web-spinner           T2/T3A/T3B 1.64/2.92/2.47  branches 0.70  closest 0.78  contour L* 14  <- alike resin-nest at T1 (0.78)
+  FAIL chitin/acid-bloat            T2/T3A/T3B 1.35/1.32/1.92  branches 0.68  closest 0.76  top 47px  contour L* 15  <- T3 grows 1.32x (>= 1.35); alike resin-nest at T1 (0.76)
+  FAIL chitin/stalker-eye           T2/T3A/T3B 2.33/3.23/3.26  branches 0.84  closest 0.55  top 40px  contour L* 15  <- T3A/T3B overlap 0.84 (<= 0.75)
+  FAIL chitin/resin-nest            T2/T3A/T3B 2.52/3.58/3.27  branches 0.77  closest 0.78  contour L* 15  <- T3A/T3B overlap 0.77 (<= 0.75); alike web-spinner at T1 (0.78)
+  FAIL chitin/pheromone-node        T2/T3A/T3B 1.56/2.74/3.01  branches 0.71  closest 0.74  contour L* 14  <- alike resin-nest at T1 (0.74)
+  ok   lumenari/prism               T2/T3A/T3B 1.21/1.57/1.45  branches 0.63  closest 0.59  contour L* 20
+  ok   lumenari/lance               T2/T3A/T3B 1.17/1.68/1.54  branches 0.66  closest 0.59  contour L* 20
+  ok   lumenari/chrono-field        T2/T3A/T3B 2.45/2.91/3.54  branches 0.47  closest 0.41  contour L* 20
+  ok   lumenari/nova                T2/T3A/T3B 1.18/1.45/1.51  branches 0.72  closest 0.47  top 47px  contour L* 19
+  FAIL lumenari/pulsar              T2/T3A/T3B 1.00/1.49/1.82  branches 0.58  closest 0.51  contour L* 19  <- T2 grows 1.00x (>= 1.15)
+  FAIL lumenari/solar-collector     T2/T3A/T3B 1.13/1.25/1.39  branches 0.62  closest 0.51  contour L* 20  <- T2 grows 1.13x (>= 1.15); T3 grows 1.25x (>= 1.35)
+  FAIL lumenari/resonator           T2/T3A/T3B 0.93/1.51/1.56  branches 0.70  closest 0.51  contour L* 20  <- T2 grows 0.93x (>= 1.15)
+
+Summary: Towers 7/28

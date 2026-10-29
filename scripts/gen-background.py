@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/gen-background.py v0.3.0 — one painter, four home worlds
+"""Extra Terram — scripts/gen-background.py v0.5.0 — skips maps that have a real painting (listed in art/maps/painted.json)
 
 Paints the home-world background for a map from its JSON tile grid. Tuned to the art pack's
 Rootkin look: saturated moss and leaf greens with teal shadow, a warm bark-brown trail with root
@@ -9,9 +9,14 @@ the spawn and a cyan-green grove heart at the exit, bioluminescent motes and can
 The grid is a data structure, not a look: nothing here draws tile squares. The engine positions
 everything on cells; the renderer only lays sprites over this image.
 
-Usage:  python scripts/gen-background.py [map-id ...]   (default: every map in src/content/maps)
-Output: public/maps/<map-id>.png at 64 px per tile. The map's `world` picks the palette:
+Versus maps (Lanes, King of the Maze) get every route painted, a low ridge between lanes, and a
+stronghold at each King base. Their files are JPEGs (the map's `background` says which).
+
+Usage:  python scripts/gen-background.py [map-id ...] [--force]   (default: every map in src/content/maps)
+Output: public/maps/<map-id>.png|jpg at 64 px per tile. The map's `world` picks the palette:
         rootkin forest moon, assembly scrap plains, chitin hive tunnels, lumenari crystal fields.
+        Maps listed in art/maps/painted.json have their real painting in public/maps and are skipped;
+        --force paints the placeholder over it anyway (it does not touch the list).
 Needs:  numpy, pillow
 """
 import json
@@ -40,7 +45,7 @@ WORLDS = {
                     spawn=((70, 34, 18), (232, 195, 58), (255, 240, 170)), exit=((40, 150, 110), (140, 240, 190), (240, 255, 240)),
                     mote=((150, 245, 215), (232, 215, 110)), leaves=(80, 130, 170, 215, 70, 110), glow=(232, 195, 58, 60), vig=0.4),
     "assembly": dict(deep=C(14, 15, 17), moss=C(58, 60, 64), leaf=C(110, 106, 96), teal=C(70, 48, 30),
-                     bark=C(40, 42, 46), bark_dark=C(18, 19, 22), stone=C(120, 122, 126),
+                     bark=C(122, 116, 104), bark_dark=C(76, 72, 64), stone=C(168, 164, 154),
                      pad=((40, 42, 46), (96, 100, 106), (232, 195, 58)), pad_core=(255, 200, 70), tuft=(196, 122, 30),
                      spawn=((60, 24, 10), (255, 120, 30), (255, 220, 160)), exit=((20, 60, 90), (90, 190, 240), (230, 250, 255)),
                      mote=((255, 190, 80), (120, 125, 130)), leaves=(150, 190, 100, 130, 30, 60), glow=(232, 195, 58, 45), vig=0.45),
@@ -73,11 +78,7 @@ def lerp(a, b, t):
     return a + (b - a) * t
 
 
-def waypoints_from_grid(grid, legend, cols, rows):
-    """Same BFS the engine runs (src/engine/map.ts), so the painted trail is the path creeps walk."""
-    kinds = {(c, r): legend[grid[r][c]] for r in range(rows) for c in range(cols)}
-    start = next(k for k, v in kinds.items() if v == "spawn")
-    goal = next(k for k, v in kinds.items() if v == "exit")
+def bfs(kinds, start, goal, allowed):
     prev = {start: None}
     queue = [start]
     while queue:
@@ -86,7 +87,7 @@ def waypoints_from_grid(grid, legend, cols, rows):
             break
         c, r = cur
         for n in ((c, r - 1), (c + 1, r), (c, r + 1), (c - 1, r)):
-            if n in kinds and n not in prev and kinds[n] in ("path", "spawn", "exit"):
+            if n in kinds and n not in prev and kinds[n] in ("path", "spawn", "exit") and allowed(n):
                 prev[n] = cur
                 queue.append(n)
     path = []
@@ -95,7 +96,39 @@ def waypoints_from_grid(grid, legend, cols, rows):
         path.append(node)
         node = prev[node]
     path.reverse()
-    return [(c * TILE + TILE / 2, r * TILE + TILE / 2) for c, r in path], kinds
+    return path
+
+
+def routes_from_map(m):
+    """Same BFS the engine runs (src/engine/map.ts), so the painted trails are the paths creeps walk.
+    Returns cell routes (one per lane or fork; one on a solo map), the tile kinds and the zone per cell."""
+    grid, legend, cols, rows = m["grid"], m["legend"], m["cols"], m["rows"]
+    kinds = {(c, r): legend[grid[r][c]] for r in range(rows) for c in range(cols)}
+    zones = {}
+    for r in range(rows):
+        for c in range(cols):
+            ch = m["zones"][r][c] if m.get("zones") else "."
+            zones[(c, r)] = int(ch) if ch.isdigit() else -1
+    spawns = [k for k, v in kinds.items() if v == "spawn"]
+    exits = [k for k, v in kinds.items() if v == "exit"]
+    mode = m.get("mode")
+    if not mode:
+        return [bfs(kinds, spawns[0], exits[0], lambda n: True)], kinds, zones
+    routes = []
+    for s in range(m["slots"]):
+        goal = next(k for k in exits if zones[k] == s)
+        if mode == "lanes":
+            start = next(k for k in spawns if zones[k] == s)
+            allowed = lambda n, s=s: zones[n] == s
+        else:
+            start = next(k for k in spawns if zones[k] == -1)
+            allowed = lambda n, s=s: zones[n] in (-1, s)
+        routes.append(bfs(kinds, start, goal, allowed))
+    return routes, kinds, zones
+
+
+def to_px(cells):
+    return [(c * TILE + TILE / 2, r * TILE + TILE / 2) for c, r in cells]
 
 
 def paint(map_id: str):
@@ -107,7 +140,16 @@ def paint(map_id: str):
     DEEP, MOSS, LEAF, TEAL, BARK, BARK_DARK, STONE = W["deep"], W["moss"], W["leaf"], W["teal"], W["bark"], W["bark_dark"], W["stone"]
     cols, rows = m["cols"], m["rows"]
     w, h = cols * TILE, rows * TILE
-    points, kinds = waypoints_from_grid(m["grid"], m["legend"], cols, rows)
+    routes, kinds, zones = routes_from_map(m)
+    polylines = [to_px(cells) for cells in routes]
+    # each trail cell once, for the stepping stones (King routes share their trunk)
+    segments, seen_seg = [], set()
+    for cells in routes:
+        for a, b in zip(cells, cells[1:]):
+            key = tuple(sorted((a, b)))
+            if key not in seen_seg:
+                seen_seg.add(key)
+                segments.append(key)
 
     # --- ground: layered moss with teal shadow and leaf-green highlights (the art's saturated greens)
     n1 = value_noise(w, h)
@@ -124,9 +166,10 @@ def paint(map_id: str):
     # --- the trail: bark-brown path with ragged root edges and pale stepping stones
     mask = Image.new("L", (w, h), 0)
     d = ImageDraw.Draw(mask)
-    d.line(points, fill=255, width=int(TILE * 0.80), joint="curve")
-    for x, y in points:
-        d.ellipse([x - TILE * 0.40, y - TILE * 0.40, x + TILE * 0.40, y + TILE * 0.40], fill=255)
+    for points in polylines:
+        d.line(points, fill=255, width=int(TILE * 0.80), joint="curve")
+        for x, y in points:
+            d.ellipse([x - TILE * 0.40, y - TILE * 0.40, x + TILE * 0.40, y + TILE * 0.40], fill=255)
     mask_blur = mask.filter(ImageFilter.GaussianBlur(TILE * 0.16))
     rough = value_noise(w, h, octaves=((20, 1.0), (80, 0.5)))
     trail = np.asarray(mask_blur, dtype=np.float32) / 255.0
@@ -136,8 +179,8 @@ def paint(map_id: str):
     # stepping stones along the centre line
     stones = Image.new("L", (w, h), 0)
     sd = ImageDraw.Draw(stones)
-    for i in range(len(points) - 1):
-        (x0, y0), (x1, y1) = points[i], points[i + 1]
+    for (ca, cb) in segments:
+        (x0, y0), (x1, y1) = to_px([ca, cb])
         seg = ((x1 - x0) ** 2 + (y1 - y0) ** 2) ** 0.5
         steps = max(1, int(seg / (TILE * 0.55)))
         for k in range(steps):
@@ -184,11 +227,46 @@ def paint(map_id: str):
     img = Image.alpha_composite(img, glow)
     img = Image.alpha_composite(img, pads.filter(ImageFilter.GaussianBlur(0.6)))
 
-    # --- spawn gate (gold, scorched) and grove heart (cyan-green bloom)
+    # --- versus: a low ridge between lanes (rock, scrap, chitin or crystal by world)
+    if m.get("mode") == "lanes":
+        bands = []
+        for s in range(m["slots"]):
+            rows_s = [r for (c, r), z in zones.items() if z == s]
+            bands.append((min(rows_s), max(rows_s)))
+        ridge = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        rd = ImageDraw.Draw(ridge)
+        for (top0, bot0), (top1, bot1) in zip(bands, bands[1:]):
+            y = (bot0 + 1 + top1) / 2 * TILE
+            pts = []
+            for x in range(0, w + 16, 16):
+                pts.append((x, y + float(np.sin(x / 37.0)) * 3 + rng.uniform(-2, 2)))
+            dark = tuple(int(v) for v in (BARK_DARK * 0.6))
+            light = tuple(int(min(255, v)) for v in (STONE * 0.9))
+            rd.line(pts, fill=(*dark, 235), width=15, joint="curve")
+            rd.line([(x, yy - 5) for x, yy in pts], fill=(*light, 140), width=3, joint="curve")
+            for x, yy in pts[::2]:
+                rr = rng.uniform(3, 6)
+                rd.ellipse([x - rr, yy - rr, x + rr, yy + rr], fill=(*light, 150))
+        img = Image.alpha_composite(img, ridge.filter(ImageFilter.GaussianBlur(1.2)))
+
+    # --- spawn gate (gold, scorched) and grove heart (cyan-green bloom); King bases are strongholds
     marks = Image.new("RGBA", (w, h), (0, 0, 0, 0))
     md = ImageDraw.Draw(marks)
+    king = m.get("mode") == "king"
     for (c, r), kind in kinds.items():
         cx, cy = c * TILE + TILE / 2, r * TILE + TILE / 2
+        if kind == "exit" and king:
+            # a walled ring with a bright heart: the base this fork defends
+            e0, e1, e2 = W["exit"]
+            md.ellipse([cx - TILE * 0.62, cy - TILE * 0.62, cx + TILE * 0.62, cy + TILE * 0.62], fill=(*BARK_DARK.astype(int), 235))
+            md.ellipse([cx - TILE * 0.52, cy - TILE * 0.52, cx + TILE * 0.52, cy + TILE * 0.52], outline=(*STONE.astype(int), 240), width=5)
+            for k in range(8):
+                a = k * 6.283 / 8
+                bx, by = cx + np.cos(a) * TILE * 0.52, cy + np.sin(a) * TILE * 0.52
+                md.rectangle([bx - 4, by - 4, bx + 4, by + 4], fill=(*STONE.astype(int), 255))
+            md.ellipse([cx - TILE * 0.3, cy - TILE * 0.3, cx + TILE * 0.3, cy + TILE * 0.3], fill=(*e1, 230))
+            md.ellipse([cx - TILE * 0.13, cy - TILE * 0.13, cx + TILE * 0.13, cy + TILE * 0.13], fill=(*e2, 250))
+            continue
         if kind == "spawn":
             s0, s1, s2 = W["spawn"]
             md.ellipse([cx - TILE * 0.55, cy - TILE * 0.55, cx + TILE * 0.55, cy + TILE * 0.55], fill=(*s0, 220))
@@ -251,15 +329,31 @@ def paint(map_id: str):
     arr = arr * vig[..., None]
     out = Image.fromarray(np.clip(arr, 0, 255).astype(np.uint8), "RGB")
 
-    out_path = ROOT / "public" / "maps" / f"{map_id}.png"
+    out_path = ROOT / "public" / m["background"].lstrip("/")
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out.save(out_path, optimize=True)
+    if out_path.suffix == ".jpg":
+        out.save(out_path, quality=86, optimize=True, progressive=True)
+    else:
+        out.save(out_path, optimize=True)
     print(f"wrote {out_path.relative_to(ROOT)} ({w}x{h}, {m['world']})")
 
 
+def painted_maps() -> set:
+    """Map ids whose background is a delivered painting (art/maps/painted.json), not a placeholder."""
+    f = ROOT / "art" / "maps" / "painted.json"
+    if not f.exists():
+        return set()
+    return set(json.loads(f.read_text()).get("maps", {}))
+
+
 def main():
-    ids = sys.argv[1:] or sorted(p.stem for p in (ROOT / "src" / "content" / "maps").glob("*.json"))
+    force = "--force" in sys.argv
+    ids = [a for a in sys.argv[1:] if not a.startswith("--")] or sorted(p.stem for p in (ROOT / "src" / "content" / "maps").glob("*.json"))
+    painted = painted_maps()
     for map_id in ids:
+        if map_id in painted and not force:
+            print(f"skip {map_id}: painted background (art/maps/painted.json); --force to paint the placeholder over it")
+            continue
         paint(map_id)
 
 

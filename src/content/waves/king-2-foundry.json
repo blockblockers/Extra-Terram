@@ -1,0 +1,389 @@
+{
+  "id": "king-2-foundry",
+  "map": "king-2-foundry",
+  "startingResources": 200,
+  "lives": 20,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.455,
+    "speedMult": 1.13,
+    "countMult": 1.195,
+    "hpPerWave": 0.065,
+    "speedPerWave": 0.0195
+  },
+  "waves": [
+    {
+      "name": "Scouts",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 8,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Second scouts",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 12,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 8,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Column",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 6,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Mixed band",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "First heavy",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "seedling",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Long column",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "seedling",
+          "count": 14,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Lumenari raid",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 16,
+          "intervalTicks": 10,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 4,
+          "intervalTicks": 30,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Heavies",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Swarm",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 28,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 12,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Escort",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "rootwalker",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 40
+        },
+        {
+          "creep": "seedling",
+          "count": 18,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Lumenari push",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "thornbeast",
+          "count": 6,
+          "intervalTicks": 24,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Siege line",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 8,
+          "intervalTicks": 44,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 12,
+          "intervalTicks": 20,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Flood",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 32,
+          "intervalTicks": 7,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 80
+        },
+        {
+          "creep": "rootwalker",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Lumenari column",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 14,
+          "intervalTicks": 18,
+          "delayTicks": 0
+        },
+        {
+          "creep": "bastion",
+          "count": 5,
+          "intervalTicks": 56,
+          "delayTicks": 140
+        }
+      ]
+    },
+    {
+      "name": "Hammer",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 10,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 16,
+          "intervalTicks": 16,
+          "delayTicks": 100
+        },
+        {
+          "creep": "seedling",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 260
+        }
+      ]
+    },
+    {
+      "name": "Tide",
+      "groups": [
+        {
+          "creep": "seedling",
+          "count": 40,
+          "intervalTicks": 6,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 18,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Rootkin and Lumenari",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "rootwalker",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 30
+        },
+        {
+          "creep": "wisp",
+          "count": 24,
+          "intervalTicks": 7,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Last wall",
+      "groups": [
+        {
+          "creep": "thornbeast",
+          "count": 22,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "rootwalker",
+          "count": 10,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        },
+        {
+          "creep": "seedling",
+          "count": 30,
+          "intervalTicks": 6,
+          "delayTicks": 240
+        }
+      ]
+    },
+    {
+      "name": "The final push",
+      "groups": [
+        {
+          "creep": "rootwalker",
+          "count": 14,
+          "intervalTicks": 32,
+          "delayTicks": 0
+        },
+        {
+          "creep": "thornbeast",
+          "count": 20,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        },
+        {
+          "creep": "seedling",
+          "count": 36,
+          "intervalTicks": 6,
+          "delayTicks": 220
+        },
+        {
+          "creep": "bastion",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 420
+        }
+      ]
+    }
+  ],
+  "content_version": "0.10.0"
+}

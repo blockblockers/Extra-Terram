@@ -1,4 +1,4 @@
-// Extra Terram — src/net/matchService.ts v0.1.0 — one door to matches: Supabase online, or local tabs for testing
+// Extra Terram — src/net/matchService.ts v0.2.0 — 2 v 2 lobbies (team mode) for Lanes and King of the Maze
 // The lobby and the game shell talk to a MatchService and never to Supabase directly, so the same
 // screens run against the local transport (two tabs in one browser, no server) and against the real
 // one. `getMatchService()` picks: Supabase when configured and signed in, otherwise local.
@@ -9,7 +9,7 @@ import { LocalMatchChannel, localCreateMatch, localJoinMatch, localStartMatch } 
 export interface MatchService {
   readonly kind: 'supabase' | 'local';
   /** Open a lobby; the caller is the host in seat 0. Returns the match row and the caller's seat. */
-  create(opts: { mode: MatchMode; maxPlayers: number; levelId: string; raceId: string; contentVersion: string }): Promise<{ match: MatchRow; seat: number }>;
+  create(opts: { mode: MatchMode; maxPlayers: number; teamMode?: boolean; levelId: string; raceId: string; contentVersion: string }): Promise<{ match: MatchRow; seat: number }>;
   /** Join by code. Returns the match row and the seat the caller received. */
   join(code: string, raceId: string): Promise<{ match: MatchRow; seat: number }>;
   /** Host only: mark the match running. */
@@ -24,8 +24,8 @@ class SupabaseMatchService implements MatchService {
 
   constructor(private userId: string) {}
 
-  async create(opts: { mode: MatchMode; maxPlayers: number; levelId: string; raceId: string; contentVersion: string }) {
-    const match = await createMatch({ mode: opts.mode, maxPlayers: opts.maxPlayers, teamMode: false, mapId: opts.levelId, raceId: opts.raceId, contentVersion: opts.contentVersion });
+  async create(opts: { mode: MatchMode; maxPlayers: number; teamMode?: boolean; levelId: string; raceId: string; contentVersion: string }) {
+    const match = await createMatch({ mode: opts.mode, maxPlayers: opts.maxPlayers, teamMode: !!opts.teamMode, mapId: opts.levelId, raceId: opts.raceId, contentVersion: opts.contentVersion });
     return { match, seat: 0 };
   }
 
@@ -52,7 +52,7 @@ class SupabaseMatchService implements MatchService {
 class LocalMatchService implements MatchService {
   readonly kind = 'local' as const;
 
-  async create(opts: { mode: MatchMode; maxPlayers: number; levelId: string; raceId: string; contentVersion: string }) {
+  async create(opts: { mode: MatchMode; maxPlayers: number; teamMode?: boolean; levelId: string; raceId: string; contentVersion: string }) {
     return localCreateMatch(opts);
   }
 

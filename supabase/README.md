@@ -1,5 +1,7 @@
 # Extra Terram — Supabase setup (accounts, progress, leaderboards, matches)
 
+_Updated for game 0.12.0: migration 0003 (run rules + Ultimate list)._
+
 Everything the game needs from Supabase lives in this folder plus three environment variables.
 The game also runs with **no** Supabase at all (no login screen, scores stay on the device), so
 nothing here blocks local play or a fresh clone.
@@ -10,10 +12,19 @@ Dashboard → **SQL Editor** → New query → paste the whole of
 [`migrations/0001_accounts_and_matches.sql`](migrations/0001_accounts_and_matches.sql) → **Run**.
 Expected result: "Success. No rows returned" (plus a few NOTICEs about policies not existing yet).
 Then do the same with [`migrations/0002_invites_and_search.sql`](migrations/0002_invites_and_search.sql)
-(player search + lobby invites; it needs 0001 first). Both files are re-runnable: every statement
-is `if not exists` / `or replace` / `drop … if exists`, so running one twice is harmless.
+(player search + lobby invites; it needs 0001 first), then
+[`migrations/0003_ultimate_leaderboard.sql`](migrations/0003_ultimate_leaderboard.sql) (run rules
+stored with every run + the Ultimate top-score list; game 0.12.0). All three files are re-runnable:
+every statement is `if not exists` / `or replace` / `drop … if exists`, so running one twice is
+harmless.
 
-Already ran 0001 before 0002 existed? Just run 0002 now — nothing in 0001 changes.
+Already ran 0001 and 0002? Just run 0003 now — it only adds. One caveat: if you ever re-run **0001**
+after 0003, run **0003** again straight after. 0001 re-creates the older `submit_run` (13
+arguments) next to 0003's (14 arguments), and two versions under one name make the API refuse the
+call; 0003 drops the older one.
+
+Until 0003 is run the game still works: runs post without their rules (the client retries without
+`p_rules`), and the Ultimate tab says "The Ultimate list is not on the server yet".
 
 What it creates:
 
@@ -26,6 +37,19 @@ What it creates:
 | RPCs | `ensure_profile`, `set_username`, `submit_run`, `save_settings`, `leaderboard`, `my_best`, `create_match`, `join_match`, `start_match`, `submit_match_result`, `save_match_log`, `rating_current`. All `SECURITY DEFINER`, all validate `auth.uid()` and their inputs. |
 | `match_invites` (0002) | One row per invite to a lobby (`from_user`, `to_user`, `status`). Readable by the two parties only; written only through RPCs. |
 | RPCs (0002) | `search_players(query)` — username / display-name **prefix**, or an **exact** email; never returns emails, never lists everyone, skips the caller. `invite_to_match`, `my_invites` (pending, lobby still open, last hour), `respond_invite`. |
+| `run_results.rules` (0003) | The rules a run was played under, e.g. `{"rounds":30,"bossEvery":5,"difficulty":0}`; null on older rows. `submit_run` takes it as `p_rules` (optional), checks it (rounds 1–100, mini-boss interval 0–100, difficulty 0–2) and keeps only those three fields. |
+| RPCs (0003) | `leaderboard_ultimate(level, limit)` — best score per player on a level over **any** rules (`campaign` + `endless` runs), with the rules of that run; anyone can read it. `my_best_ultimate(level)` — the caller's best there (signed-in only). |
+
+`run_results.mode` tells runs apart: `campaign` is a level played as written, `endless` is a
+single-player run under other rules (more or fewer rounds, mini-bosses; always 0 stars, enforced
+server-side), `challenge` is a multiplayer match run. Each level has two top-score lists:
+
+- **Standard** (`leaderboard`, `my_best`): `campaign` runs only — the fair comparison.
+- **Ultimate** (`leaderboard_ultimate`, `my_best_ultimate`, from 0003): `campaign` and `endless`
+  runs alike — the highest score ever on that level, whatever the rules. Each row carries its
+  rules, so the list can say "100 rounds · mini-boss every 3 rounds".
+
+Match runs (`challenge`) are on neither list: a shared board's score depends on the other players.
 
 Rules carried over from Deadblock, baked into the SQL:
 
@@ -144,9 +168,11 @@ to be reusable there.
 - `src/net/auth.tsx` — `AuthProvider` / `useAuth()`: session restore, email + password (sign in,
   create account, reset, new-password screen), magic link + code, guest mode (local flag),
   sign-out, `set_username`; OAuth kept wired but dormant.
-- `src/net/progress.ts` — `recordRun()` → `submit_run`, or a local queue that is flushed on the
-  next sign-in; local personal bests for offline display.
-- `src/net/leaderboard.ts` — `leaderboard` and `my_best` with a 30 s cache.
+- `src/net/progress.ts` — `recordRun()` → `submit_run` (with `p_rules`), or a local queue that is
+  flushed on the next sign-in; local personal bests for offline display (standard and ultimate kept
+  apart).
+- `src/net/leaderboard.ts` — Standard (`leaderboard`, `my_best`) and Ultimate
+  (`leaderboard_ultimate`, `my_best_ultimate`) with a 30 s cache.
 - `src/net/match.ts` — match RPC wrappers and `MatchChannel` (Broadcast + Presence).
 - `src/ui/LoginScreen.tsx`, `AccountBar.tsx`, `Leaderboard.tsx` — the screens.
 
@@ -162,4 +188,8 @@ device signs in.
 3. **Sign in** → *Create account* with an email and password (instant with "Confirm email" off) →
    back on the menu with your name; pick a username when prompted → "Top scores" under the level
    list shows the queued run, now posted.
-4. Dashboard → Table Editor → `run_results` shows the row; `profiles` has your username.
+4. Dashboard → Table Editor → `run_results` shows the row (with its `rules`); `profiles` has your
+   username.
+5. Under the level list pick 30 rounds and a mini-boss every 5 rounds, finish (or lose) a run →
+   the result screen says "Posted to the Ultimate list (custom rules)"; the **Ultimate** tab of Top
+   scores shows it with "30 rounds · mini-boss every 5 rounds", the **Standard** tab does not.

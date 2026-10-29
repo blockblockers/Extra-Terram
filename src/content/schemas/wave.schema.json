@@ -124,6 +124,58 @@
           "type": "number",
           "minimum": 0,
           "maximum": 1
+        },
+        "rampWaves": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "hpMult and speedMult phase in over this many waves (0 = from wave 1); counts are never eased"
+        }
+      }
+    },
+    "endless": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "growth past the script: 1 + max * x / (x + k)",
+      "properties": {
+        "hpMax": {
+          "type": "number",
+          "minimum": 0
+        },
+        "hpK": {
+          "type": "number",
+          "minimum": 0
+        },
+        "countMax": {
+          "type": "number",
+          "minimum": 0
+        },
+        "countK": {
+          "type": "number",
+          "minimum": 0
+        },
+        "speedMax": {
+          "type": "number",
+          "minimum": 0
+        },
+        "speedK": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "difficulty": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "this level's Hard and Brutal steps, in level-factor units",
+      "properties": {
+        "hard": {
+          "type": "number",
+          "minimum": 0
+        },
+        "brutal": {
+          "type": "number",
+          "minimum": 0
         }
       }
     }

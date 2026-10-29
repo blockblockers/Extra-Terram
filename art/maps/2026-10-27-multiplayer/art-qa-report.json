@@ -1,0 +1,146 @@
+{
+  "source_project": "extra-terram-v0.13.0.zip",
+  "source_handoff": "Handoff Multiplayer Maps and Art-Ready Code 10.27v1.pdf",
+  "maps": [
+    {
+      "id": "king-2-foundry",
+      "title": "Foundry Crown",
+      "size_px": [
+        1664,
+        2048
+      ],
+      "mode": "king",
+      "race": "assembly",
+      "pads": 32,
+      "trail_cells_unique": 58,
+      "start_end_count": 2,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "king-2-foundry: trail contrast median 68.8 (good); 0 of 58 cells weak (under 18.0)",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 81.6 (threshold 10.0); 0 of 32 pads without a visible socket",
+        "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+      ],
+      "edge_correction_pixels": 0
+    },
+    {
+      "id": "king-3-elderfork",
+      "title": "Elder Fork",
+      "size_px": [
+        1664,
+        2304
+      ],
+      "mode": "king",
+      "race": "rootkin",
+      "pads": 37,
+      "trail_cells_unique": 66,
+      "start_end_count": 3,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "king-3-elderfork: trail contrast median 46.1 (good); 0 of 66 cells weak (under 16.1)",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 66.2 (threshold 10.0); 0 of 37 pads without a visible socket",
+        "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+      ],
+      "edge_correction_pixels": 693
+    },
+    {
+      "id": "king-4-throne",
+      "title": "Crystal Throne",
+      "size_px": [
+        1664,
+        2560
+      ],
+      "mode": "king",
+      "race": "lumenari",
+      "pads": 38,
+      "trail_cells_unique": 86,
+      "start_end_count": 4,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "king-4-throne: trail contrast median 88.8 (good); 1 of 86 cells weak (under 18.0): [('E9', 4.0)]",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 94.3 (threshold 10.0); 0 of 38 pads without a visible socket",
+        "  verdict: NEEDS A LOOK"
+      ],
+      "edge_correction_pixels": 0
+    },
+    {
+      "id": "lanes-2-hollows",
+      "title": "Twin Hollows",
+      "size_px": [
+        1536,
+        2048
+      ],
+      "mode": "lanes",
+      "race": "rootkin",
+      "pads": 20,
+      "trail_cells_unique": 68,
+      "start_end_count": 2,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "lanes-2-hollows: trail contrast median 68.0 (good); 0 of 68 cells weak (under 18.0)",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 65.4 (threshold 10.0); 0 of 20 pads without a visible socket",
+        "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+      ],
+      "edge_correction_pixels": 1489
+    },
+    {
+      "id": "lanes-3-prism",
+      "title": "Three Rivers of Light",
+      "size_px": [
+        1536,
+        2304
+      ],
+      "mode": "lanes",
+      "race": "lumenari",
+      "pads": 27,
+      "trail_cells_unique": 69,
+      "start_end_count": 3,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "lanes-3-prism: trail contrast median 83.9 (good); 0 of 69 cells weak (under 18.0)",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 92.1 (threshold 10.0); 0 of 27 pads without a visible socket",
+        "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+      ],
+      "edge_correction_pixels": 0
+    },
+    {
+      "id": "lanes-4-warrens",
+      "title": "Four Warrens",
+      "size_px": [
+        1536,
+        2560
+      ],
+      "mode": "lanes",
+      "race": "chitin",
+      "pads": 32,
+      "trail_cells_unique": 92,
+      "start_end_count": 4,
+      "centerline_mask_verified": true,
+      "path_pad_mask_overlap": 0,
+      "sprite_checker_warnings": [
+        "lanes-4-warrens: trail contrast median 62.2 (good); 0 of 92 cells weak (under 18.0)",
+        "  trail centring: 0 of 0 long-straight cells more than 19 px off the guide (no measurable band on the straights; judge the check image)",
+        "  sockets: mean 65.2 (threshold 10.0); 0 of 32 pads without a visible socket",
+        "  verdict: ALIGNED (by the numbers; confirm in the check image)"
+      ],
+      "edge_correction_pixels": 336
+    }
+  ],
+  "limitations": [
+    "King of the Maze companion art handoff was not separately uploaded. Project layout JSON/templates are authoritative for geometry.",
+    "All six maps passed the visible socket checks. Crystal Throne flags E9 in the low-trail-score heuristic at a multi-route junction where a perpendicular side sample lands on another valid route.",
+    "Straight-run numeric centering reported no measurable bands; exact centerline masks have been independently verified from the layout JSON, and visual overlays are included.",
+    "In-game mobile readability and full v0.15.0 renderer integration have not been run.",
+    "Individual backgrounds use painterly source environments with geometry rebuilt from JSON. This is a visual draft requiring user art approval.",
+    "The project specifies Crystal Throne as 1664x2560 pixels; the PDF summary says 1664x2432. The project source of truth was followed."
+  ]
+}

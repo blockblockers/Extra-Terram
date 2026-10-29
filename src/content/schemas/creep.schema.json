@@ -25,7 +25,8 @@
           "bounty": { "type": "integer", "minimum": 0 },
           "leakCost": { "type": "integer", "minimum": 1 },
           "radius": { "type": "number", "exclusiveMinimum": 0, "maximum": 0.5, "description": "tiles, for rendering and hit tests" },
-          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" }
+          "color": { "type": "string", "pattern": "^#[0-9a-fA-F]{6}$" },
+          "art": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "draw with this creep's art (mini-bosses reuse their tank)" }
         }
       }
     }

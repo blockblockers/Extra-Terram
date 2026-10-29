@@ -1,0 +1,389 @@
+{
+  "id": "lanes-4-warrens",
+  "map": "lanes-4-warrens",
+  "startingResources": 200,
+  "lives": 20,
+  "firstBuildTicks": 600,
+  "buildTicks": 300,
+  "waveBonus": 20,
+  "scaling": {
+    "hpMult": 1.42,
+    "speedMult": 1.12,
+    "countMult": 1.18,
+    "hpPerWave": 0.06,
+    "speedPerWave": 0.018
+  },
+  "waves": [
+    {
+      "name": "Scouts",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 8,
+          "intervalTicks": 20,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Second scouts",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 12,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Workers",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 8,
+          "intervalTicks": 16,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 3,
+          "intervalTicks": 36,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Column",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 6,
+          "intervalTicks": 30,
+          "delayTicks": 0
+        }
+      ]
+    },
+    {
+      "name": "Mixed band",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 4,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        }
+      ]
+    },
+    {
+      "name": "First heavy",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 20
+        },
+        {
+          "creep": "wisp",
+          "count": 14,
+          "intervalTicks": 12,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Long column",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "wisp",
+          "count": 14,
+          "intervalTicks": 10,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Assembly raid",
+      "groups": [
+        {
+          "creep": "compactor",
+          "count": 16,
+          "intervalTicks": 10,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dump-hauler",
+          "count": 4,
+          "intervalTicks": 30,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Heavies",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 8,
+          "intervalTicks": 24,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Swarm",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 28,
+          "intervalTicks": 8,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 12,
+          "intervalTicks": 18,
+          "delayTicks": 100
+        }
+      ]
+    },
+    {
+      "name": "Escort",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 10,
+          "intervalTicks": 22,
+          "delayTicks": 0
+        },
+        {
+          "creep": "bastion",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 40
+        },
+        {
+          "creep": "wisp",
+          "count": 18,
+          "intervalTicks": 8,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Assembly push",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 4,
+          "intervalTicks": 60,
+          "delayTicks": 0
+        },
+        {
+          "creep": "compactor",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 60
+        },
+        {
+          "creep": "sentinel",
+          "count": 6,
+          "intervalTicks": 24,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Siege line",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 8,
+          "intervalTicks": 44,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 12,
+          "intervalTicks": 20,
+          "delayTicks": 120
+        }
+      ]
+    },
+    {
+      "name": "Flood",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 32,
+          "intervalTicks": 7,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 14,
+          "intervalTicks": 16,
+          "delayTicks": 80
+        },
+        {
+          "creep": "bastion",
+          "count": 3,
+          "intervalTicks": 70,
+          "delayTicks": 300
+        }
+      ]
+    },
+    {
+      "name": "Assembly column",
+      "groups": [
+        {
+          "creep": "dump-hauler",
+          "count": 14,
+          "intervalTicks": 18,
+          "delayTicks": 0
+        },
+        {
+          "creep": "dozer",
+          "count": 5,
+          "intervalTicks": 56,
+          "delayTicks": 140
+        }
+      ]
+    },
+    {
+      "name": "Hammer",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 10,
+          "intervalTicks": 40,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 16,
+          "intervalTicks": 16,
+          "delayTicks": 100
+        },
+        {
+          "creep": "wisp",
+          "count": 20,
+          "intervalTicks": 8,
+          "delayTicks": 260
+        }
+      ]
+    },
+    {
+      "name": "Tide",
+      "groups": [
+        {
+          "creep": "wisp",
+          "count": 40,
+          "intervalTicks": 6,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 18,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        }
+      ]
+    },
+    {
+      "name": "Lumenari and Assembly",
+      "groups": [
+        {
+          "creep": "dozer",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 0
+        },
+        {
+          "creep": "bastion",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 30
+        },
+        {
+          "creep": "compactor",
+          "count": 24,
+          "intervalTicks": 7,
+          "delayTicks": 200
+        }
+      ]
+    },
+    {
+      "name": "Last wall",
+      "groups": [
+        {
+          "creep": "sentinel",
+          "count": 22,
+          "intervalTicks": 12,
+          "delayTicks": 0
+        },
+        {
+          "creep": "bastion",
+          "count": 10,
+          "intervalTicks": 36,
+          "delayTicks": 80
+        },
+        {
+          "creep": "wisp",
+          "count": 30,
+          "intervalTicks": 6,
+          "delayTicks": 240
+        }
+      ]
+    },
+    {
+      "name": "The final push",
+      "groups": [
+        {
+          "creep": "bastion",
+          "count": 14,
+          "intervalTicks": 32,
+          "delayTicks": 0
+        },
+        {
+          "creep": "sentinel",
+          "count": 20,
+          "intervalTicks": 14,
+          "delayTicks": 60
+        },
+        {
+          "creep": "wisp",
+          "count": 36,
+          "intervalTicks": 6,
+          "delayTicks": 220
+        },
+        {
+          "creep": "dozer",
+          "count": 6,
+          "intervalTicks": 50,
+          "delayTicks": 420
+        }
+      ]
+    }
+  ],
+  "content_version": "0.10.0"
+}

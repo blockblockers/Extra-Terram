@@ -1,9 +1,10 @@
-// Extra Terram — src/ui/WorldIntro.tsx v0.1.0 — the home world from orbit before a solo level: who is attacking, why, and how your weapons fare
+// Extra Terram — src/ui/WorldIntro.tsx v0.2.0 — the painted planets, alive: the delivered frames cross-fade on a canvas over the still
 // Full-screen over the shell while the loop is held: a starfield, the world's planet drifting closer
-// (public/art/worlds/<world>.webp, placeholders from scripts/gen-planets.py until the painted shots
-// arrive — art/WORLD_INTRO_HANDOFF.md), the world and level names, the lore, the invader and the matchup
-// for the race you brought. A tap, Enter or Space begins; so does the timer. Reduced motion: no drift.
-import { useEffect, useMemo, useState } from 'react';
+// (public/art/worlds/<world>.webp, the still; <world>-frames.webp, its frames side by side, which a
+// canvas cross-fades through the eight frames at six frames/second with a wrap to frame zero; the still shows until the
+// frames arrive and when the player asks for reduced motion), the world and level names, the lore, the
+// invader and the matchup for the race you brought. A tap, Enter or Space begins; so does the timer.
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { matchupsFor, raceById, type LevelEntry } from '../content';
 import { loreFor } from '../content/lore';
 import { WORLD_NAMES } from './Menu';
@@ -24,6 +25,64 @@ export function planetArtUrl(world: string): string {
   return `/art/worlds/${world}.webp`;
 }
 
+export function planetFramesUrl(world: string): string {
+  return `/art/worlds/${world}-frames.webp`;
+}
+
+/** World-intro artwork: eight 1024px frames authored as a seamless 6fps loop. */
+const FRAME_SECONDS = 1 / 6;
+
+/**
+ * The frames, cross-faded on a canvas: at any moment two neighbouring frames are drawn, the next one's
+ * opacity rising with the clock. Returns whether the frames are playing (then the canvas covers the still).
+ */
+function useFramePlayer(canvas: React.RefObject<HTMLCanvasElement | null>, world: string, enabled: boolean): boolean {
+  const [playing, setPlaying] = useState(false);
+  useEffect(() => {
+    setPlaying(false);
+    if (!enabled) return;
+    let raf = 0;
+    let stopped = false;
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      if (stopped) return;
+      const c = canvas.current;
+      const n = Math.max(1, Math.round(img.width / img.height));
+      if (!c || n < 2) return;
+      const size = img.height;
+      c.width = size;
+      c.height = size;
+      const ctx = c.getContext('2d');
+      if (!ctx) return;
+      setPlaying(true);
+      const t0 = performance.now();
+      const draw = (now: number) => {
+        if (stopped) return;
+        // The artwork is authored as a periodic loop; cross-fade also smooths the 7 -> 0 seam.
+        const pos = ((now - t0) / 1000 / FRAME_SECONDS) % n;
+        const a = Math.floor(pos);
+        const b = (a + 1) % n;
+        const f = pos - a;
+        ctx.clearRect(0, 0, size, size);
+        ctx.globalAlpha = 1;
+        ctx.drawImage(img, a * size, 0, size, size, 0, 0, size, size);
+        ctx.globalAlpha = f * f * (3 - 2 * f);
+        ctx.drawImage(img, b * size, 0, size, size, 0, 0, size, size);
+        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(draw);
+      };
+      raf = requestAnimationFrame(draw);
+    };
+    img.src = planetFramesUrl(world);
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+    };
+  }, [canvas, world, enabled]);
+  return playing;
+}
+
 export function WorldIntro({ level, raceId, ready, onBegin }: Props) {
   const world = level.map.world;
   const lore = loreFor(world, level.enemyRace);
@@ -32,6 +91,9 @@ export function WorldIntro({ level, raceId, ready, onBegin }: Props) {
   const edge = matchupsFor(raceId).multiplier[invader.id] ?? 1;
   const stars = useMemo(() => starfield(level.id), [level.id]);
   const [loaded, setLoaded] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const motion = useMemo(() => !(typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches), []);
+  const playing = useFramePlayer(canvasRef, world, motion);
 
   useEffect(() => {
     // the hold starts once the level has loaded under the intro, so the picture gets its moment on a slow device too
@@ -63,6 +125,7 @@ export function WorldIntro({ level, raceId, ready, onBegin }: Props) {
       <div className="et-intro-stars absolute inset-0" style={{ backgroundImage: stars }} aria-hidden="true" />
       <div className="et-intro-planet-wrap relative" aria-hidden="true">
         <img src={planetArtUrl(world)} alt="" className={`et-intro-planet ${loaded ? 'opacity-100' : 'opacity-0'}`} onLoad={() => setLoaded(true)} draggable={false} />
+        <canvas ref={canvasRef} className={`et-intro-planet et-intro-frames ${playing ? 'opacity-100' : 'opacity-0'}`} />
       </div>
       <div className="relative mx-auto w-full max-w-md px-[calc(var(--safe-left)+1.25rem)] pr-[calc(var(--safe-right)+1.25rem)]">
         <p className="font-tech text-xs font-bold uppercase tracking-[0.3em] text-grove-300/70">{WORLD_NAMES[world] ?? world}</p>

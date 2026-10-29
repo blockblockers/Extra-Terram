@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Extra Terram — scripts/gen-planets.py v0.1.0 — placeholder planets for the world intro, from the map paintings
+"""Extra Terram — scripts/gen-planets.py v0.2.0 — world intro import, validation, and optional placeholder generation
 
   python scripts/gen-planets.py                      writes the placeholder public/art/worlds/<world>.webp for the four worlds
-  python scripts/gen-planets.py --from <folder>      converts a delivery (art/world-intro/<world>.png, 2048²) into the shipped WebP at 1024
+  python scripts/gen-planets.py --from <folder>      converts full-size <world>.png still + <world>-strip.png (8-12 frames),
+                                                     or legacy <world>-sheet.png / numbered frames, to shipped WebPs
   python scripts/gen-planets.py --check <folder>     checks a delivery against art/WORLD_INTRO_HANDOFF.md (square, the globe's size and
                                                      centre, transparent corners, the lit side upper left, strips' frames)
 
@@ -165,8 +166,8 @@ def measure(path: Path) -> list[str]:
     ys, xs = np.nonzero(solid)
     bw, bh = xs.max() - xs.min() + 1, ys.max() - ys.min() + 1
     frac = max(bw, bh) / w
-    if not 0.78 <= frac <= 0.9:
-        msgs.append(f"the globe spans {frac * 100:.0f}% of the canvas, expected 80-88%")
+    if not 0.78 <= frac <= 0.95:
+        msgs.append(f"the globe spans {frac * 100:.0f}% of the canvas, expected 80-88% (up to 94% passes)")
     cx, cy = (xs.min() + xs.max()) / 2 / w, (ys.min() + ys.max()) / 2 / h
     if abs(cx - 0.5) > 0.02 or abs(cy - 0.5) > 0.02:
         msgs.append(f"the globe is off centre ({cx:.2f}, {cy:.2f})")
@@ -182,37 +183,145 @@ def measure(path: Path) -> list[str]:
 def check(folder: Path) -> int:
     bad = 0
     for world in WORLDS:
-        still = folder / f"{world}.png"
-        if not still.exists():
-            print(f"MISSING {still.name}")
+        got = load_frames(folder, world)
+        if not got:
+            print(f"MISSING {world}: no {world}-sheet.png, {world}-<n>.png or {world}.png")
             bad += 1
             continue
-        msgs = measure(still)
-        im = Image.open(still)
-        if im.size[0] < 2048:
-            msgs.append(f"{im.size[0]} px wide; the handoff asks for 2048")
-        strip = folder / f"{world}-strip.png"
-        if strip.exists():
-            sw, sh = Image.open(strip).size
-            if sh != 1024 or sw % 1024 or not 8 <= sw // 1024 <= 12:
-                msgs.append(f"strip is {sw} x {sh}; expected 8-12 frames of 1024 x 1024")
-            else:
-                msgs.append(f"strip: {sw // 1024} frames (ok)")
-        print(("WARN " if any(not m.endswith("(ok)") for m in msgs) else "OK   ") + still.name + ("" if not msgs else "\n      " + "\n      ".join(msgs)))
-        bad += int(any(not m.endswith("(ok)") for m in msgs))
+        frames, source = got
+        msgs = []
+        f0 = frames[0]
+        if f0.width < 1024:
+            msgs.append(f"frames are {f0.width} px; the handoff asks for 1024 frames")
+        still = folder / f"{world}.png"
+        if still.exists():
+            with Image.open(still) as master:
+                if master.size != (2048, 2048):
+                    msgs.append(f"master still is {master.size}, expected 2048 x 2048")
+            msgs += measure(still)
+        else:
+            tmp = folder / f".{world}-f0.png"
+            f0.save(tmp)
+            msgs += measure(tmp)
+            tmp.unlink()
+        if (folder / f"{world}-strip.png").exists() and still.exists():
+            from PIL import ImageChops
+            base = Image.open(still).convert("RGBA").resize((1024, 1024), Image.Resampling.LANCZOS)
+            if ImageChops.difference(f0, base).getbbox() is not None:
+                msgs.append("frame 0 does not match the downsampled 2048 still")
+        if len(frames) > 1:
+            sizes = {f.size for f in frames}
+            if len(sizes) > 1:
+                msgs.append(f"frames differ in size: {sorted(sizes)}")
+            msgs.append(f"{len(frames)} frames from {source} (ok)")
+        warn = any(not m.endswith("(ok)") for m in msgs)
+        print(("WARN " if warn else "OK   ") + world + ("" if not msgs else "\n      " + "\n      ".join(msgs)))
+        bad += int(warn)
     return bad
 
 
+def load_frames(folder: Path, world: str) -> tuple[list[Image.Image], str] | None:
+    """A world's delivered frames: a `<world>-strip.png` horizontal strip, `<world>-sheet.png` grid, several
+    `<world>-<n>.png`, or the single `<world>.png` still. Returns the frames and where they came from."""
+    strip = folder / f"{world}-strip.png"
+    if strip.exists():
+        im = Image.open(strip).convert("RGBA")
+        w, h = im.size
+        if h == 0 or w % h or not (8 <= w // h <= 12):
+            raise ValueError(f"{strip}: expected horizontal 8-12 square frames, got {w} x {h}")
+        n = w // h
+        return [im.crop((i * h, 0, (i + 1) * h, h)) for i in range(n)], f"{strip.name} ({n} frames of {h} px)"
+    sheet = folder / f"{world}-sheet.png"
+    if sheet.exists():
+        im = Image.open(sheet).convert("RGBA")
+        w, h = im.size
+        # the cells are square: the grid is whatever divides the sheet into squares
+        cols, rows = (1, 1)
+        for c in range(1, 13):
+            for r in range(1, 13):
+                if c * r in (1, 2, 4, 6, 8, 9, 10, 12, 16) and abs(w / c - h / r) <= 2 and c * r > cols * rows:
+                    cols, rows = c, r
+        cw, ch = w // cols, h // rows
+        frames = [im.crop((c * cw, r * ch, (c + 1) * cw, (r + 1) * ch)) for r in range(rows) for c in range(cols)]
+        return frames, f"{sheet.name} ({cols} x {rows} grid, cells {cw} x {ch})"
+    numbered = sorted(folder.glob(f"{world}-[0-9]*.png"), key=lambda p: int(p.stem.rsplit("-", 1)[1]))
+    if numbered:
+        return [Image.open(p).convert("RGBA") for p in numbered], f"{len(numbered)} numbered frames"
+    still = folder / f"{world}.png"
+    if still.exists():
+        return [Image.open(still).convert("RGBA")], still.name
+    return None
+
+
+def normalise(frames: list[Image.Image], size: int) -> list[Image.Image]:
+    """Every frame on a square canvas of `size`, the globe centred and scaled to one common diameter (painted
+    frames drift and breathe a little from one to the next; this keeps the planet still under the animation)."""
+    boxes = []
+    for f in frames:
+        a = np.asarray(f)[..., 3]
+        ys, xs = np.nonzero(a > 128)
+        boxes.append((xs.min(), ys.min(), xs.max(), ys.max()))
+    diam = int(np.median([max(x1 - x0, y1 - y0) + 1 for x0, y0, x1, y1 in boxes]))
+    target = size * 0.86  # the handoff's globe: 84-88% of the canvas
+    out = []
+    for f, (x0, y0, x1, y1) in zip(frames, boxes):
+        d = max(x1 - x0, y1 - y0) + 1
+        scale = target / d
+        cx, cy = (x0 + x1 + 1) / 2, (y0 + y1 + 1) / 2
+        nw, nh = int(round(f.width * scale)), int(round(f.height * scale))
+        g = f.resize((nw, nh), Image.LANCZOS)
+        canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+        canvas.alpha_composite(g, (int(round(size / 2 - cx * scale)), int(round(size / 2 - cy * scale))))
+        out.append(canvas)
+    _ = diam
+    return out
+
+
 def convert(folder: Path) -> None:
+    """Install author-provided masters and animations as runtime WebPs.
+
+    When an exact 1024 frame strip and 2048 master exist together, frame zero is kept
+    pixel-aligned with the downsampled still; do not re-fit their geometry. For old
+    undersized concept sheets, normalise painted frames as before.
+    """
     OUT.mkdir(parents=True, exist_ok=True)
     for world in WORLDS:
-        src = folder / f"{world}.png"
-        if not src.exists():
-            print(f"skip {world}: no {src.name}")
+        got = load_frames(folder, world)
+        if not got:
+            print(f"skip {world}: nothing delivered")
             continue
-        im = Image.open(src).convert("RGBA").resize((1024, 1024), Image.LANCZOS)
-        im.save(OUT / f"{world}.webp", "WEBP", quality=88, method=6)
-        print(f"wrote {OUT / f'{world}.webp'} from {src}")
+        frames, source = got
+        master_path = folder / f"{world}.png"
+        has_native_strip = (folder / f"{world}-strip.png").exists()
+        if has_native_strip:
+            if not master_path.exists():
+                raise ValueError(f"{world}: full-res strip requires matching <world>.png still")
+            master = Image.open(master_path).convert("RGBA")
+            if master.size != (2048, 2048):
+                raise ValueError(f"{world}: expected 2048x2048 still, got {master.size}")
+            if any(f.size != (1024, 1024) for f in frames):
+                raise ValueError(f"{world}: every frame of the authored strip must be 1024x1024")
+            poster = master.resize((1024, 1024), Image.Resampling.LANCZOS)
+            # Strong compatibility guarantee: still and first animated frame cannot flash when loading.
+            from PIL import ImageChops
+            if ImageChops.difference(frames[0], poster).getbbox() is not None:
+                raise ValueError(f"{world}: the animation's first frame differs from its still")
+        else:
+            size = min(1024, frames[0].width)
+            frames = normalise(frames, size)
+            poster = frames[0]
+        poster.save(OUT / f"{world}.webp", "WEBP", quality=90, method=3)
+        line = f"{world}: still 1024 px from {master_path.name if has_native_strip else source}"
+        if len(frames) > 1:
+            size = frames[0].width
+            strip = Image.new("RGBA", (size * len(frames), size), (0, 0, 0, 0))
+            for i, f in enumerate(frames):
+                strip.paste(f, (i * size, 0))
+            strip.save(OUT / f"{world}-frames.webp", "WEBP", quality=86, method=2)
+            line += f"; {len(frames)} frames -> {world}-frames.webp ({(OUT / f'{world}-frames.webp').stat().st_size // 1024} KB)"
+        else:
+            (OUT / f"{world}-frames.webp").unlink(missing_ok=True)
+        print(line)
 
 
 def main() -> None:

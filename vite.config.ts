@@ -1,4 +1,4 @@
-// Extra Terram — vite.config.ts v0.11.0 — sound: effects precached, music loaded and cached on first play like the strips
+// Extra Terram — vite.config.ts v0.12.0 — sound: effects precached, music loaded and cached on first play like the strips
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       // stills, effects and icons are precached through globPatterns below; strips are not (see runtimeCaching)
-      includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.jpg', 'art/*.jpg', 'art/worlds/*.webp', 'ui/*.png', 'sprites/manifest.json', 'sprites/mounts.json', 'audio/manifest.json', 'audio/sfx/*.{ogg,m4a,mp3}'],
+      includeAssets: ['favicon.ico', 'icons/*.png', 'maps/*.jpg', 'art/*.jpg', 'art/worlds/!(*-frames).webp', 'ui/*.png', 'sprites/manifest.json', 'sprites/mounts.json', 'audio/manifest.json', 'audio/sfx/*.{ogg,m4a,mp3}'],
       manifest: {
         name: 'Extra-Terram: The Alien Race Tower Defense',
         short_name: 'Extra-Terram',
@@ -31,12 +31,19 @@ export default defineConfig({
         // animation strips are most of the art's weight: they load when the game first shows them and are
         // cached then (the stills carry the game until they arrive, offline included); old PNG map
         // placeholders, should any be left in public/maps, are never cached (the maps are JPEGs)
-        globIgnores: ['**/sprites/**/*-idle.png', '**/sprites/**/*-fire.png', '**/sprites/**/*-walk.png', '**/sprites/**/*-die.png', '**/maps/*.png', '**/audio/music/**'],
+        globIgnores: ['**/sprites/**/*-idle.png', '**/sprites/**/*-fire.png', '**/sprites/**/*-walk.png', '**/sprites/**/*-die.png', '**/maps/*.png', '**/audio/music/**', '**/art/worlds/*-frames.webp'],
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.startsWith('/sprites/') && /-(idle|fire|walk|die)\.png$/.test(url.pathname),
             handler: 'StaleWhileRevalidate',
             options: { cacheName: 'sprite-strips', expiration: { maxEntries: 500 } },
+          },
+          {
+            // the world intros' full-resolution animation strips (1-2 MB a world): the still is precached and carries the intro
+            // until the frames arrive; after the first showing they are cached
+            urlPattern: ({ url }) => url.pathname.startsWith('/art/worlds/') && url.pathname.endsWith('-frames.webp'),
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'world-intros-v024-fullres', expiration: { maxEntries: 8 } },
           },
           {
             // music is the heaviest thing in the game: it loads when a scene first asks for it and stays cached

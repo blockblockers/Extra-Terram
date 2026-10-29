@@ -1,0 +1,245 @@
+{
+  "target_project": "Extra Terram v0.24.0",
+  "asset_origin": "Four previously created 2048px planet masters and the fullsize eight-frame 1024px animations",
+  "source_provenance_note": "Rootkin was originally generated individually; Assembly, Chitin, Lumenari were enlarged from lower-resolution illustrations. Re-encoding does not create additional painted detail.",
+  "runtime": "src/ui/WorldIntro.tsx uses 6fps frame crossfades, looping from final frame back to first; reduced-motion uses the still",
+  "worlds": {
+    "rootkin": {
+      "pass": true,
+      "master_size": [
+        2048,
+        2048
+      ],
+      "strip_size": [
+        8192,
+        1024
+      ],
+      "game_still_size": [
+        1024,
+        1024
+      ],
+      "game_frames_size": [
+        8192,
+        1024
+      ],
+      "frame_count": 8,
+      "fps": 6,
+      "first_frame_matches_downsampled_master_exactly": true,
+      "frame_alpha_stable": true,
+      "master_globe_bbox": [
+        194,
+        200,
+        1853,
+        1834
+      ],
+      "master_globe_span_ratio": 0.8105,
+      "globe_center_fraction": [
+        0.4998,
+        0.4966
+      ],
+      "corners_alpha_max": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "animation_frame_0_to_4_mean_abs_difference": 0.613,
+      "files": {
+        "art/world-intro/rootkin.png": {
+          "size_bytes": 5085867,
+          "sha256": "57831cca95385162417e744003ef53b5df08275602946d99fe26a0d338ceaf3a"
+        },
+        "art/world-intro/rootkin-strip.png": {
+          "size_bytes": 7191543,
+          "sha256": "b0a35d804f749e56c1332a7fa2e4f56e8635d36284b9db0810ef61e0bf434605"
+        },
+        "public/art/worlds/rootkin.webp": {
+          "size_bytes": 400194,
+          "sha256": "1a818d52fb0dcb886f7289f59596ed2fac92956f011fc313634ea7f27bd33c83"
+        },
+        "public/art/worlds/rootkin-frames.webp": {
+          "size_bytes": 2070578,
+          "sha256": "2a8ced93d498ab61cee06a657fa6c25125b56352a2a976a6fc865b2831ace241"
+        }
+      }
+    },
+    "assembly": {
+      "pass": true,
+      "master_size": [
+        2048,
+        2048
+      ],
+      "strip_size": [
+        8192,
+        1024
+      ],
+      "game_still_size": [
+        1024,
+        1024
+      ],
+      "game_frames_size": [
+        8192,
+        1024
+      ],
+      "frame_count": 8,
+      "fps": 6,
+      "first_frame_matches_downsampled_master_exactly": true,
+      "frame_alpha_stable": true,
+      "master_globe_bbox": [
+        172,
+        172,
+        1877,
+        1877
+      ],
+      "master_globe_span_ratio": 0.833,
+      "globe_center_fraction": [
+        0.5002,
+        0.5002
+      ],
+      "corners_alpha_max": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "animation_frame_0_to_4_mean_abs_difference": 0.698,
+      "files": {
+        "art/world-intro/assembly.png": {
+          "size_bytes": 3369137,
+          "sha256": "416591f322e975eb1e4f4a938b90d5e8f4803d214a02df835431586a108311cf"
+        },
+        "art/world-intro/assembly-strip.png": {
+          "size_bytes": 6355032,
+          "sha256": "195e9df016137b966287fde72e08a279a4288fb8bc39cd275d2844cf356c5ee8"
+        },
+        "public/art/worlds/assembly.webp": {
+          "size_bytes": 180354,
+          "sha256": "707edcc75ccae5138bd4bcf7343fb770e1b3611c470c74534c753d6b2d3a5e46"
+        },
+        "public/art/worlds/assembly-frames.webp": {
+          "size_bytes": 1093352,
+          "sha256": "73646eea7f619a00b51f492f47785c811c73cf73625c7d14b53799242fe40469"
+        }
+      }
+    },
+    "chitin": {
+      "pass": true,
+      "master_size": [
+        2048,
+        2048
+      ],
+      "strip_size": [
+        8192,
+        1024
+      ],
+      "game_still_size": [
+        1024,
+        1024
+      ],
+      "game_frames_size": [
+        8192,
+        1024
+      ],
+      "frame_count": 8,
+      "fps": 6,
+      "first_frame_matches_downsampled_master_exactly": true,
+      "frame_alpha_stable": true,
+      "master_globe_bbox": [
+        172,
+        172,
+        1877,
+        1877
+      ],
+      "master_globe_span_ratio": 0.833,
+      "globe_center_fraction": [
+        0.5002,
+        0.5002
+      ],
+      "corners_alpha_max": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "animation_frame_0_to_4_mean_abs_difference": 0.876,
+      "files": {
+        "art/world-intro/chitin.png": {
+          "size_bytes": 3202016,
+          "sha256": "c05fad798e18e2527d234503039bd03e4be14755cc1f71b7dd8c8ec34172473d"
+        },
+        "art/world-intro/chitin-strip.png": {
+          "size_bytes": 6766552,
+          "sha256": "360160a7397b69cc49af02ade5149aaebf5d98c4479184b7a1a8df59148660d4"
+        },
+        "public/art/worlds/chitin.webp": {
+          "size_bytes": 160874,
+          "sha256": "be3409c42f2339c1511b770e76e93193a660208e72eb95084f7d01d5a32c586f"
+        },
+        "public/art/worlds/chitin-frames.webp": {
+          "size_bytes": 941752,
+          "sha256": "b03db0970555986f76361d86990aa6a06cbc6977684139fe8fe32d877d0e8c00"
+        }
+      }
+    },
+    "lumenari": {
+      "pass": true,
+      "master_size": [
+        2048,
+        2048
+      ],
+      "strip_size": [
+        8192,
+        1024
+      ],
+      "game_still_size": [
+        1024,
+        1024
+      ],
+      "game_frames_size": [
+        8192,
+        1024
+      ],
+      "frame_count": 8,
+      "fps": 6,
+      "first_frame_matches_downsampled_master_exactly": true,
+      "frame_alpha_stable": true,
+      "master_globe_bbox": [
+        172,
+        172,
+        1877,
+        1877
+      ],
+      "master_globe_span_ratio": 0.833,
+      "globe_center_fraction": [
+        0.5002,
+        0.5002
+      ],
+      "corners_alpha_max": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "animation_frame_0_to_4_mean_abs_difference": 1.876,
+      "files": {
+        "art/world-intro/lumenari.png": {
+          "size_bytes": 3382720,
+          "sha256": "fef81d5482d6b7bac60e879d6189bb38ed9b61f6e998f4c5a217cd2fa2f7916b"
+        },
+        "art/world-intro/lumenari-strip.png": {
+          "size_bytes": 8686147,
+          "sha256": "318beac311f12523e189b65af63f452cae83bc62db288f95236136928109b4cf"
+        },
+        "public/art/worlds/lumenari.webp": {
+          "size_bytes": 177670,
+          "sha256": "10f76d400d84c7768c37f45a291575a3a8688e7cf5c2af6554965b041f991051"
+        },
+        "public/art/worlds/lumenari-frames.webp": {
+          "size_bytes": 1027204,
+          "sha256": "04ee69236ba9ee411acca1db2ff1f61c34f1ee5fd185f6f7c332df09ba05f877"
+        }
+      }
+    }
+  },
+  "overall_pass": true
+}
